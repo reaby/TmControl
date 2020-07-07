@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<manialink version="3">
+	<stylesheet>
+		<style class="button" size="50 7" textcolor="dee" focusareacolor1="0000" focusareacolor2="0000" halign="center" valign="center2" />
+	</stylesheet>
+	<frame id="players" hidden="0">
+		<frame id="details" pos="0 52">
+			<label pos="75 0" size="150 8" text="" scale="1" z-index="-0" textsize="8" halign="center" valign="center" class="bg" translate="0" textcolor="dee"  id="pl_nickname"/>
+			<label pos="75 -6" size="150 8" text="" scale="1" z-index="-0" textsize="2" valign="top" class="bg" textcolor="dee"  autonewline="1" maxline="2" translate="0" halign="center" id="pl_description"/>
+			<frame pos="0 -16">
+				<frame pos="0 0" size="150 5" >
+					<label pos="0 0"  size="30 4" text="Language" textsize="2"  translate="0"/>
+					<label pos="31 0"  size="40 4" text="" textsize="2"  focusareacolor1="0000" id="pl_language"/>
+				</frame>
+				<frame pos="0 -6"  size="150 5" >
+					<label pos="0 0"  size="30 4" text="Login" textsize="2"  translate="0"/>
+					<entry pos="31 0"  size="40 4" default="" textsize="2"  focusareacolor1="0000" id="pl_login"/>
+				</frame>
+				<frame pos="0 -12"  size="150 5" >
+					<label pos="0 0"  size="30 4" text="WSUserId" textsize="2"  translate="0"/>
+					<entry pos="31 0"  size="40 4" default="" textsize="2"  focusareacolor1="0000" id="pl_wsuserid"/>
+				</frame>
+			</frame>
+		</frame>
+		<frame id="background" pos="0 30" z-index="100">
+			<quad pos="0 31.6" z-index="0" size="100 0.5" bgcolor="FFF9" valign="center" halign="center" class="bg" />
+			<label pos="1 36" size="100 8" text="Manage players" scale="1" z-index="-0" textsize="8" halign="center" valign="center" class="bg" translate="0" textcolor="dee" />
+		</frame>
+		<frame pos="-150 55" >
+			<frame size="156 5">
+				<label pos="1 -0.5" size="10 4" text="#" maxline="1" textsize="2"  />
+				<label pos="11 -0.5" size="20 4" text="Trigram" maxline="1" textsize="2"  />
+				<label pos="32 -0.5" size="51 4" text="Nickname" maxline="1" textsize="2"  />
+				<label pos="83 -0.5" size="51 4" text="From" translate="1" maxline="1" textsize="2"  />
+				<quad pos="0 -4.75"  size="135 0.25" bgcolor="fff" />
+			</frame>
+			<frame pos="0 -6" size="156 80" id="PlayersList" scroll="1">
+				<!--%players%-->
+				<quad size="900 900" scriptevents="1" bgcolor="0000"/>
+			</frame>
+		</frame>
+		<frame pos="50 0">
+			<frame pos="0 0" class="btnContainer" id="btn_chat">
+				<label size="22 6" text="Disable Chat" class="button noAnim" textprefix="" halign="center" valign="center" focusareacolor1="0000" focusareacolor2="fff" data-color="fff" translate="0" scriptevents="1" pos="-6.5 1.5" textsize="1.5" />
+				<quad size="22 6" style="Bgs1" colorize="fff" substyle="BgColorContour" class="button" halign="center" valign="center" pos="-6.5 1.5" />
+			</frame>
+			<frame pos="23 0" class="btnContainer" id="btn_spec">
+				<label size="22 6" text="Force Spec" class="button noAnim" textprefix="" halign="center" valign="center" focusareacolor1="0000" focusareacolor2="09f" data-color="fff" translate="0" scriptevents="1" pos="-6.5 1.5" textsize="1.5" />
+				<quad size="22 6" style="Bgs1" colorize="09f" substyle="BgColorContour" class="button" halign="center" valign="center" pos="-6.5 1.5" />
+			</frame>
+			<frame pos="46 0" class="btnContainer" id="btn_kick">
+				<label size="22 6" text="Kick" class="button noAnim" textprefix="" halign="center" valign="center" focusareacolor1="0000" focusareacolor2="d00" data-color="fff" translate="0" scriptevents="1" pos="-6.5 1.5" textsize="1.5" />
+				<quad size="22 6" style="Bgs1" colorize="d00" substyle="BgColorContour" class="button" halign="center" valign="center" pos="-6.5 1.5" />
+			</frame>
+			<frame pos="69 0" class="btnContainer" id="btn_ban">
+				<label size="22 6" text="Ban" class="button noAnim" textprefix="" halign="center" valign="center" focusareacolor1="0000" focusareacolor2="d00" data-color="fff" translate="0" scriptevents="1" pos="-6.5 1.5" textsize="1.5" />
+				<quad size="22 6" style="Bgs1" colorize="d00" substyle="BgColorContour" class="button" halign="center" valign="center" pos="-6.5 1.5" />
+			</frame>
+		</frame>
+	</frame>
+	<frame pos="120 -70" class="btnContainer" id="btn_close">
+				<label size="30 6" text="Close Window" class="button" textprefix="" halign="center" valign="center" focusareacolor1="0000" focusareacolor2="fff" data-color="fff" translate="0" scriptevents="1" pos="-6.5 1.5" textsize="1.5" />
+				<quad size="30 6" style="Bgs1" colorize="fff" substyle="BgColorContour" class="button" halign="center" valign="center" pos="-6.5 1.5" />
+			</frame>
+	<quad pos="0 0" z-index="0" size="400 400" style="Bgs1" substyle="BgDialogBlur" halign="center" valign="center" class="bg" />
+	<script><!--
+		// #RequireContext CSmMlScriptIngame
+		#Include "TextLib" as TextLib
+		
+		declare Text SelectedLogin;
+		
+		Void SelectPlayer(Text Login) {
+			declare Frame = (Page.GetFirstChild(Login) as CMlFrame);
+			if (Frame != Null) {
+				SelectedLogin = Login;	
+				(Frame.Controls[4] as CMlQuad).Opacity = 1.;
+			}
+			declare CUser User;
+			foreach (Player in Players) {
+				if (Player.User.Login == Login) {
+					User <=> Player.User;
+				}
+			}
+			if (User != Null) {
+				declare CMlLabel pl_nickname <=> (Page.GetFirstChild("pl_nickname") as CMlLabel);
+				pl_nickname.Value = User.Name;
+				declare CMlLabel pl_description <=> (Page.GetFirstChild("pl_description") as CMlLabel);
+				pl_description.Value = User.Description;
+				declare CMlLabel pl_language <=> (Page.GetFirstChild("pl_language") as CMlLabel);
+				pl_language.Value = User.Language;
+				declare CMlEntry pl_login <=> (Page.GetFirstChild("pl_login") as CMlEntry);
+				pl_login.Value = User.Login;
+				declare  CMlEntry pl_wsuserid <=> (Page.GetFirstChild("pl_wsuserid") as CMlEntry);
+				pl_wsuserid.Value = User.WebServicesUserId;
+			}
+		}
+		
+		main() {
+			declare CMlFrame FramePlayersList <=> (Page.GetFirstChild("PlayersList") as CMlFrame);
+			SelectPlayer(FramePlayersList.Controls[0].ControlId);
+			FramePlayersList.ScrollMax = <0., (FramePlayersList.Controls.count * 4.)>;
+			
+			while (True) {
+				yield;
+				
+				foreach (Event in PendingEvents) {							
+					if (Event.Type == CMlScriptEvent::Type::MouseOver && Event.Control.HasClass("selector")) {
+						if (Event.Control.Parent.ControlId != SelectedLogin) {
+							(Event.Control as CMlQuad).Opacity= 0.4;
+						}
+						
+					}
+					
+					if (Event.Type == CMlScriptEvent::Type::MouseOut && Event.Control.HasClass("selector")) {
+						if (Event.Control.Parent.ControlId != SelectedLogin) {
+							(Event.Control as CMlQuad).Opacity= 0.;
+						}
+					}
+					
+					if (Event.Type == CMlScriptEvent::Type::MouseClick && Event.Control.HasClass("selector")) {
+						if (SelectedLogin != "") {
+							declare CMlFrame frame = (Page.GetFirstChild(SelectedLogin) as CMlFrame);
+							if (frame != Null) {
+								(frame.Controls[4] as CMlQuad).Opacity = 0.;
+							}
+						}
+						SelectPlayer(Event.Control.Parent.ControlId);
+					}
+					
+					if (Event.Type == CMlScriptEvent::Type::MouseClick && Event.Control.HasClass("button")) {
+						switch (Event.Control.Parent.ControlId) {
+							case "btn_chat": {
+								SendCustomEvent("DoPlayerAction", ["ToggleChat", SelectedLogin]);
+							}
+							case "btn_spec": {
+								SendCustomEvent("DoPlayerAction", ["ToggleSpec", SelectedLogin]);
+							}
+							case "btn_kick": {
+								SendCustomEvent("DoPlayerAction", ["Kick", SelectedLogin]);
+							}
+							case "btn_ban": {
+								SendCustomEvent("DoPlayerAction", ["Ban", SelectedLogin]);
+							}
+							case "btn_close": {
+								SendCustomEvent("DoPlayerAction", ["Close", SelectedLogin]);
+							}
+							default: 
+							{}
+						}
+					}
+				}
+			}
+		}
+	--></script>
+</manialink>

@@ -1,0 +1,40 @@
+// #RequireContext CServerPlugin
+
+#Struct ServerAdmin {
+	Text name;
+	Text level;	
+}
+
+#Struct ConfigJson {
+	ServerAdmin[Text] ServerAdmins;
+	Text[Text] Colors;
+	Text[][Text] Permissions;
+}
+
+
+declare ConfigJson configuration;
+
+Void Init() {	
+	declare CHttpRequest req = Http.CreateGet("file:///Media/TmControl/config.json");	
+	wait(req.IsCompleted);
+	if (req.StatusCode == 200) {
+		configuration.fromjson(req.Result);
+	} else {
+		log("TMControl started without any admins.");
+	}	
+}
+
+Boolean isAdmin(Text _login) {
+	return configuration.ServerAdmins.existskey(_login);
+}
+
+Text[Text] getColors() {
+	return configuration.Colors;
+}
+
+ServerAdmin getAdmin(Text _login) {
+	if (configuration.ServerAdmins.existskey(_login)) {
+		return configuration.ServerAdmins[_login];
+	}
+	return ServerAdmin{};
+}
