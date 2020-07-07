@@ -13,7 +13,6 @@ When you have admins a row icons will appear above the chrono timer at bottom ce
 ## For Developers
 > tip1: If you wish to develop using maniascript vscode + manialsp, have a copy manialsp.exe this repo root.
 
-
 > tip2: use symlinks to dedicated
 
 1. Clone this git repo outside of the dedicated server.
@@ -22,3 +21,6 @@ When you have admins a row icons will appear above the chrono timer at bottom ce
    1. At Windows 10: `mklink /D Link OriginalDirectory` 
    2. At Linux: `ln -s /path/to/file /path/to/symlink`
 
+You can restart the serverplugin without restarting dedicated with RemoteControlExamples\PhpControl\restart.php
+Just edit the dedicated xmlrpc port and credentials at the restart.php file and run it with php.
+You might see some deprecated warnings, due the example itself is quite old and we run so much newer php's nowdays... but it'll work just fine.
