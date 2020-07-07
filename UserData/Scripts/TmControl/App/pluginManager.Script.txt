@@ -1,0 +1,114 @@
+// #RequireContext CServerPlugin
+#Include "TextLib" as TL
+#Include "TMControl/App/config.Script.txt" as Config
+#Include "TMControl/Plugins/ServerAdmin.Script.txt" as Admin
+#Include "TMControl/Plugins/AdminPanel.Script.txt" as AdminPanel
+#Include "TMControl/Plugins/Players.Script.txt" as PlayersPanel
+#Include "TMControl/App/serverManager.Script.txt" as Server
+#Struct Config::ServerAdmin as ServerAdmin
+
+
+// this should get run from label: OnInit to pluginssystem for work, but the label never doesn't get run.
+// #Include "TMControl/Plugins/Hello2.Script.txt"
+
+/* oh, i wish so much to have dynamic plugin loader...
+foreach (Plugin in Config::GetEnabledPlugins()) {
+    #Include "TMControl/Plugins/ " ^ Plugin ^ ".Script.txt"
+} */
+
+*** OnInit ***
+*** 
+// this should get run, but never does.
+    log("PluginManager: OnInit");
+***
+
+Void Init() {     
+    +++ OnInit +++
+  //  log("""\033[32mHello from plugin manager!\033[0m""");
+}
+
+Void HandleEvent(CServerPluginEvent Event) {  
+    declare CClient Client <=> Event.Client;
+    switch (Event.Type) {
+        case CServerPluginEvent::EType::ClientDisconnected:  {
+            
+        }   
+        case CServerPluginEvent::EType::ClientConnected: {  
+            declare Text Login = Client.User.Login;      
+            declare Text Title = "Player";
+            if (Config::isAdmin(Login)) {    
+                declare ServerAdmin Admin = Config::getAdmin(Login);
+                Title = Admin.level;
+                AdminPanel::SendAdminPanel(Client);
+                Server::SendChat("""TmControl> Enabling server administation for you.""", [Client]);
+            } 
+            
+        }
+        case CServerPluginEvent::EType::ChatCommand: {            
+            if (Config::isAdmin(Client.User.Login)) { 
+                log(Event);               
+                if (Event.ChatCommandType != "") {                                   
+                    Admin::OnChat(Client, Event.ChatCommandType, Event.ChatCommandData);
+                }
+            }
+        }        
+        default: {  
+           // log(Event);
+        }
+    }	
+}
+
+Void HandleUiEvent(CUIConfigEvent UiEvent) {
+    
+    if (UiEvent.CustomEventType == "DoAdminAction") {
+        declare Text[] data = UiEvent.CustomEventData;
+        if (data.count >= 1) {
+            declare Text action = data[0];
+            data.removekey(0);
+            Server::_AddAction(action,data);    
+        } 
+    }
+    if (UiEvent.CustomEventType == "OpenDialog") {
+        declare Text data = UiEvent.CustomEventData[0];
+        
+        switch (data) {
+            case "!Players": {
+                declare CClient Client <=> GetClient(UiEvent.UI);
+                PlayersPanel::ShowPlayerAdmin(Client);
+            }
+            default: {}
+        }  
+    }
+
+    if (UiEvent.CustomEventType == "DoPlayerAction") {
+        declare Text[] data = UiEvent.CustomEventData;
+        if (data.count >= 2) {
+            declare Text action = data[0];
+            declare Text Login = data[1];
+            declare CClient Client = GetClient(Login);
+            if (Client != Null) {
+                switch (action) {
+                    case "ToggleSpec": {
+                        Client.UI.ForceSpectator = !Client.UI.ForceSpectator;
+                    }
+                    case "ToggleChat": {
+                        Client.UI.OverlayHideChat = !Client.UI.OverlayHideChat;
+                    }
+                    case "Kick": {
+                        Server::PlayerKick(Login, "");
+                        PlayersPanel::HidePlayerAdmin(Client);
+                        Server::SendChat("""TmControl> Player $<$fff{{{Client.User.Name}}}$> Kicked""", [GetClient(UiEvent.UI)]);
+                    }
+                    case "Ban": {
+                        
+                    }
+                    case "Close": {
+                        PlayersPanel::HidePlayerAdmin(Client);
+                    }
+                }
+            } else {
+                Server::SendChat("""Client with login {{{Login}}} not found, can't invoke action""", [GetClient(UiEvent.UI)]);
+            }
+        } 
+    }
+}

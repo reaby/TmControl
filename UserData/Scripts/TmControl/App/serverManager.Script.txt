@@ -1,0 +1,89 @@
+// @context CServerPlugin
+#Include "TMControl/App/config.Script.txt" as Config
+#Include "TextLib" as TL
+
+declare Text[][Text] PendingActions;
+
+Void _AddAction(Text action, Text[] params) {
+    if (!PendingActions.existskey(action)) {
+        PendingActions[action] = params;
+    }
+}
+
+Void PlayerKick(CClient _Client, Text _Reason) {
+    _AddAction("Kick", [_Client.User.Login, _Reason]);
+}
+
+Void PlayerKick(Text _Login, Text _Reason) {
+    _AddAction("Kick", [_Login, _Reason]);
+}
+
+
+Void MapSkip() {
+    _AddAction("NextMap", []);
+}
+
+Void MapRestart() {
+    _AddAction("RestartMap", []);
+}
+
+Void MapSetNext(CMapInfo _Map) {
+    NextMapIndex = MapList.keyof(_Map) % MapList.count;
+}
+
+Void MapSetNext(Integer _index) {
+    NextMapIndex = _index % MapList.count;
+}
+
+Text ParseColors(Text _Message) {
+    declare out = _Message;
+    foreach (color => code in Config::getColors()) {
+        out = TL::Replace(out, """%{{{color}}}%""", code);
+    }
+    return out;
+}
+
+
+Void SendChat(Text _Message) {
+    log("""[Server] {{{_Message}}}""");
+    
+    UIManager.UIAll.SendChat(ParseColors(_Message));
+}
+Void SendChat(Text _Message, CClient[] _Recipients) {
+    declare out = ParseColors(_Message);
+    foreach (Client in _Recipients) {
+        Client.UI.SendChat(out);
+    }
+}
+
+Void SendChat(Text _Message, Text[] __Recipients) {
+    declare out = ParseColors(_Message);
+    foreach (_Client in __Recipients) {
+        declare Client <=> GetClient(_Client);
+        Client.UI.SendChat(out);
+    }   
+}
+
+
+Void ProcessActions() {
+    foreach(action => params in PendingActions) {
+        switch(action) {
+            case "RestartMap": {
+                RestartMap();
+            }
+            case "NextMap": {
+                NextMap();
+            }
+            case "Kick": {
+                declare CClient Client <=> GetClient(params[0]);
+                ServerAdmin.Kick(Client, params[1]);
+            }
+            case "Ban": {
+                declare CClient Client <=> GetClient(params[0]);
+                ServerAdmin.Ban(Client, params[1]);
+            }            
+        }
+    }
+    
+    PendingActions.clear();
+}

@@ -1,0 +1,13 @@
+// #RequireContext CServerPlugin
+#Include "TMControl/App/serverManager.Script.txt" as Server
+
+Void OnChat(CClient _client, Text _command, Text[] _params) {
+    switch(_command) {
+        case "/skip": {            
+            Server::MapSkip();
+        }
+        case "/res": {            
+            Server::MapRestart();
+        }
+    }
+}
