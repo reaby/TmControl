@@ -1,22 +1,8 @@
 // #RequireContext CServerPlugin
-#Include "TmControl/Libs/Layers2.Script.txt" as Layers
-
-
-Text getManialink() {
-    declare CHttpRequest req = Http.CreateGet("file:///Media/TmControl/UI/admintoolbar.xml");	
-    wait(req.IsCompleted);
-	if (req.StatusCode == 200) {    
-        return req.Result;
-    }
-    return "";
-}
+#Include "TmControl/Libs/Ui.Script.txt" as UI
+#Include "TmControl/Libs/File.Script.txt" as File
 
 Void SendAdminPanel(CClient _Client) {
-   Layers::Create("AdminPanel", getManialink());
-   declare CUILayer layer = Layers::Get("AdminPanel");
-
-   if (!_Client.UI.UILayers.exists(layer)) {
-        _Client.UI.UILayers.add(layer);
-   }
-   layer.IsVisible = True;
+    UI::Create("AdminPanel", File::Read("TmControl/UI/admintoolbar.xml"));
+    UI::Show("AdminPanel", _Client);
 }

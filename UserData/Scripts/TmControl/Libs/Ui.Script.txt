@@ -1,0 +1,64 @@
+// #RequireContext CServerPlugin
+declare Ident[Text] _UILayers;
+
+Boolean _LayerExists(Text _LayerName) {
+	if (!_UILayers.existskey(_LayerName)) return False;
+	if (!UIManager.UILayers.existskey(_UILayers[_LayerName])) return False;
+	return True;
+}
+
+CUILayer _LayerGet(Text _LayerName) {
+	if (!_LayerExists(_LayerName)) return Null;
+	return UIManager.UILayers[_UILayers[_LayerName]];
+}
+
+Void Delete(Text _LayerName) {
+	if (!_LayerExists(_LayerName)) return;
+	UIManager.UILayerDestroy(UIManager.UILayers[_UILayers[_LayerName]]);
+	_UILayers.removekey(_LayerName);
+}
+
+CUILayer Create(Text _LayerName, Text _LayerManialink) {
+	if (_LayerExists(_LayerName)) Delete(_LayerName);
+	declare CUILayer NewLayer <=> UIManager.UILayerCreate();
+	_UILayers[_LayerName] = NewLayer.Id;
+	if (NewLayer != Null) { 
+		NewLayer.ManialinkPage = _LayerManialink;
+		NewLayer.IsVisible = True;
+	}
+	return NewLayer;
+}
+
+Void Show(Text _LayerName, CClient _Client) {
+	declare Layer <=> _LayerGet(_LayerName);
+	if (Layer == Null) return;
+	
+	if (_Client != Null) {
+		declare UI <=> UIManager.GetUI(_Client);
+		if (UI == Null) return;
+		if (!UI.UILayers.exists(Layer)) UI.UILayers.add(Layer);
+	} else {
+		if (!UIManager.UIAll.UILayers.exists(Layer)) UIManager.UIAll.UILayers.add(Layer);
+	}
+}
+
+Void Show(Text _LayerName) {
+	Show(_LayerName, Null);
+}
+
+Void Hide(Text _LayerName, CClient _Client) {
+	declare Layer <=> _LayerGet(_LayerName);
+	if (Layer == Null) return;
+	
+	if (_Client != Null) {
+		declare UI <=> UIManager.GetUI(_Client);
+		if (UI == Null) return;
+		UI.UILayers.removekey(Layer.Id);
+	} else {
+		UIManager.UIAll.UILayers.removekey(Layer.Id);
+	}
+}
+
+Void Hide(Text _LayerName) {
+	Hide(_LayerName, Null);
+}

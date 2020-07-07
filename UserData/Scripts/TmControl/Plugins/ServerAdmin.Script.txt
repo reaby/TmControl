@@ -1,5 +1,5 @@
 // #RequireContext CServerPlugin
-#Include "TMControl/App/serverManager.Script.txt" as Server
+#Include "TMControl/Core/serverManager.Script.txt" as Server
 
 Void OnChat(CClient _client, Text _command, Text[] _params) {
     switch(_command) {

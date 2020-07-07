@@ -1,0 +1,10 @@
+{
+	"Admins": {
+		"login_here": "friendly_name",
+		"login2_here": "friendly_name"
+	},
+	"Colors": {
+		"join": "$ada",
+		"leave": "$daa"
+	}
+}

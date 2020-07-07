@@ -1,15 +1,10 @@
 // #RequireContext CServerPlugin
 #Include "TextLib" as TL
-#Include "TMControl/App/config.Script.txt" as Config
+#Include "TMControl/Core/config.Script.txt" as Config
+#Include "TMControl/Core/serverManager.Script.txt" as Server
 #Include "TMControl/Plugins/ServerAdmin.Script.txt" as Admin
 #Include "TMControl/Plugins/AdminPanel.Script.txt" as AdminPanel
 #Include "TMControl/Plugins/Players.Script.txt" as PlayersPanel
-#Include "TMControl/App/serverManager.Script.txt" as Server
-#Struct Config::ServerAdmin as ServerAdmin
-
-
-// this should get run from label: OnInit to pluginssystem for work, but the label never doesn't get run.
-// #Include "TMControl/Plugins/Hello2.Script.txt"
 
 /* oh, i wish so much to have dynamic plugin loader...
 foreach (Plugin in Config::GetEnabledPlugins()) {
@@ -24,7 +19,7 @@ foreach (Plugin in Config::GetEnabledPlugins()) {
 
 Void Init() {     
     +++ OnInit +++
-  //  log("""\033[32mHello from plugin manager!\033[0m""");
+    log("""\033[32mHello from plugin manager!\033[0m""");
 }
 
 Void HandleEvent(CServerPluginEvent Event) {  
@@ -33,27 +28,25 @@ Void HandleEvent(CServerPluginEvent Event) {
         case CServerPluginEvent::EType::ClientDisconnected:  {
             
         }   
+        
         case CServerPluginEvent::EType::ClientConnected: {  
             declare Text Login = Client.User.Login;      
             declare Text Title = "Player";
-            if (Config::isAdmin(Login)) {    
-                declare ServerAdmin Admin = Config::getAdmin(Login);
-                Title = Admin.level;
+            if (Config::isAdmin(Login)) {
                 AdminPanel::SendAdminPanel(Client);
                 Server::SendChat("""TmControl> Enabling server administation for you.""", [Client]);
-            } 
-            
+            }        
         }
+
         case CServerPluginEvent::EType::ChatCommand: {            
-            if (Config::isAdmin(Client.User.Login)) { 
-                log(Event);               
+            if (Config::isAdmin(Client.User.Login)) {           
                 if (Event.ChatCommandType != "") {                                   
                     Admin::OnChat(Client, Event.ChatCommandType, Event.ChatCommandData);
                 }
             }
         }        
         default: {  
-           // log(Event);
+            log(Event);
         }
     }	
 }
@@ -70,7 +63,6 @@ Void HandleUiEvent(CUIConfigEvent UiEvent) {
     }
     if (UiEvent.CustomEventType == "OpenDialog") {
         declare Text data = UiEvent.CustomEventData[0];
-        
         switch (data) {
             case "!Players": {
                 declare CClient Client <=> GetClient(UiEvent.UI);
@@ -100,7 +92,7 @@ Void HandleUiEvent(CUIConfigEvent UiEvent) {
                         Server::SendChat("""TmControl> Player $<$fff{{{Client.User.Name}}}$> Kicked""", [GetClient(UiEvent.UI)]);
                     }
                     case "Ban": {
-                        
+                        Server::PlayerBan(Login, "");
                     }
                     case "Close": {
                         PlayersPanel::HidePlayerAdmin(Client);

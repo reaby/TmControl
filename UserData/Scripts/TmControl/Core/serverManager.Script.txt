@@ -1,5 +1,5 @@
 // @context CServerPlugin
-#Include "TMControl/App/config.Script.txt" as Config
+#Include "TMControl/Core/config.Script.txt" as Config
 #Include "TextLib" as TL
 
 declare Text[][Text] PendingActions;
@@ -18,6 +18,13 @@ Void PlayerKick(Text _Login, Text _Reason) {
     _AddAction("Kick", [_Login, _Reason]);
 }
 
+Void PlayerBan(CClient _Client, Text _Reason) {
+    _AddAction("Ban", [_Client.User.Login, _Reason]);
+}
+
+Void PlayerBan(Text _Login, Text _Reason) {
+    _AddAction("Ban", [_Login, _Reason]);
+}
 
 Void MapSkip() {
     _AddAction("NextMap", []);

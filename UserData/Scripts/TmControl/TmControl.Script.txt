@@ -1,16 +1,9 @@
 #RequireContext CServerPlugin
 
-#Include "TMControl/App/config.Script.txt" as Config
-#Include "TMControl/App/pluginManager.Script.txt" as PluginManager
-#Include "TMControl/App/serverManager.Script.txt" as Server
+#Include "TMControl/Core/config.Script.txt" as Config
+#Include "TMControl/Core/pluginManager.Script.txt" as PluginManager
+#Include "TMControl/Core/serverManager.Script.txt" as Server
 
-Void DoNothing() {
-    
-}
-
-/** main
-@return Void
-*/
 main() {
     Config::Init();
     PluginManager::Init();
