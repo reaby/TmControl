@@ -7,7 +7,7 @@ Boolean _LayerExists(Text _LayerName) {
 	return True;
 }
 
-CUILayer _LayerGet(Text _LayerName) {
+CUILayer LayerGet(Text _LayerName) {
 	if (!_LayerExists(_LayerName)) return Null;
 	return UIManager.UILayers[_UILayers[_LayerName]];
 }
@@ -30,7 +30,7 @@ CUILayer Create(Text _LayerName, Text _LayerManialink) {
 }
 
 Void Show(Text _LayerName, CClient _Client) {
-	declare CUILayer Layer <=> _LayerGet(_LayerName);
+	declare CUILayer Layer <=> LayerGet(_LayerName);
 	Layer.IsVisible = True;
 
 	if (Layer == Null) return;
@@ -49,7 +49,7 @@ Void Show(Text _LayerName) {
 }
 
 Void Hide(Text _LayerName, CClient _Client) {
-	declare Layer <=> _LayerGet(_LayerName);
+	declare Layer <=> LayerGet(_LayerName);
 	if (Layer == Null) return;
 	
 	if (_Client != Null) {

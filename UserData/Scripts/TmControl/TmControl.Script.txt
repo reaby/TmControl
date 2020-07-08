@@ -8,10 +8,10 @@ main() {
     Config::Init();
     PluginManager::Init();
     
-    TriggerModeScriptEvent("XmlRpc.EnableCallbacks", ["test1"]);
-
+    TriggerModeScriptEvent("XmlRpc.EnableCallbacks", [""]);
+    
     while (True) {   
-             
+        
         foreach (Event in PendingEvents) {            
             declare TempEvent <=> Event;
             PluginManager::HandleEvent(TempEvent);
@@ -23,10 +23,10 @@ main() {
         }
         
         foreach (XPEvent in XmlRpc.PendingEvents) {
-         //  log(XPEvent);
+            log(XPEvent);
         }
         
         Server::ProcessActions();
         yield;        
-    }   
+    }
 }

@@ -5,6 +5,8 @@
 #Include "TMControl/Plugins/ServerAdmin.Script.txt" as ServerAdmin
 #Include "TMControl/Plugins/Players.Script.txt" as PlayersPanel
 #Include "TMControl/Plugins/Maps.Script.txt" as MapsPanel
+// #Include "TMControl/Plugins/BestCheckpoints.Script.txt" as WidgetBestCheckpoints   // plugin doesn't work atm @todo check if can be enabled later
+
 /* oh, i wish so much to have dynamic plugin loader...
 foreach (Plugin in Config::GetEnabledPlugins()) {
     #Include "TMControl/Plugins/ " ^ Plugin ^ ".Script.txt"
@@ -21,6 +23,7 @@ Void Init() {
     log("""\033[32mHello from plugin manager!\033[0m""");
     PlayersPanel::Init();
     ServerAdmin::Init();
+   // WidgetBestCheckpoints::Init(); // enable when things evolve
 }
 
 Void HandleEvent(CServerPluginEvent Event) {  
@@ -29,7 +32,6 @@ Void HandleEvent(CServerPluginEvent Event) {
         case CServerPluginEvent::EType::ClientDisconnected:  {
             
         }   
-        
         case CServerPluginEvent::EType::ClientConnected: {        
             declare Text Login = Client.User.Login;  
             if (Config::isAdmin(Login)) {
@@ -42,11 +44,16 @@ Void HandleEvent(CServerPluginEvent Event) {
             if (Config::isAdmin(Client.User.Login)) {                       
                 ServerAdmin::OnChat(Client, Event.ChatCommandType, Event.ChatCommandData);
             }
-        }        
-        default: {  
-            log(Event);
+        }   
+        
+        case CServerPluginEvent::EType::ModeCallback: {
+        //   WidgetBestCheckpoints::OnModeEvent(Event); enable when things work
         }
-    }	
+
+        default: {  
+           // log(Event);
+        }
+    }
 }
 
 Void HandleUiEvent(CUIConfigEvent UiEvent) {

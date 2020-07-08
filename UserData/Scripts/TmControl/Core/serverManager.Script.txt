@@ -34,6 +34,12 @@ Void MapRestart() {
     _AddAction("RestartMap", []);
 }
 
+Void ForceSpectator(Text _Login, Boolean _IsSpec) {
+    declare Text out = "PlayerSelectable";
+    if (_IsSpec == True) out = "SpectatorForced";
+    _AddAction("ForceSpectator", [_Login, out]);
+}
+
 Void MapSetNext(CMapInfo _Map) {
     NextMapIndex = MapList.keyof(_Map) % MapList.count;
 }
@@ -71,6 +77,12 @@ Void SendChat(Text _Message, Text[] __Recipients) {
     }   
 }
 
+CServerAdmin::ESpecMode _getSpecMode(Text _SpectatorMode) {
+    if (_SpectatorMode == "SpectatorForced") return CServerAdmin::ESpecMode::SpectatorForced;
+    if (_SpectatorMode == "PlayerSelectable") return CServerAdmin::ESpecMode::PlayerSelectable;
+    /** @todo add other enums as well */
+    return CServerAdmin::ESpecMode::Selectable;
+}
 
 Void ProcessActions() {
     foreach(action => params in PendingActions) {
@@ -78,13 +90,21 @@ Void ProcessActions() {
             case "RestartMap": {
                 RestartMap();
             }
+            
             case "NextMap": {
                 NextMap();
             }
+            
+            case "ForceSpectator": {
+                declare CClient Client <=> GetClient(params[0]);  
+                ServerAdmin.ForceSpectator(Client, _getSpecMode(params[1]));  
+            }
+
             case "Kick": {
                 declare CClient Client <=> GetClient(params[0]);
                 ServerAdmin.Kick(Client, params[1]);
             }
+
             case "Ban": {
                 declare CClient Client <=> GetClient(params[0]);
                 ServerAdmin.Ban(Client, params[1]);

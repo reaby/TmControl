@@ -18,7 +18,6 @@ Void Init() {
 		log("Did you remember to copy config.default.json to config.json ?");
 	}
 	configuration.fromjson(data);
-	log(configuration);
 }
 
 Boolean isAdmin(Text _login) {

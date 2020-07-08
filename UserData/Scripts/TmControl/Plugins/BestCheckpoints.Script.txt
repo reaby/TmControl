@@ -1,0 +1,205 @@
+// #RequireContext CServerPlugin
+
+// @todo enable plugins when things evolve
+
+#Include "TmControl/Libs/File.Script.txt" as File
+#Include "TmControl/Libs/Ui.Script.txt" as UI
+#Include "TMControl/Core/serverManager.Script.txt" as Server
+#Include "TextLib" as TL
+/**
+Text ModeCallbackType Trackmania.Event.WayPoint
+Text[] ModeCallbackData [{
+    "time": 21450260,
+    "login": "EdbzfLXMS_aI_PjZCVaygQ",
+    "accountid": "11d6f37c-b5cc-4bf6-88fc-f8d90956b281",
+    "racetime": 1,
+    "laptime": 1,
+    "checkpointinrace": 0,
+    "checkpointinlap": 0,
+    "isendrace": false,
+    "isendlap": false,
+    "isindependentlaps": false,
+    "curracecheckpoints": [19450],
+    "curlapcheckpoints": [19450],
+    "blockid": "#50331649",
+    "speed": 54.71880
+}]
+*/
+
+#Struct WayPoint {
+    Integer time;
+    Text login;
+    Real speed;
+    Integer[] curlapcheckpoints;
+    Integer checkpointinlap;
+}
+
+
+#Struct CpInfo {
+    Integer index;
+    Text trigram;
+    Integer time;
+    Real speed;
+}
+
+#Const C_widgetMaxCp 18
+
+declare CpInfo[] BestCpsData;
+
+Text getManialink() {
+    declare Integer maxColumns = 9;
+    declare Integer maxRows = 3;
+    declare Integer y = 89;
+    declare Integer index = 0;
+    
+    declare out = """
+    <?xml version="1.0" encoding="utf-8" standalone="yes"?>
+    <manialink version="3">
+    <stylesheet>
+    <style class="center" halign="center" valign="center" textsize="1" />
+    </stylesheet>
+    """;
+    for (row, 0, maxRows) {
+        for (column, 0, maxColumns) {
+            out ^= """
+            <frame pos="{{{-130 + (column*37)}}} {{{ y- (row*5) }}}" id="cp_{{{index}}}" hidden="1">
+            <label pos="2 -2"  size="4 4" text="" class="center"/>
+            <label pos="7 -2" size="8 4" text=""  class="center"/>
+            <label pos="18 -2" size="12 4" text="" class="center"/>
+            <label pos="30 -2" size="12 4" text="" textsize="0.8"  class="center"/>
+            <quad pos="0 0" size="36 4" bgcolor="0004" halign="left"/>
+            </frame>""";
+            index +=1;
+        }
+    }
+    out ^= """
+    <script><!--
+    #Include "MathLib" as ML
+    #Include "TextLib" as TL
+    #Struct CpInfo {
+        Integer index;
+        Text trigram;
+        Integer time;
+        Real speed;
+    }
+    
+    Text formatTime(Integer _Time) {
+        if (_Time == 0) return "0:00.00";
+        
+        declare Time = ML::Abs(_Time);
+        declare Sign = "";
+        if (_Time < 0) Sign = "-";
+        
+        declare Milliseconds = Time % 1000;
+        declare Seconds = (Time / 1000) % 60;
+        declare Minutes = (Time / 60000) % 60;
+        declare Hours = (Time / 3600000) % 24;
+        declare Days = Time / 86400000;
+        
+        if (Days > 0) {
+            return Sign ^ Days ^ ":" ^ TL::FormatInteger(Hours, 2) ^ ":" ^ TL::FormatInteger(Minutes, 2) ^ ":" ^ TL::FormatInteger(Seconds, 2) ^ "." ^ TL::FormatInteger(Milliseconds, 3);
+        }
+        
+        if (Hours > 0) {
+            return Sign ^ Hours ^ ":" ^ TL::FormatInteger(Minutes, 2) ^ ":" ^ TL::FormatInteger(Seconds, 2)^ "."  ^ TL::FormatInteger(Milliseconds, 3);
+        }
+        
+        return Sign ^ Minutes ^ ":" ^ TL::FormatInteger(Seconds, 2) ^ "." ^ TL::FormatInteger(Milliseconds, 3);
+    }
+    
+
+    declare CpInfo[] bestCps;
+    
+    Void updateWidgetData() {
+        foreach (data in bestCps) {
+            declare CMlFrame frame <=> (Page.GetFirstChild("cp_"^data.index) as CMlFrame); 
+            if (frame != Null && data.time > -1) {
+                frame.Show();
+                (frame.Controls[0] as CMlLabel).Value = ""^(data.index+1);
+                (frame.Controls[1] as CMlLabel).Value = data.trigram;
+                (frame.Controls[2] as CMlLabel).Value = formatTime(data.time);
+                (frame.Controls[3] as CMlLabel).Value = data.speed^"km/h";
+            }
+        }
+    }
+    
+    main() {
+        declare Text DataUpdate for Page = "[]";
+        declare Integer Update for Page = 0;
+        declare Integer LastUpdate = 0;
+        while (True) {
+            yield;
+            if (Update != LastUpdate) {
+                log("update!");
+                LastUpdate = Update;
+                bestCps.fromjson(DataUpdate);
+                log(bestCps);
+                updateWidgetData();
+            }
+        }
+       
+    }
+    --></script>
+    """;
+    out ^= """</manialink>""";
+    return out;
+}
+
+Void Update() {
+    declare CUILayer layer = UI::LayerGet("WidgetBestCps");
+    log(UIManager.UILayers[layer.Id].LocalPage);  // null
+    log(layer.LocalPage); // null
+
+    //declare Integer _Update for layer.LocalPage = 0;
+    //declare Text _DataUpdate for layer.LocalPage = "";
+    
+    //_DataUpdate = BestCpsData.tojson();
+    //_Update = Now;
+    log("update");
+}
+
+Void Reset() {
+    BestCpsData.clear();
+    for(i, 0, C_widgetMaxCp) {
+        BestCpsData.add(CpInfo{index = i, time = -1});
+    }
+    Update();
+}
+
+
+
+Void Init() {
+    UI::Create("WidgetBestCps", getManialink());
+    UI::Show("WidgetBestCps");
+    yield;
+    Reset();
+}
+
+Void OnModeEvent(CServerPluginEvent Event) {
+    switch (Event.ModeCallbackType) {
+        case "Maniaplanet.StartMap_End": {
+            Reset();
+        }
+        case "Trackmania.Event.Waypoint": {
+            declare WayPoint waypoint;
+            waypoint.fromjson(Event.ModeCallbackData[0]);
+            declare Integer i = waypoint.checkpointinlap; 
+            if (waypoint.checkpointinlap > C_widgetMaxCp) {
+                if (BestCpsData.existskey(i)) {
+                    if (waypoint.curlapcheckpoints[i] < BestCpsData[i].time ) {
+                        declare CUser User <=> GetClient(waypoint.login).User;
+                        declare CpInfo cp = CpInfo {
+                            index = waypoint.checkpointinlap,
+                            speed = waypoint.speed,
+                            time = waypoint.curlapcheckpoints[i],
+                            trigram = User.Trigram
+                        };
+                        BestCpsData[waypoint.checkpointinlap] = cp;
+                        Update();
+                    }
+                }
+            }
+        }
+        default: {}
+    }
+}

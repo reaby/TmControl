@@ -15,7 +15,8 @@ Text genPlayersList() {
     declare Text out = "";
     declare Integer i = 1;
     
-    foreach (User in Users) {
+    foreach (Client in Clients) {
+        declare User <=> Client.User;
         out ^= """
         <frame pos="0 -{{{(i-1)*6}}}" size="156 5" id="{{{ User.Login }}}">
             <label pos="1 -4.5"  size="12 4" text="{{{i}}}" textsize="2" valign="bottom"/>
@@ -64,7 +65,7 @@ Void OnUiEvent(CUIConfigEvent UiEvent) {
         if (Client != Null) {
             switch (action) {
                 case "ToggleSpec": {
-                    Client.UI.ForceSpectator = !Client.UI.ForceSpectator;
+                    Server::ForceSpectator(Login, !Client.IsSpectator);
                 }
                 case "ToggleChat": {
                     Client.UI.OverlayHideChat = !Client.UI.OverlayHideChat;
