@@ -4,8 +4,11 @@
 #Include "TMControl/Core/serverManager.Script.txt" as Server
 #Include "TextLib" as TL
 
+declare Text PlayersListXml;
+
 Void Init() {
     UI::Create("PlayersWarning", File::Read("TmControl/UI/playerWarning.xml"));
+    PlayersListXml = File::Read("TmControl/UI/players.xml");
 }
 
 Text genPlayersList() {
@@ -27,7 +30,7 @@ Text genPlayersList() {
 }
 
 Void ShowPlayerAdmin(CClient _Client) {
-    declare Text xml = File::Read("TmControl/UI/players.xml");
+    declare xml = PlayersListXml;
     xml = TL::Replace(xml, "<!--%players%-->", genPlayersList());
     UI::Create("PlayersPanel", xml);
     UI::Show("PlayersPanel", _Client);    

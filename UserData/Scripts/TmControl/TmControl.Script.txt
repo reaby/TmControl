@@ -8,6 +8,8 @@ main() {
     Config::Init();
     PluginManager::Init();
     
+    TriggerModeScriptEvent("XmlRpc.EnableCallbacks", ["test1"]);
+
     while (True) {   
              
         foreach (Event in PendingEvents) {            
@@ -21,7 +23,7 @@ main() {
         }
         
         foreach (XPEvent in XmlRpc.PendingEvents) {
-           // log(XPEvent);
+         //  log(XPEvent);
         }
         
         Server::ProcessActions();

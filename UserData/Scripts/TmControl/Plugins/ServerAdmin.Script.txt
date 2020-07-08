@@ -3,8 +3,11 @@
 #Include "TmControl/Libs/Ui.Script.txt" as UI
 #Include "TmControl/Libs/File.Script.txt" as File
 
-Void SendAdminPanel(CClient _Client) {
+Void Init() {
     UI::Create("AdminPanel", File::Read("TmControl/UI/admintoolbar.xml"));
+}
+
+Void SendAdminPanel(CClient _Client) {
     UI::Show("AdminPanel", _Client);
 }
 

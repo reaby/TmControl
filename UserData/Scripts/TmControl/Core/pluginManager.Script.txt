@@ -20,6 +20,7 @@ Void Init() {
     +++ OnInit +++
     log("""\033[32mHello from plugin manager!\033[0m""");
     PlayersPanel::Init();
+    ServerAdmin::Init();
 }
 
 Void HandleEvent(CServerPluginEvent Event) {  
@@ -29,9 +30,8 @@ Void HandleEvent(CServerPluginEvent Event) {
             
         }   
         
-        case CServerPluginEvent::EType::ClientConnected: {  
-            declare Text Login = Client.User.Login;      
-            declare Text Title = "Player";
+        case CServerPluginEvent::EType::ClientConnected: {        
+            declare Text Login = Client.User.Login;  
             if (Config::isAdmin(Login)) {
                 ServerAdmin::SendAdminPanel(Client);
                 Server::SendChat("""TmControl> Enabling server administation for you.""", [Client]);
