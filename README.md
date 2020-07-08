@@ -3,12 +3,11 @@ Trackmania dedicated server plugin written in ManiaScript
 
 ## Installation
 1. Download .zip extract directly to dedicated server directory
-2. copy `Media/TmControl/config.default.json` to setup admins
+2. copy `Media/TmControl/config.default.json` to `Media/TmControl/config.json` and setup admins
 3. To start the server plugin, add `/serverplugin=TmControl/TmControl.Script.txt` to your dedicated server command
 
 ## Usage
 When you have admins a row icons will appear above the chrono timer at bottom center.
-
 
 ## For Developers
 > tip1: If you wish to develop using maniascript vscode + manialsp, have a copy manialsp.exe this repo root.
