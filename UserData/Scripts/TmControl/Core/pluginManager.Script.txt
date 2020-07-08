@@ -36,13 +36,13 @@ Void HandleEvent(CServerPluginEvent Event) {
             declare Text Login = Client.User.Login;  
             if (Config::isAdmin(Login)) {
                 ServerAdmin::SendAdminPanel(Client);
-                Server::SendChat("""TmControl> Enabling server administation for you.""", [Client]);
+                Server::SendChat("""TmControl> Enabling server administation for you""", [Client]);
             }        
         }
         
         case CServerPluginEvent::EType::ChatCommand: {            
             if (Config::isAdmin(Client.User.Login)) {                       
-                ServerAdmin::OnChat(Client, Event.ChatCommandType, Event.ChatCommandData);
+              //  ServerAdmin::OnChat(Client, Event.ChatCommandType, Event.ChatCommandData);
             }
         }   
         

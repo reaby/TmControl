@@ -23,7 +23,7 @@ main() {
         }
         
         foreach (XPEvent in XmlRpc.PendingEvents) {
-            log(XPEvent);
+          //  log(XPEvent);
         }
         
         Server::ProcessActions();
