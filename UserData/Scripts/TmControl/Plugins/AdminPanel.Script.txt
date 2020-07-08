@@ -1,8 +1,0 @@
-// #RequireContext CServerPlugin
-#Include "TmControl/Libs/Ui.Script.txt" as UI
-#Include "TmControl/Libs/File.Script.txt" as File
-
-Void SendAdminPanel(CClient _Client) {
-    UI::Create("AdminPanel", File::Read("TmControl/UI/admintoolbar.xml"));
-    UI::Show("AdminPanel", _Client);
-}

@@ -39,7 +39,7 @@
 				<quad size="900 900" scriptevents="1" bgcolor="0000" />
 			</frame>
 		</frame>
-		<frame pos="50 0">
+		<frame pos="20 0">
 			<frame pos="0 0" class="btnContainer" id="btn_chat">
 				<label size="22 6" text="Disable Chat" class="button noAnim" textprefix="" halign="center" valign="center" focusareacolor1="0000" focusareacolor2="fff" data-color="fff" translate="0" scriptevents="1" pos="-6.5 1.5" textsize="1.5" />
 				<quad size="22 6" style="Bgs1" colorize="fff" substyle="BgColorContour" class="button" halign="center" valign="center" pos="-6.5 1.5" />
@@ -48,11 +48,15 @@
 				<label size="22 6" text="Force Spec" class="button noAnim" textprefix="" halign="center" valign="center" focusareacolor1="0000" focusareacolor2="09f" data-color="fff" translate="0" scriptevents="1" pos="-6.5 1.5" textsize="1.5" />
 				<quad size="22 6" style="Bgs1" colorize="09f" substyle="BgColorContour" class="button" halign="center" valign="center" pos="-6.5 1.5" />
 			</frame>
-			<frame pos="46 0" class="btnContainer" id="btn_kick">
+			<frame pos="46 0" class="btnContainer" id="btn_warn">
+				<label size="22 6" text="Warn" class="button noAnim" textprefix="" halign="center" valign="center" focusareacolor1="0000" focusareacolor2="f90" data-color="fff" translate="0" scriptevents="1" pos="-6.5 1.5" textsize="1.5" />
+				<quad size="22 6" style="Bgs1" colorize="f90" substyle="BgColorContour" class="button" halign="center" valign="center" pos="-6.5 1.5" />
+			</frame>
+			<frame pos="69 0" class="btnContainer" id="btn_kick">
 				<label size="22 6" text="Kick" class="button noAnim" textprefix="" halign="center" valign="center" focusareacolor1="0000" focusareacolor2="d00" data-color="fff" translate="0" scriptevents="1" pos="-6.5 1.5" textsize="1.5" />
 				<quad size="22 6" style="Bgs1" colorize="d00" substyle="BgColorContour" class="button" halign="center" valign="center" pos="-6.5 1.5" />
 			</frame>
-			<frame pos="69 0" class="btnContainer" id="btn_ban">
+			<frame pos="92 0" class="btnContainer" id="btn_ban">
 				<label size="22 6" text="Ban" class="button noAnim" textprefix="" halign="center" valign="center" focusareacolor1="0000" focusareacolor2="d00" data-color="fff" translate="0" scriptevents="1" pos="-6.5 1.5" textsize="1.5" />
 				<quad size="22 6" style="Bgs1" colorize="d00" substyle="BgColorContour" class="button" halign="center" valign="center" pos="-6.5 1.5" />
 			</frame>
@@ -130,19 +134,22 @@
 					if (Event.Type == CMlScriptEvent::Type::MouseClick && Event.Control.HasClass("button")) {
 						switch (Event.Control.Parent.ControlId) {
 							case "btn_chat": {
-								SendCustomEvent("DoPlayerAction", ["ToggleChat", SelectedLogin]);
+								SendCustomEvent("TmControl.Plugins.Players", ["ToggleChat", SelectedLogin]);
 							}
 							case "btn_spec": {
-								SendCustomEvent("DoPlayerAction", ["ToggleSpec", SelectedLogin]);
+								SendCustomEvent("TmControl.Plugins.Players", ["ToggleSpec", SelectedLogin]);
+							}
+							case "btn_warn": {
+								SendCustomEvent("TmControl.Plugins.Players", ["Warn", SelectedLogin]);
 							}
 							case "btn_kick": {
-								SendCustomEvent("DoPlayerAction", ["Kick", SelectedLogin]);
+								SendCustomEvent("TmControl.Plugins.Players", ["Kick", SelectedLogin]);
 							}
 							case "btn_ban": {
-								SendCustomEvent("DoPlayerAction", ["Ban", SelectedLogin]);
+								SendCustomEvent("TmControl.Plugins.Players", ["Ban", SelectedLogin]);
 							}
 							case "btn_close": {
-								SendCustomEvent("DoPlayerAction", ["Close", SelectedLogin]);
+								SendCustomEvent("TmControl.Plugins.Players", ["Close", "Main"]);
 							}
 							default: 
 							{}

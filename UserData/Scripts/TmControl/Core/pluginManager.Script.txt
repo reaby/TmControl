@@ -2,10 +2,9 @@
 #Include "TextLib" as TL
 #Include "TMControl/Core/config.Script.txt" as Config
 #Include "TMControl/Core/serverManager.Script.txt" as Server
-#Include "TMControl/Plugins/ServerAdmin.Script.txt" as Admin
-#Include "TMControl/Plugins/AdminPanel.Script.txt" as AdminPanel
+#Include "TMControl/Plugins/ServerAdmin.Script.txt" as ServerAdmin
 #Include "TMControl/Plugins/Players.Script.txt" as PlayersPanel
-
+#Include "TMControl/Plugins/Maps.Script.txt" as MapsPanel
 /* oh, i wish so much to have dynamic plugin loader...
 foreach (Plugin in Config::GetEnabledPlugins()) {
     #Include "TMControl/Plugins/ " ^ Plugin ^ ".Script.txt"
@@ -14,12 +13,13 @@ foreach (Plugin in Config::GetEnabledPlugins()) {
 *** OnInit ***
 *** 
 // this should get run, but never does.
-    log("PluginManager: OnInit");
+log("PluginManager: OnInit");
 ***
 
 Void Init() {     
     +++ OnInit +++
     log("""\033[32mHello from plugin manager!\033[0m""");
+    PlayersPanel::Init();
 }
 
 Void HandleEvent(CServerPluginEvent Event) {  
@@ -33,16 +33,14 @@ Void HandleEvent(CServerPluginEvent Event) {
             declare Text Login = Client.User.Login;      
             declare Text Title = "Player";
             if (Config::isAdmin(Login)) {
-                AdminPanel::SendAdminPanel(Client);
+                ServerAdmin::SendAdminPanel(Client);
                 Server::SendChat("""TmControl> Enabling server administation for you.""", [Client]);
             }        
         }
-
+        
         case CServerPluginEvent::EType::ChatCommand: {            
-            if (Config::isAdmin(Client.User.Login)) {           
-                if (Event.ChatCommandType != "") {                                   
-                    Admin::OnChat(Client, Event.ChatCommandType, Event.ChatCommandData);
-                }
+            if (Config::isAdmin(Client.User.Login)) {                       
+                ServerAdmin::OnChat(Client, Event.ChatCommandType, Event.ChatCommandData);
             }
         }        
         default: {  
@@ -52,8 +50,8 @@ Void HandleEvent(CServerPluginEvent Event) {
 }
 
 Void HandleUiEvent(CUIConfigEvent UiEvent) {
-    
-    if (UiEvent.CustomEventType == "DoAdminAction") {
+
+    if (UiEvent.CustomEventType == "TmControl.Server.AddAction") {
         declare Text[] data = UiEvent.CustomEventData;
         if (data.count >= 1) {
             declare Text action = data[0];
@@ -61,6 +59,7 @@ Void HandleUiEvent(CUIConfigEvent UiEvent) {
             Server::_AddAction(action,data);    
         } 
     }
+
     if (UiEvent.CustomEventType == "OpenDialog") {
         declare Text data = UiEvent.CustomEventData[0];
         switch (data) {
@@ -68,39 +67,19 @@ Void HandleUiEvent(CUIConfigEvent UiEvent) {
                 declare CClient Client <=> GetClient(UiEvent.UI);
                 PlayersPanel::ShowPlayerAdmin(Client);
             }
+            case "!MapList": {
+                declare CClient Client <=> GetClient(UiEvent.UI);
+                MapsPanel::ShowMaps(Client);
+            }
             default: {}
         }  
     }
+    
+    if (UiEvent.CustomEventType == "TmControl.Plugins.Players") {
+        PlayersPanel::OnUiEvent(UiEvent);
+    }
 
-    if (UiEvent.CustomEventType == "DoPlayerAction") {
-        declare Text[] data = UiEvent.CustomEventData;
-        if (data.count >= 2) {
-            declare Text action = data[0];
-            declare Text Login = data[1];
-            declare CClient Client = GetClient(Login);
-            if (Client != Null) {
-                switch (action) {
-                    case "ToggleSpec": {
-                        Client.UI.ForceSpectator = !Client.UI.ForceSpectator;
-                    }
-                    case "ToggleChat": {
-                        Client.UI.OverlayHideChat = !Client.UI.OverlayHideChat;
-                    }
-                    case "Kick": {
-                        Server::PlayerKick(Login, "");
-                        PlayersPanel::HidePlayerAdmin(Client);
-                        Server::SendChat("""TmControl> Player $<$fff{{{Client.User.Name}}}$> Kicked""", [GetClient(UiEvent.UI)]);
-                    }
-                    case "Ban": {
-                        Server::PlayerBan(Login, "");
-                    }
-                    case "Close": {
-                        PlayersPanel::HidePlayerAdmin(Client);
-                    }
-                }
-            } else {
-                Server::SendChat("""Client with login {{{Login}}} not found, can't invoke action""", [GetClient(UiEvent.UI)]);
-            }
-        } 
+    if (UiEvent.CustomEventType == "TmControl.Plugins.Maps") {
+        MapsPanel::OnUiEvent(UiEvent);
     }
 }

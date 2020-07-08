@@ -12,14 +12,14 @@ CUILayer _LayerGet(Text _LayerName) {
 	return UIManager.UILayers[_UILayers[_LayerName]];
 }
 
-Void Delete(Text _LayerName) {
+Void _Delete(Text _LayerName) {
 	if (!_LayerExists(_LayerName)) return;
 	UIManager.UILayerDestroy(UIManager.UILayers[_UILayers[_LayerName]]);
 	_UILayers.removekey(_LayerName);
 }
 
 CUILayer Create(Text _LayerName, Text _LayerManialink) {
-	if (_LayerExists(_LayerName)) Delete(_LayerName);
+	if (_LayerExists(_LayerName)) _Delete(_LayerName);
 	declare CUILayer NewLayer <=> UIManager.UILayerCreate();
 	_UILayers[_LayerName] = NewLayer.Id;
 	if (NewLayer != Null) { 
@@ -30,7 +30,9 @@ CUILayer Create(Text _LayerName, Text _LayerManialink) {
 }
 
 Void Show(Text _LayerName, CClient _Client) {
-	declare Layer <=> _LayerGet(_LayerName);
+	declare CUILayer Layer <=> _LayerGet(_LayerName);
+	Layer.IsVisible = True;
+
 	if (Layer == Null) return;
 	
 	if (_Client != Null) {

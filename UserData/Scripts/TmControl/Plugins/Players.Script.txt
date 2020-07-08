@@ -1,7 +1,12 @@
 // #RequireContext CServerPlugin
 #Include "TmControl/Libs/File.Script.txt" as File
 #Include "TmControl/Libs/Ui.Script.txt" as UI
+#Include "TMControl/Core/serverManager.Script.txt" as Server
 #Include "TextLib" as TL
+
+Void Init() {
+    UI::Create("PlayersWarning", File::Read("TmControl/UI/playerWarning.xml"));
+}
 
 Text genPlayersList() {
     declare Text out = "";
@@ -25,10 +30,58 @@ Void ShowPlayerAdmin(CClient _Client) {
     declare Text xml = File::Read("TmControl/UI/players.xml");
     xml = TL::Replace(xml, "<!--%players%-->", genPlayersList());
     UI::Create("PlayersPanel", xml);
-    log("Show");
     UI::Show("PlayersPanel", _Client);    
+}
+
+Void ShowWarning(CClient _Client) {
+    UI::Show("PlayersWarning", _Client);
+}
+
+Void HideWarning(CClient _Client) {
+    UI::Hide("PlayersWarning", _Client);
 }
 
 Void HidePlayerAdmin(CClient _Client) {
     UI::Hide("PlayersPanel", _Client);
+}
+
+Void OnUiEvent(CUIConfigEvent UiEvent) {
+    declare Text[] data = UiEvent.CustomEventData;
+    if (data.count >= 2) {
+        declare Text action = data[0];
+        switch (action) {
+            case "Close": {
+                if (data[1] == "Main") HidePlayerAdmin(GetClient(UiEvent.UI));
+                if (data[1] == "Warn") HideWarning(GetClient(UiEvent.UI));
+                return;
+            }
+        }
+        declare Text Login = data[1];
+        declare CClient Client = GetClient(Login);
+        if (Client != Null) {
+            switch (action) {
+                case "ToggleSpec": {
+                    Client.UI.ForceSpectator = !Client.UI.ForceSpectator;
+                }
+                case "ToggleChat": {
+                    Client.UI.OverlayHideChat = !Client.UI.OverlayHideChat;
+                }
+                case "Warn": {
+                    ShowWarning(Client);
+                }
+                case "Kick": {
+                    Server::PlayerKick(Login, "");
+                    HidePlayerAdmin(Client);
+                    Server::SendChat("""TmControl> Player $<$fff{{{Client.User.Name}}}$> Kicked""", [GetClient(UiEvent.UI)]);
+                }
+                case "Ban": {
+                    Server::PlayerBan(Login, "");
+                    HidePlayerAdmin(Client);
+                    Server::SendChat("""TmControl> Player $<$fff{{{Client.User.Name}}}$> Banned""", [GetClient(UiEvent.UI)]);
+                }
+            }
+        } else {
+            Server::SendChat("""Client with login {{{Login}}} not found, can't invoke action""", [GetClient(UiEvent.UI)]);
+        }
+    } 
 }

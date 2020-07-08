@@ -1,5 +1,12 @@
 // #RequireContext CServerPlugin
 #Include "TMControl/Core/serverManager.Script.txt" as Server
+#Include "TmControl/Libs/Ui.Script.txt" as UI
+#Include "TmControl/Libs/File.Script.txt" as File
+
+Void SendAdminPanel(CClient _Client) {
+    UI::Create("AdminPanel", File::Read("TmControl/UI/admintoolbar.xml"));
+    UI::Show("AdminPanel", _Client);
+}
 
 Void OnChat(CClient _client, Text _command, Text[] _params) {
     switch(_command) {

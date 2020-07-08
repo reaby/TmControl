@@ -222,7 +222,7 @@
 					}
 					if (Event.Type == CMlScriptEvent::Type::MouseClick && Event.Control.HasClass("submenuItem")) {
 						if (TextLib::SubString(Event.Control.Parent.DataAttributeGet("action"), 0, 1) != "!") { 
-							SendCustomEvent("DoAdminAction", [Event.Control.Parent.DataAttributeGet("action")]);
+							SendCustomEvent("TmControl.Server.AddAction", [Event.Control.Parent.DataAttributeGet("action")]);
 						} else {
 							SendCustomEvent("OpenDialog", [Event.Control.Parent.DataAttributeGet("action")]);
 						}
