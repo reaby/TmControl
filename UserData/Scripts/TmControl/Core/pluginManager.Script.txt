@@ -25,6 +25,22 @@ Void Init() {
     WidgetBestCheckpoints::Init();
 }
 
+Void OnModeReady() {
+    Server::onModeReady();
+
+    foreach (Client in Players) {
+        if (Config::isAdmin(Client)) {
+            ServerAdmin::SendAdminPanel(Client);
+        }        
+    }
+
+    foreach (Client in Spectators) {
+        if (Config::isAdmin(Client)) {
+            ServerAdmin::SendAdminPanel(Client);
+        }
+    }
+}
+
 Void HandleEvent(CServerPluginEvent Event) { 
     declare CClient Client <=> Event.Client;
     switch (Event.Type) {
@@ -32,18 +48,16 @@ Void HandleEvent(CServerPluginEvent Event) {
         case CServerPluginEvent::EType::ClientDisconnected:  {
             
         }   
-
+        
         case CServerPluginEvent::EType::ClientConnected: {        
-            declare Text Login = Client.User.Login;  
-            if (Config::isAdmin(Login)) {
+            if (Config::isAdmin(Client)) {
                 ServerAdmin::SendAdminPanel(Client);
-                Server::SendChat("""TmControl> Enabling server administation for you""", [Client]);
-            }        
+            }
         }
         
         case CServerPluginEvent::EType::ChatCommand: {            
-            if (Config::isAdmin(Client.User.Login)) {                       
-              //  ServerAdmin::OnChat(Client, Event.ChatCommandType, Event.ChatCommandData);
+            if (Config::isAdmin(Client)) {                       
+                //  ServerAdmin::OnChat(Client, Event.ChatCommandType, Event.ChatCommandData);
             }
         }   
         
@@ -80,7 +94,7 @@ Void HandleUiEvent(CUIConfigEvent UiEvent) {
                 MapsPanel::ShowMaps(Client);
             }
             case "!Config": {
-               Server::_AddAction("!Config", []);
+                Server::_AddAction("!Config", []);
             }
             default: {}
         }  

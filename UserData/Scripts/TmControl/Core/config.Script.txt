@@ -24,6 +24,10 @@ Boolean isAdmin(Text _login) {
 	return configuration.Admins.existskey(_login);
 }
 
+Boolean isAdmin(CClient _client) {
+	return isAdmin(_client.User.Login);
+}
+
 Text[Text] getColors() {
 	return configuration.Colors;
 }

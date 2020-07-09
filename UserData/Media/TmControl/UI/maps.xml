@@ -39,7 +39,6 @@
 				<label size="22 6" text="Go to map" class="button noAnim" textprefix="" halign="center" valign="center" focusareacolor1="0000" focusareacolor2="09f" data-color="fff" translate="0" scriptevents="1" pos="-6.5 1.5" textsize="1.5" />
 				<quad size="22 6" style="Bgs1" colorize="09f" substyle="BgColorContour" class="button" halign="center" valign="center" pos="-6.5 1.5" />
 			</frame>
-
 		</frame>
 	</frame>
 	<frame pos="120 -70" class="btnContainer" id="btn_close">
@@ -77,7 +76,7 @@
 			declare FrameMapsList <=> (Page.GetFirstChild("Maplist") as CMlFrame);
 			SelectMap(FrameMapsList.Controls[0].ControlId);
 			FrameMapsList.ScrollMax = <0., (FrameMapsList.Controls.count * 4.)>;
-
+			
 			while (True) {
 				yield;
 				
@@ -121,6 +120,5 @@
 				}
 			}
 		}
-	-->
-	</script>
+	--></script>
 </manialink>

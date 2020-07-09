@@ -5,21 +5,25 @@
 #Include "TMControl/Core/serverManager.Script.txt" as Server
 
 main() {
-    declare Boolean isStartDone = False;
+    declare Boolean initialStartDone = False;
     Config::Init();
     PluginManager::Init();
     
+    
+    
+    
+    
     while (True) {   
-        yield;   
+        yield; 
+
+        if (initialStartDone == False && MapLoaded) {
+            initialStartDone = True;
+            log("onModeReady");
+            PluginManager::OnModeReady();
+        }
         
         foreach (Event in PendingEvents) {            
             declare TempEvent <=> Event;
-            
-            if (isStartDone == False && Event.Type == CServerPluginEvent::EType::MapLoaded) {
-                isStartDone = True;
-                Server::onModeReady();
-            }
-
             PluginManager::HandleEvent(TempEvent);
         }
         
@@ -29,7 +33,7 @@ main() {
         }
         
         foreach (XPEvent in XmlRpc.PendingEvents) {
-           // log(XPEvent);
+            // log(XPEvent);
         }
         
         Server::ProcessActions();    

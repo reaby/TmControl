@@ -8,7 +8,9 @@ Void Init() {
 }
 
 Void SendAdminPanel(CClient _Client) {
-    UI::Show("AdminPanel", _Client);
+    if (_Client != Null) {
+        UI::Show("AdminPanel", _Client);
+    }
 }
 
 Void OnChat(CClient _client, Text _command, Text[] _params) {

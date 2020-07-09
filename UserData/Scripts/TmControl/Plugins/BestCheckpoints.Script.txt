@@ -85,31 +85,6 @@ Text getManialink() {
         Integer speed;
     }
     
-    Text formatTime(Integer _Time) {
-        if (_Time == 0) return "0:00.00";
-        
-        declare Time = ML::Abs(_Time);
-        declare Sign = "";
-        if (_Time < 0) Sign = "-";
-        
-        declare Milliseconds = Time % 1000;
-        declare Seconds = (Time / 1000) % 60;
-        declare Minutes = (Time / 60000) % 60;
-        declare Hours = (Time / 3600000) % 24;
-        declare Days = Time / 86400000;
-        
-        if (Days > 0) {
-            return Sign ^ Days ^ ":" ^ TL::FormatInteger(Hours, 2) ^ ":" ^ TL::FormatInteger(Minutes, 2) ^ ":" ^ TL::FormatInteger(Seconds, 2) ^ "." ^ TL::FormatInteger(Milliseconds, 3);
-        }
-        
-        if (Hours > 0) {
-            return Sign ^ Hours ^ ":" ^ TL::FormatInteger(Minutes, 2) ^ ":" ^ TL::FormatInteger(Seconds, 2)^ "."  ^ TL::FormatInteger(Milliseconds, 3);
-        }
-        
-        return Sign ^ Minutes ^ ":" ^ TL::FormatInteger(Seconds, 2) ^ "." ^ TL::FormatInteger(Milliseconds, 3);
-    }
-    
-    
     declare CpInfo[] bestCps;
     
     Void updateWidgetData() {
@@ -122,7 +97,7 @@ Text getManialink() {
                 if (data.time > -1) {
                     (frame.Controls[0] as CMlLabel).Value = ""^(data.index+1);
                     (frame.Controls[1] as CMlLabel).Value = data.trigram;
-                    (frame.Controls[2] as CMlLabel).Value = formatTime(data.time);
+                    (frame.Controls[2] as CMlLabel).Value = TL::TimeToText(data.time, True, True);
                     (frame.Controls[3] as CMlLabel).Value = data.speed^"km/h";
                     frame.Show();
                 }
