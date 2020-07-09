@@ -8,7 +8,7 @@ main() {
     Config::Init();
     PluginManager::Init();
     
-    TriggerModeScriptEvent("XmlRpc.EnableCallbacks", [""]);
+    TriggerModeScriptEvent("XmlRpc.EnableCallbacks", [""^Now]);
     
     while (True) {   
         

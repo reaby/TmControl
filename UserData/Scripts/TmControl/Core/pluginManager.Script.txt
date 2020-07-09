@@ -5,7 +5,7 @@
 #Include "TMControl/Plugins/ServerAdmin.Script.txt" as ServerAdmin
 #Include "TMControl/Plugins/Players.Script.txt" as PlayersPanel
 #Include "TMControl/Plugins/Maps.Script.txt" as MapsPanel
-// #Include "TMControl/Plugins/BestCheckpoints.Script.txt" as WidgetBestCheckpoints   // plugin doesn't work atm @todo check if can be enabled later
+#Include "TMControl/Plugins/BestCheckpoints.Script.txt" as WidgetBestCheckpoints
 
 /* oh, i wish so much to have dynamic plugin loader...
 foreach (Plugin in Config::GetEnabledPlugins()) {
@@ -20,10 +20,9 @@ log("PluginManager: OnInit");
 
 Void Init() {     
     +++ OnInit +++
-    log("""\033[32mHello from plugin manager!\033[0m""");
     PlayersPanel::Init();
     ServerAdmin::Init();
-   // WidgetBestCheckpoints::Init(); // enable when things evolve
+    WidgetBestCheckpoints::Init();
 }
 
 Void HandleEvent(CServerPluginEvent Event) {  
@@ -47,17 +46,17 @@ Void HandleEvent(CServerPluginEvent Event) {
         }   
         
         case CServerPluginEvent::EType::ModeCallback: {
-        //   WidgetBestCheckpoints::OnModeEvent(Event); enable when things work
+            WidgetBestCheckpoints::OnModeEvent(Event);
         }
-
+        
         default: {  
-           // log(Event);
+            //   log(Event);
         }
     }
 }
 
 Void HandleUiEvent(CUIConfigEvent UiEvent) {
-
+    
     if (UiEvent.CustomEventType == "TmControl.Server.AddAction") {
         declare Text[] data = UiEvent.CustomEventData;
         if (data.count >= 1) {
@@ -66,7 +65,7 @@ Void HandleUiEvent(CUIConfigEvent UiEvent) {
             Server::_AddAction(action,data);    
         } 
     }
-
+    
     if (UiEvent.CustomEventType == "OpenDialog") {
         declare Text data = UiEvent.CustomEventData[0];
         switch (data) {
@@ -85,7 +84,7 @@ Void HandleUiEvent(CUIConfigEvent UiEvent) {
     if (UiEvent.CustomEventType == "TmControl.Plugins.Players") {
         PlayersPanel::OnUiEvent(UiEvent);
     }
-
+    
     if (UiEvent.CustomEventType == "TmControl.Plugins.Maps") {
         MapsPanel::OnUiEvent(UiEvent);
     }

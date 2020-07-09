@@ -6,12 +6,13 @@
 #Include "TmControl/Libs/Ui.Script.txt" as UI
 #Include "TMControl/Core/serverManager.Script.txt" as Server
 #Include "TextLib" as TL
+#Include "MathLib" as ML
 /**
 Text ModeCallbackType Trackmania.Event.WayPoint
 Text[] ModeCallbackData [{
     "time": 21450260,
-    "login": "EdbzfLXMS_aI_PjZCVaygQ",
-    "accountid": "11d6f37c-b5cc-4bf6-88fc-f8d90956b281",
+    "login": "",
+    "accountid": "",
     "racetime": 1,
     "laptime": 1,
     "checkpointinrace": 0,
@@ -39,7 +40,7 @@ Text[] ModeCallbackData [{
     Integer index;
     Text trigram;
     Integer time;
-    Real speed;
+    Integer speed;
 }
 
 #Const C_widgetMaxCp 18
@@ -54,11 +55,12 @@ Text getManialink() {
     
     declare out = """
     <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-    <manialink version="3">
-    <stylesheet>
-    <style class="center" halign="center" valign="center" textsize="1" />
-    </stylesheet>
+    <manialink version="3" name="TmControl.Widget.BestCps">
+        <stylesheet>
+            <style class="center" halign="center" valign="center" textsize="1" />
+        </stylesheet>
     """;
+
     for (row, 0, maxRows) {
         for (column, 0, maxColumns) {
             out ^= """
@@ -80,7 +82,7 @@ Text getManialink() {
         Integer index;
         Text trigram;
         Integer time;
-        Real speed;
+        Integer speed;
     }
     
     Text formatTime(Integer _Time) {
@@ -114,30 +116,30 @@ Text getManialink() {
         foreach (data in bestCps) {
             declare CMlFrame frame <=> (Page.GetFirstChild("cp_"^data.index) as CMlFrame); 
             if (frame != Null && data.time > -1) {
-                frame.Show();
                 (frame.Controls[0] as CMlLabel).Value = ""^(data.index+1);
                 (frame.Controls[1] as CMlLabel).Value = data.trigram;
                 (frame.Controls[2] as CMlLabel).Value = formatTime(data.time);
                 (frame.Controls[3] as CMlLabel).Value = data.speed^"km/h";
+                frame.Show();
             }
         }
     }
     
     main() {
-        declare Text DataUpdate for Page = "[]";
-        declare Integer Update for Page = 0;
+        declare Text tmcontrol_bestcps_data for LocalUser = "[]";
+        declare Integer tmcontrol_bestcps_update for LocalUser = 0;
         declare Integer LastUpdate = 0;
+        LastUpdate = 0;
+        tmcontrol_bestcps_update = 0;
+
         while (True) {
             yield;
-            if (Update != LastUpdate) {
-                log("update!");
-                LastUpdate = Update;
-                bestCps.fromjson(DataUpdate);
-                log(bestCps);
+            if (tmcontrol_bestcps_update != LastUpdate) {
+                LastUpdate = tmcontrol_bestcps_update;
+                bestCps.fromjson(TL::Replace(tmcontrol_bestcps_data, "'", "\""));
                 updateWidgetData();
             }
         }
-       
     }
     --></script>
     """;
@@ -146,16 +148,25 @@ Text getManialink() {
 }
 
 Void Update() {
-    declare CUILayer layer = UI::LayerGet("WidgetBestCps");
-    log(UIManager.UILayers[layer.Id].LocalPage);  // null
-    log(layer.LocalPage); // null
+    declare out = BestCpsData.tojson();
+    out = TL::Replace(out, "\"", "'");
 
-    //declare Integer _Update for layer.LocalPage = 0;
-    //declare Text _DataUpdate for layer.LocalPage = "";
+    declare Text xml = """
+    <manialink version="3" name="TmControl.Widget.BestCpsUpdater">
+        <script><!-- 
+        main() {
+            declare Integer tmcontrol_bestcps_update for LocalUser;
+            declare Text tmcontrol_bestcps_data for LocalUser = "[]";
+            tmcontrol_bestcps_data = "{{{ out }}}";
+            tmcontrol_bestcps_update = {{{ Now }}}; 
+        }
+        --></script>
+    </manialink>
     
-    //_DataUpdate = BestCpsData.tojson();
-    //_Update = Now;
-    log("update");
+    """;
+
+    UI::Create("BestCpsUpdater", xml);
+    UI::Show("BestCpsUpdater");
 }
 
 Void Reset() {
@@ -171,7 +182,6 @@ Void Reset() {
 Void Init() {
     UI::Create("WidgetBestCps", getManialink());
     UI::Show("WidgetBestCps");
-    yield;
     Reset();
 }
 
@@ -180,17 +190,17 @@ Void OnModeEvent(CServerPluginEvent Event) {
         case "Maniaplanet.StartMap_End": {
             Reset();
         }
-        case "Trackmania.Event.Waypoint": {
+        case "Trackmania.Event.WayPoint": {
             declare WayPoint waypoint;
             waypoint.fromjson(Event.ModeCallbackData[0]);
             declare Integer i = waypoint.checkpointinlap; 
-            if (waypoint.checkpointinlap > C_widgetMaxCp) {
+            if (waypoint.checkpointinlap < C_widgetMaxCp) {
                 if (BestCpsData.existskey(i)) {
-                    if (waypoint.curlapcheckpoints[i] < BestCpsData[i].time ) {
+                    if (waypoint.curlapcheckpoints[i] < BestCpsData[i].time || BestCpsData[i].time == -1 ) {
                         declare CUser User <=> GetClient(waypoint.login).User;
                         declare CpInfo cp = CpInfo {
                             index = waypoint.checkpointinlap,
-                            speed = waypoint.speed,
+                            speed = ML::NearestInteger(waypoint.speed*3.6),
                             time = waypoint.curlapcheckpoints[i],
                             trigram = User.Trigram
                         };
@@ -200,6 +210,8 @@ Void OnModeEvent(CServerPluginEvent Event) {
                 }
             }
         }
-        default: {}
+        default: {
+           // log(Event);
+        }
     }
 }

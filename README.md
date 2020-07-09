@@ -3,7 +3,7 @@ Trackmania dedicated server plugin written in ManiaScript
 
 ## Installation
 1. Download .zip extract directly to dedicated server directory
-2. copy `Media/TmControl/config.default.json` to `Media/TmControl/config.json` and setup admins
+2. copy `UserData/Media/TmControl/config.default.json` to `UserData/Media/TmControl/config.json` and setup admins
 3. To start the server plugin, add `/serverplugin=TmControl/TmControl.Script.txt` to your dedicated server command
 
 ## Usage
