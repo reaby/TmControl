@@ -92,9 +92,10 @@
 			icon: "",
 			title: "Server",		
 			submenu: [
+				["🔁", "Re-read configs", "!Config"],
 				["", "Map list", "!MapList"],
 				["", "Players list", "!Players"]
-				["🔁", "Re-read configs", "!Config"]
+				
 			]			
 		},
 		{ 	
