@@ -118,3 +118,7 @@ Void ProcessActions() {
     
     PendingActions.clear();
 }
+
+Void onModeReady() {
+    TriggerModeScriptEvent("XmlRpc.EnableCallbacks", [""^Now]);
+}

@@ -25,12 +25,14 @@ Void Init() {
     WidgetBestCheckpoints::Init();
 }
 
-Void HandleEvent(CServerPluginEvent Event) {  
+Void HandleEvent(CServerPluginEvent Event) { 
     declare CClient Client <=> Event.Client;
     switch (Event.Type) {
+        
         case CServerPluginEvent::EType::ClientDisconnected:  {
             
         }   
+
         case CServerPluginEvent::EType::ClientConnected: {        
             declare Text Login = Client.User.Login;  
             if (Config::isAdmin(Login)) {

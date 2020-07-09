@@ -5,15 +5,21 @@
 #Include "TMControl/Core/serverManager.Script.txt" as Server
 
 main() {
+    declare Boolean isStartDone = False;
     Config::Init();
     PluginManager::Init();
     
-    TriggerModeScriptEvent("XmlRpc.EnableCallbacks", [""^Now]);
-    
     while (True) {   
+        yield;   
         
         foreach (Event in PendingEvents) {            
             declare TempEvent <=> Event;
+            
+            if (isStartDone == False && Event.Type == CServerPluginEvent::EType::MapLoaded) {
+                isStartDone = True;
+                Server::onModeReady();
+            }
+
             PluginManager::HandleEvent(TempEvent);
         }
         
@@ -23,10 +29,9 @@ main() {
         }
         
         foreach (XPEvent in XmlRpc.PendingEvents) {
-          //  log(XPEvent);
+           // log(XPEvent);
         }
         
-        Server::ProcessActions();
-        yield;        
+        Server::ProcessActions();    
     }
 }

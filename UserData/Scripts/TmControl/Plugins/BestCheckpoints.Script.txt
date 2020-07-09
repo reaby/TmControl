@@ -157,17 +157,16 @@ Void Update() {
     out = TL::Replace(out, "\"", "'");
     
     declare Text xml = """
-    <manialink version="3" name="TmControl.Widget.BestCpsUpdater">
-    <script><!-- 
-    main() {
-        declare Integer tmcontrol_bestcps_update for LocalUser;
-        declare Text tmcontrol_bestcps_data for LocalUser = "[]";
-        tmcontrol_bestcps_data = "{{{ out }}}";
-        tmcontrol_bestcps_update = {{{ Now }}}; 
-    }
-    --></script>
-    </manialink>
-    
+        <manialink version="3" name="TmControl.Widget.BestCpsUpdater">
+        <script><!-- 
+        main() {
+            declare Integer tmcontrol_bestcps_update for LocalUser;
+            declare Text tmcontrol_bestcps_data for LocalUser = "[]";
+            tmcontrol_bestcps_data = "{{{ out }}}";
+            tmcontrol_bestcps_update = {{{ Now }}}; 
+        }
+        --></script>
+        </manialink>
     """;
     
     UI::Create("BestCpsUpdater", xml);
@@ -199,13 +198,14 @@ Void OnModeEvent(CServerPluginEvent Event) {
         case "Maniaplanet.StartMap_End": {
             Reset();
         }
+
         case "Trackmania.Event.WayPoint": {
             declare WayPoint waypoint;
             waypoint.fromjson(Event.ModeCallbackData[0]);
-            declare Integer i = waypoint.checkpointinlap; 
+            declare Integer i = waypoint.checkpointinlap;
             if (waypoint.checkpointinlap < C_widgetMaxCp) {
                 if (BestCpsData.existskey(i)) {
-                    if (waypoint.curlapcheckpoints[i] < BestCpsData[i].time || BestCpsData[i].time == -1 ) {
+                    if (BestCpsData[i].time == -1 || waypoint.curlapcheckpoints[i] < BestCpsData[i].time) {
                         declare CUser User <=> GetClient(waypoint.login).User;
                         declare CpInfo cp = CpInfo {
                             index = waypoint.checkpointinlap,
