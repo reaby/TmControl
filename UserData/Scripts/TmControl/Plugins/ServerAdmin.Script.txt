@@ -8,7 +8,6 @@ Void Init() {
 }
 
 Void SendAdminPanel(CClient _Client) {
-    log("sendAdminPanel");
     UI::Show("AdminPanel", _Client);
 }
 

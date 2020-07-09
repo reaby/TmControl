@@ -56,11 +56,11 @@ Text getManialink() {
     declare out = """
     <?xml version="1.0" encoding="utf-8" standalone="yes"?>
     <manialink version="3" name="TmControl.Widget.BestCps">
-        <stylesheet>
-            <style class="center" halign="center" valign="center" textsize="1" />
-        </stylesheet>
+    <stylesheet>
+    <style class="center" halign="center" valign="center" textsize="1" />
+    </stylesheet>
     """;
-
+    
     for (row, 0, maxRows) {
         for (column, 0, maxColumns) {
             out ^= """
@@ -109,18 +109,23 @@ Text getManialink() {
         return Sign ^ Minutes ^ ":" ^ TL::FormatInteger(Seconds, 2) ^ "." ^ TL::FormatInteger(Milliseconds, 3);
     }
     
-
+    
     declare CpInfo[] bestCps;
     
     Void updateWidgetData() {
         foreach (data in bestCps) {
             declare CMlFrame frame <=> (Page.GetFirstChild("cp_"^data.index) as CMlFrame); 
-            if (frame != Null && data.time > -1) {
-                (frame.Controls[0] as CMlLabel).Value = ""^(data.index+1);
-                (frame.Controls[1] as CMlLabel).Value = data.trigram;
-                (frame.Controls[2] as CMlLabel).Value = formatTime(data.time);
-                (frame.Controls[3] as CMlLabel).Value = data.speed^"km/h";
-                frame.Show();
+            if (frame != Null) {
+                if (data.time == -1) {
+                    frame.Hide();
+                }
+                if (data.time > -1) {
+                    (frame.Controls[0] as CMlLabel).Value = ""^(data.index+1);
+                    (frame.Controls[1] as CMlLabel).Value = data.trigram;
+                    (frame.Controls[2] as CMlLabel).Value = formatTime(data.time);
+                    (frame.Controls[3] as CMlLabel).Value = data.speed^"km/h";
+                    frame.Show();
+                }
             }
         }
     }
@@ -131,7 +136,7 @@ Text getManialink() {
         declare Integer LastUpdate = 0;
         LastUpdate = 0;
         tmcontrol_bestcps_update = 0;
-
+        
         while (True) {
             yield;
             if (tmcontrol_bestcps_update != LastUpdate) {
@@ -150,21 +155,21 @@ Text getManialink() {
 Void Update() {
     declare out = BestCpsData.tojson();
     out = TL::Replace(out, "\"", "'");
-
+    
     declare Text xml = """
     <manialink version="3" name="TmControl.Widget.BestCpsUpdater">
-        <script><!-- 
-        main() {
-            declare Integer tmcontrol_bestcps_update for LocalUser;
-            declare Text tmcontrol_bestcps_data for LocalUser = "[]";
-            tmcontrol_bestcps_data = "{{{ out }}}";
-            tmcontrol_bestcps_update = {{{ Now }}}; 
-        }
-        --></script>
+    <script><!-- 
+    main() {
+        declare Integer tmcontrol_bestcps_update for LocalUser;
+        declare Text tmcontrol_bestcps_data for LocalUser = "[]";
+        tmcontrol_bestcps_data = "{{{ out }}}";
+        tmcontrol_bestcps_update = {{{ Now }}}; 
+    }
+    --></script>
     </manialink>
     
     """;
-
+    
     UI::Create("BestCpsUpdater", xml);
     UI::Show("BestCpsUpdater");
 }
@@ -187,6 +192,10 @@ Void Init() {
 
 Void OnModeEvent(CServerPluginEvent Event) {
     switch (Event.ModeCallbackType) {
+        case "Maniaplanet.Podium_Start": {
+            Reset();
+        }
+
         case "Maniaplanet.StartMap_End": {
             Reset();
         }
@@ -211,7 +220,7 @@ Void OnModeEvent(CServerPluginEvent Event) {
             }
         }
         default: {
-           // log(Event);
+          //   log(Event);
         }
     }
 }
