@@ -108,7 +108,11 @@ Void ProcessActions() {
             case "Ban": {
                 declare CClient Client <=> GetClient(params[0]);
                 ServerAdmin.Ban(Client, params[1]);
-            }            
+            }       
+        
+            case "!Config": {
+                Config::Init();
+            }
         }
     }
     

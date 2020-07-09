@@ -89,11 +89,12 @@
 		
 		#Const menuJson """[
 		{ 	
-			icon: "👥",
-			title: "Players",		
+			icon: "",
+			title: "Server",		
 			submenu: [
 				["", "Map list", "!MapList"],
 				["", "Players list", "!Players"]
+				["🔁", "Re-read configs", "!Config"]
 			]			
 		},
 		{ 	
@@ -101,7 +102,7 @@
 			title: "Maps",
 			submenu: [
 				["", "Skip", "NextMap"],
-				["n", "Restart", "RestartMap"]											
+				["🔁", "Restart", "RestartMap"]											
 			]	
 		}
 		]
