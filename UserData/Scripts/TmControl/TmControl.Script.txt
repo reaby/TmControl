@@ -1,4 +1,4 @@
-#RequireContext CServerPlugin
+// #RequireContext CServerPlugin
 
 #Include "TMControl/Core/config.Script.txt" as Config
 #Include "TMControl/Core/pluginManager.Script.txt" as PluginManager
@@ -8,17 +8,12 @@ main() {
     declare Boolean initialStartDone = False;
     Config::Init();
     PluginManager::Init();
-    
-    
-    
-    
-    
+
     while (True) {   
         yield; 
 
         if (initialStartDone == False && MapLoaded) {
             initialStartDone = True;
-            log("onModeReady");
             PluginManager::OnModeReady();
         }
         

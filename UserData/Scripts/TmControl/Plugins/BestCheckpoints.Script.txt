@@ -1,7 +1,4 @@
 // #RequireContext CServerPlugin
-
-// @todo enable plugins when things evolve
-
 #Include "TmControl/Libs/File.Script.txt" as File
 #Include "TmControl/Libs/Ui.Script.txt" as UI
 #Include "TMControl/Core/serverManager.Script.txt" as Server
@@ -48,7 +45,7 @@ Text[] ModeCallbackData [{
 declare CpInfo[] BestCpsData;
 
 Text getManialink() {
-    declare Integer maxColumns = 9;
+    declare Integer maxColumns = 6;
     declare Integer maxRows = 3;
     declare Integer y = 89;
     declare Integer index = 0;
@@ -84,7 +81,7 @@ Text getManialink() {
         Integer time;
         Integer speed;
     }
-    
+
     declare CpInfo[] bestCps;
     
     Void updateWidgetData() {

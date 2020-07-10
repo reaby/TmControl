@@ -7,10 +7,6 @@
 #Include "TMControl/Plugins/Maps.Script.txt" as MapsPanel
 #Include "TMControl/Plugins/BestCheckpoints.Script.txt" as WidgetBestCheckpoints
 
-/* oh, i wish so much to have dynamic plugin loader...
-foreach (Plugin in Config::GetEnabledPlugins()) {
-    #Include "TMControl/Plugins/ " ^ Plugin ^ ".Script.txt"
-} */
 
 *** OnInit ***
 *** 
