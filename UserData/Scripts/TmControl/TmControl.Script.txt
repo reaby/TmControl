@@ -1,4 +1,4 @@
-// #RequireContext CServerPlugin
+#RequireContext CServerPlugin
 
 #Include "TMControl/Core/config.Script.txt" as Config
 #Include "TMControl/Core/pluginManager.Script.txt" as PluginManager
