@@ -1,0 +1,333 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+<xs:simpleType name="type_floatPositive">
+    <xs:restriction base="xs:string">
+        <xs:pattern value="([0-9]+([.][0-9]*)?|[.][0-9]+)"></xs:pattern>
+    </xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="type_float2">
+    <xs:restriction base="xs:string">
+        <xs:pattern value="[-]?([0-9]+([.][0-9]*)?|[.][0-9]+) [-]?([0-9]+([.][0-9]*)?|[.][0-9]+)"></xs:pattern>
+    </xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="type_float2positive">
+    <xs:restriction base="xs:string">
+        <xs:pattern value="([0-9]+([.][0-9]*)?|[.][0-9]+) ([0-9]+([.][0-9]*)?|[.][0-9]+)"></xs:pattern>
+    </xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="type_bool">
+    <xs:restriction base="xs:int">
+        <xs:enumeration value="0"></xs:enumeration>
+        <xs:enumeration value="1"></xs:enumeration>
+    </xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="type_valign">
+    <xs:restriction base="xs:string">
+        <xs:enumeration value="top"></xs:enumeration>
+        <xs:enumeration value="bottom"></xs:enumeration>
+        <xs:enumeration value="center"></xs:enumeration>
+        <xs:enumeration value="center2"></xs:enumeration>
+    </xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="type_halign">
+    <xs:restriction base="xs:string">
+        <xs:enumeration value="left"></xs:enumeration>
+        <xs:enumeration value="right"></xs:enumeration>
+        <xs:enumeration value="center"></xs:enumeration> 
+    </xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="type_keepRatio">
+    <xs:restriction base="xs:string">
+        <xs:enumeration value="Clip"></xs:enumeration>
+        <xs:enumeration value="Fit"></xs:enumeration>
+        <xs:enumeration value="Inactive"></xs:enumeration> 
+    </xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="entry_textformat">
+    <xs:restriction base="xs:string">
+        <xs:enumeration value="Basic"></xs:enumeration>
+        <xs:enumeration value="Password"></xs:enumeration>
+        <xs:enumeration value="Newpassword"></xs:enumeration> 
+    </xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="textedit_format">
+    <xs:restriction base="xs:string">
+        <xs:enumeration value="Basic"></xs:enumeration>
+        <xs:enumeration value="Script"></xs:enumeration>
+        <xs:enumeration value="Password"></xs:enumeration>
+        <xs:enumeration value="Newpassword"></xs:enumeration> 
+    </xs:restriction>
+</xs:simpleType>
+
+<xs:attributeGroup name="commonAttrib">
+        <xs:attribute name="id" type="xs:NCName" use="optional" />
+        <xs:attribute name="pos" type="type_float2" />
+        <xs:attribute name="z-index" type="type_floatPositive" use="optional" />
+        <xs:attribute name="class" type="xs:string" use="optional" />
+        <xs:attribute name="rot" type="xs:float" use="optional" />
+        <xs:attribute name="hidden" type="type_bool" use="optional" />
+        <xs:attribute name="scale" type="type_floatPositive" use="optional" />
+    </xs:attributeGroup>
+
+    <xs:attributeGroup name="elemAttrib">
+        <xs:attribute name="valign" type="type_valign" use="optional" />
+        <xs:attribute name="halign" type="type_halign" use="optional" />
+        <xs:attribute name="size" type="type_float2positive" />
+        <xs:attribute name="scriptevents" type="type_bool" />
+        <xs:attribute name="scriptaction" type="xs:string" use="optional" />
+    </xs:attributeGroup>
+
+    <xs:element name="frameinstance">
+        <xs:complexType>
+            <xs:attributeGroup ref="commonAttrib"/>
+            <xs:attribute name="modelid" type="xs:NCName" />
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="graph">
+        <xs:complexType>
+            <xs:attributeGroup ref="commonAttrib"/>
+            <xs:attributeGroup ref="elemAttrib"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="video">
+        <xs:complexType>
+            <xs:attributeGroup ref="commonAttrib"/>
+            <xs:attributeGroup ref="elemAttrib"/>
+         
+            <xs:attribute name="data" type="xs:anyURI" />
+            <xs:attribute name="play" type="type_bool" use="optional" />
+            <xs:attribute name="music" type="type_bool" use="optional" />
+            <xs:attribute name="volume" type="type_floatPositive" use="optional" />
+           
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="audio">
+        <xs:complexType>
+            <xs:attributeGroup ref="commonAttrib"/>
+            <xs:attributeGroup ref="elemAttrib"/>
+            <xs:attribute name="data" type="xs:anyURI" />
+            <xs:attribute name="volume" type="type_floatPositive" use="optional" />
+            <xs:attribute name="play" type="type_bool" use="optional" />
+            <xs:attribute name="music" type="type_bool" use="optional" />
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="label">
+        <xs:complexType>
+            <xs:attributeGroup ref="commonAttrib"/>
+            <xs:attributeGroup ref="elemAttrib"/>
+
+            <xs:attribute name="text" type="xs:string" />
+            <xs:attribute name="style" type="xs:string" use="optional" />
+            <xs:attribute name="textsize" type="type_floatPositive" use="optional" />
+            <xs:attribute name="textcolor" type="xs:string" use="optional" />
+            <xs:attribute name="translate" type="type_bool" use="optional" />
+            <xs:attribute name="focusareacolor1" type="xs:string" use="optional" />
+            <xs:attribute name="focusareacolor2" type="xs:string" use="optional" />
+            <xs:attribute name="textfont" type="xs:string" use="optional" />
+            <xs:attribute name="textprefix" type="xs:string" use="optional" />
+            <xs:attribute name="opacity" type="type_floatPositive" use="optional" />
+            <xs:attribute name="textemboss" type="type_bool" use="optional" />
+            <xs:attribute name="autonewline" type="type_bool" use="optional" />
+            <xs:attribute name="maxline" type="xs:positiveInteger" use="optional" />
+            <xs:attribute name="textid" type="xs:string" use="optional" />
+            <xs:attribute name="linespacing" type="type_bool" use="optional" />
+            <xs:attribute name="action" type="xs:string" use="optional" />
+            <xs:attribute name="url" type="xs:anyURI" use="optional" />
+            <xs:attribute name="manialink" type="xs:anyURI" use="optional" />
+            <xs:anyAttribute processContents="lax"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="gauge">
+        <xs:complexType>
+            <xs:attributeGroup ref="commonAttrib"/>
+            <xs:attributeGroup ref="elemAttrib"/>
+            <xs:attribute name="style" type="xs:string" use="optional" />
+            <xs:attribute name="ratio" type="xs:float" use="optional" />
+            <xs:attribute name="grading" type="xs:float" use="optional" />
+            <xs:attribute name="clan" type="xs:int" use="optional" />
+            <xs:attribute name="centered" type="type_bool" use="optional" />
+            <xs:attribute name="color" type="xs:string" use="optional" />
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="fileentry">
+        <xs:complexType>
+            <xs:attributeGroup ref="commonAttrib"/>
+            <xs:attributeGroup ref="elemAttrib"/>
+            <xs:attribute name="default" type="xs:string" use="optional" />
+            <xs:attribute name="textsize" type="xs:string" use="optional" />
+            <xs:attribute name="textcolor" type="xs:string" use="optional" />
+            <xs:attribute name="textfont" type="xs:string" use="optional" />
+            <xs:attribute name="focusareacolor1" type="xs:string" use="optional" />
+            <xs:attribute name="focusareacolor2" type="xs:string" use="optional" />
+            <xs:attribute name="name" type="xs:string" use="optional" />
+            <xs:attribute name="folder" type="xs:string" use="optional" />
+            <xs:attribute name="selecttext" type="type_bool" use="optional" />
+            <xs:attribute name="type" type="xs:string" use="optional" />
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="quad">
+        <xs:complexType>
+            <xs:attributeGroup ref="commonAttrib"/>
+            <xs:attributeGroup ref="elemAttrib"/>
+
+            <xs:attribute name="image" type="xs:anyURI" use="optional" />
+            <xs:attribute name="imagefocus" type="xs:anyURI" use="optional" />
+
+            <xs:attribute name="bgcolor" type="xs:string" use="optional" />
+         
+            <xs:attribute name="keepratio" type="type_keepRatio" use="optional" />
+            <xs:attribute name="colorize" type="xs:string" use="optional" />
+            <xs:attribute name="modulatecolor" type="xs:string" use="optional" />
+            <xs:attribute name="style" type="xs:string" use="optional" />
+            <xs:attribute name="substyle" type="xs:string" use="optional" />
+            <xs:attribute name="autoscalefixedwidth" type="type_bool" use="optional" />
+            <xs:attribute name="styleselected" type="type_bool" use="optional" />
+            <xs:attribute name="opacity" type="type_floatPositive" use="optional" />
+            <xs:attribute name="action" type="xs:string" use="optional" />
+            <xs:attribute name="url" type="xs:anyURI" use="optional" />
+            <xs:attribute name="manialink" type="xs:anyURI" use="optional" />
+            <xs:attribute name="bluramount" type="type_floatPositive" use="optional" />
+            <xs:anyAttribute processContents="lax"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="entry">
+        <xs:complexType>
+            <xs:attributeGroup ref="commonAttrib"/>
+            <xs:attributeGroup ref="elemAttrib"/>
+            <xs:attribute name="style" type="xs:string" use="optional" />
+            <xs:attribute name="textfont" type="xs:string" use="optional" />
+            <xs:attribute name="focusareacolor1" type="xs:string" use="optional" />
+            <xs:attribute name="focusareacolor2" type="xs:string" use="optional" />
+            <xs:attribute name="textcolor" type="xs:string" use="optional" />
+            <xs:attribute name="textsize" type="type_floatPositive" use="optional" />
+            <xs:attribute name="name" type="xs:NCName" use="optional" />
+            <xs:attribute name="textformat" type="entry_textformat" use="optional" />
+            <xs:attribute name="selecttext" type="type_bool" use="optional" />
+            <xs:attribute name="default" type="xs:string" use="optional" />
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="textedit" nillable="true">
+        <xs:complexType>
+            <xs:simpleContent>
+                <xs:extension base="xs:string">
+                    <xs:attributeGroup ref="commonAttrib"/>
+                    <xs:attributeGroup ref="elemAttrib"/>
+                
+                    <xs:attribute name="default" type="xs:string" use="optional" />
+                    <xs:attribute name="style" type="xs:string" use="optional" />
+                    <xs:attribute name="textsize" type="type_floatPositive" use="optional" />
+                    <xs:attribute name="textcolor" type="xs:string" use="optional" />
+                    <xs:attribute name="textfont" type="xs:string" use="optional" />
+                    <xs:attribute name="focusareacolor1" type="xs:string" use="optional" />
+                    <xs:attribute name="focusareacolor2" type="xs:string" use="optional" />
+                    <xs:attribute name="showlinenumbers" type="type_bool" use="optional" />
+                    <xs:attribute name="autonewline" type="type_bool" use="optional" />
+                    <xs:attribute name="maxline" type="xs:positiveInteger" use="optional" />
+                    <xs:attribute name="textformat" type="textedit_format" use="optional" />
+                    <xs:attribute name="linespacing" type="type_floatPositive" use="optional" />
+                </xs:extension>
+            </xs:simpleContent>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="frame">
+        <xs:complexType>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="frame" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element ref="frameinstance" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element ref="graph" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element ref="video" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element ref="audio" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element ref="label" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element ref="gauge" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element ref="fileentry" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element ref="quad" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element ref="entry" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element ref="textedit" minOccurs="0" maxOccurs="unbounded" />
+            </xs:choice>
+            <xs:attributeGroup ref="commonAttrib"></xs:attributeGroup>
+            <xs:attribute name="clip" type="type_float2positive" use="optional" />
+            <xs:attribute name="size" type="type_float2positive" use="optional" />
+            <xs:attribute name="scroll" type="type_bool" use="optional" />
+            <xs:attribute name="scrollmax" type="type_float2positive" use="optional" />
+            <xs:anyAttribute processContents="lax"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="manialink">
+        <xs:complexType>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="stylesheet" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="style" minOccurs="0" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:attributeGroup ref="commonAttrib" />
+                                    <xs:attributeGroup ref="elemAttrib" />
+                                    <xs:anyAttribute processContents="lax" />
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="dico" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="language" minOccurs="0" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:choice minOccurs="0" maxOccurs="unbounded">
+                                        <xs:any processContents="skip" />
+                                    </xs:choice>
+                                    <xs:attribute name="id" type="xs:NCName" />
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="framemodel" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:choice minOccurs="0" maxOccurs="unbounded">
+                            <xs:element ref="frameinstance" minOccurs="0" maxOccurs="unbounded" />
+                            <xs:element ref="graph" minOccurs="0" maxOccurs="unbounded" />
+                            <xs:element ref="video" minOccurs="0" maxOccurs="unbounded" />
+                            <xs:element ref="audio" minOccurs="0" maxOccurs="unbounded" />
+                            <xs:element ref="label" minOccurs="0" maxOccurs="unbounded" />
+                            <xs:element ref="gauge" minOccurs="0" maxOccurs="unbounded" />
+                            <xs:element ref="fileentry" minOccurs="0" maxOccurs="unbounded" />
+                            <xs:element ref="quad" minOccurs="0" maxOccurs="unbounded" />
+                            <xs:element ref="entry" minOccurs="0" maxOccurs="unbounded" />
+                            <xs:element ref="textedit" minOccurs="0" maxOccurs="unbounded" />
+                            <xs:element ref="frame" minOccurs="0" maxOccurs="unbounded" />
+                        </xs:choice>
+                        <xs:attributeGroup ref="commonAttrib" />
+                    </xs:complexType>
+                </xs:element>
+                <xs:element ref="frameinstance" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element ref="graph" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element ref="video" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element ref="audio" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element ref="label" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element ref="gauge" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element ref="fileentry" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element ref="quad" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element ref="entry" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element ref="textedit" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element ref="frame" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element name="script" minOccurs="0" maxOccurs="unbounded"></xs:element>
+            </xs:choice>
+            <xs:attribute name="version" type="xs:positiveInteger" />
+            <xs:attribute name="id" type="xs:NCName" use="optional" />
+            <xs:attribute name="name" type="xs:QName" use="optional" />
+            <xs:attribute name="background" type="xs:string" use="optional" />
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

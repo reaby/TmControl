@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml-model href="manialink_v3.xsd"?>
 <manialink version="3">
 	<stylesheet>
 		<style class="active" focusareacolor1="000F" focusareacolor2="000" />
@@ -7,8 +8,8 @@
 	</stylesheet>
 	<frame pos="-21 -72.5">
 		<frame id="mainMenu">
-			<label class="menuItem" pos="36  0" z-index="0" size="6 6" halign="center" valign="center" data-menu="submenu_0" scriptevents="1" />
-			<label class="menuItem" pos="30  0" z-index="0" size="6 6" halign="center" valign="center" text="" data-menu="submenu_1" scriptevents="1" />
+			<label class="menuItem" pos="36 0" z-index="0" size="6 6" halign="center" valign="center" data-menu="submenu_0" scriptevents="1" />
+			<label class="menuItem" pos="30 0" z-index="0" size="6 6" halign="center" valign="center" text="" data-menu="submenu_1" scriptevents="1" />
 			<label class="menuItem" pos="24 0" z-index="0" size="6 6" halign="center" valign="center" text="" data-menu="submenu_2" scriptevents="1" />
 			<label class="menuItem" pos="18 0" z-index="0" size="6 6" halign="center" valign="center" text="" data-menu="submenu_3" scriptevents="1" />
 			<label class="menuItem" pos="12 0" z-index="0" size="6 6" halign="center" valign="center" text="" data-menu="submenu_4" scriptevents="1" />
@@ -23,7 +24,7 @@
 		<frameinstance modelid="menuitems" id="submenu_5" />
 		<frameinstance modelid="menuitems" id="submenu_6" />
 	</frame>
-	<framemodel id="menuitems" z-index="-1" pos="42 -2.5" hidden="">
+	<framemodel id="menuitems" pos="42 -2.5" hidden="0">
 		<frame pos="-3 3">
 			<label pos="3.5 0" z-index="0" size="6 6" halign="center" valign="center2" text="n" textsize="2" />
 			<label pos="8 0" z-index="0" size="36 6" valign="center2" text="Template" textsize="1" halign="left" />
@@ -92,18 +93,18 @@
 			icon: "",
 			title: "Server",		
 			submenu: [
-				["🔁", "Re-read configs", "!Config"],
-				["", "Map list", "!MapList"],
-				["", "Players list", "!Players"]
-				
+			["🔁", "Re-read configs", "!Config"],
+			["", "Map list", "!MapList"],
+			["", "Players list", "!Players"]
+			
 			]			
 		},
 		{ 	
 			icon: "",
 			title: "Maps",
 			submenu: [
-				["", "Skip", "NextMap"],
-				["🔁", "Restart", "RestartMap"]											
+			["", "Skip", "NextMap"],
+			["🔁", "Restart", "RestartMap"]											
 			]	
 		}
 		]

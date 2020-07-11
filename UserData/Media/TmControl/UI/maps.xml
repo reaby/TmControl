@@ -1,11 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml-model href="manialink_v3.xsd"?>
 <manialink version="3">
 	<stylesheet>
 		<style class="button" size="50 7" textcolor="dee" focusareacolor1="0000" focusareacolor2="0000" halign="center" valign="center2" />
 	</stylesheet>
 	<frame id="maps" hidden="0">
 		<frame id="details" pos="0 52">
-			<label pos="75 0" size="150 8" text="" scale="1" z-index="-0" textsize="8" halign="center" valign="center" class="bg" translate="0" textcolor="dee" id="map_name" />
-			<label pos="75 -6" size="150 8" text="" scale="1" z-index="-0" textsize="2" valign="top" class="bg" textcolor="dee" autonewline="1" maxline="2" translate="0" halign="center" id="map_comments" />
+			<label pos="75 0" size="150 8" text="" scale="1" z-index="0" textsize="8" halign="center" valign="center" class="bg" translate="0" textcolor="dee" id="map_name" />
+			<label pos="75 -6" size="150 8" text="" scale="1" z-index="0" textsize="2" valign="top" class="bg" textcolor="dee" autonewline="1" maxline="2" translate="0" halign="center" id="map_comments" />
 			<frame pos="0 -16">
 				<frame pos="0 0" size="150 5">
 					<label pos="0 0" size="30 4" text="MapUid" textsize="2" translate="0" />
@@ -15,7 +17,7 @@
 		</frame>
 		<frame id="background" pos="0 30" z-index="100">
 			<quad pos="0 31.6" z-index="0" size="100 0.5" bgcolor="FFF9" valign="center" halign="center" class="bg" />
-			<label pos="1 36" size="100 8" text="Server Maps" scale="1" z-index="-0" textsize="8" halign="center" valign="center" class="bg" translate="0" textcolor="dee" />
+			<label pos="1 36" size="100 8" text="Server Maps" scale="1" z-index="0" textsize="8" halign="center" valign="center" class="bg" translate="0" textcolor="dee" />
 		</frame>
 		<frame pos="-150 55">
 			<frame size="156 5">

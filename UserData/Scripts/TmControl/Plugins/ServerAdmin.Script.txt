@@ -13,7 +13,7 @@ Void SendAdminPanel(CClient _Client) {
     }
 }
 
-Void OnChat(CClient _client, Text _command, Text[] _params) {
+Void OnChat(CClient Client, Text _command, Text[] _params) {
     switch(_command) {
         case "/skip": {            
             Server::MapSkip();
