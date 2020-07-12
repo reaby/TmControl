@@ -1,3 +1,5 @@
 # ignore manialsp
 manialsp.exe
+
+# ignore custom config
 UserData/Media/TmControl/config.json

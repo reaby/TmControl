@@ -4,6 +4,7 @@
 #Include "TMControl/Core/serverManager.Script.txt" as Server
 #Include "TextLib" as TL
 #Include "MathLib" as ML
+
 /**
 Text ModeCallbackType Trackmania.Event.WayPoint
 Text[] ModeCallbackData [{
@@ -152,8 +153,6 @@ Void Reset() {
     }
     Update();
 }
-
-
 
 Void Init() {
     UI::Create("WidgetBestCps", getManialink());

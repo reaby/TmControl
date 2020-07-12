@@ -1,0 +1,24 @@
+{
+	"folders": [
+		{
+			"name": "All",
+			"path": "."
+		},
+		{
+			"name": "ManiaScripts",
+			"path": ".\\UserData\\Scripts"
+		},
+		{
+			"name": "Config & UI",
+			"path": ".\\UserData\\Media\\TmControl"
+		}
+	],
+	"extensions": {
+		"recommendations": [
+			"mmcfarland.vscode-maniascript",
+			"redhat.vscode-xml",
+			"vincent-p.vscode-maniascript"
+		]
+	},
+	"settings": {}
+}

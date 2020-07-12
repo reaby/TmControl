@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<?xml-model href="manialink_v3.xsd"?>
+<?xml-model href="manialink_v3.xsd" ?>
 <manialink version="3">
 	<stylesheet>
 		<style class="button" size="50 7" textcolor="dee" focusareacolor1="0000" focusareacolor2="0000" halign="center" valign="center2" />
 	</stylesheet>
+
 	<frame id="maps" hidden="0">
 		<frame id="details" pos="0 52">
 			<label pos="75 0" size="150 8" text="" scale="1" z-index="0" textsize="8" halign="center" valign="center" class="bg" translate="0" textcolor="dee" id="map_name" />

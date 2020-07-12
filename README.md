@@ -20,6 +20,6 @@ When you have admins a row icons will appear above the chrono timer at bottom ce
    1. At Windows 10: `mklink /D Link OriginalDirectory` 
    2. At Linux: `ln -s /path/to/file /path/to/symlink`
 
-You can restart the serverplugin without restarting dedicated with RemoteControlExamples\PhpControl\restart.php
+You can restart the serverplugin without restarting dedicated with `RemoteControlExamples\PhpControl\restart.php`
 Just edit the dedicated xmlrpc port and credentials at the restart.php file and run it with php.
 You might see some deprecated warnings, due the example itself is quite old and we run so much newer php's nowdays... but it'll work just fine.

@@ -23,13 +23,13 @@ Void Init() {
 
 Void OnModeReady() {
     Server::onModeReady();
-
+    
     foreach (Client in Players) {
         if (Config::isAdmin(Client)) {
             ServerAdmin::SendAdminPanel(Client);
         }        
     }
-
+    
     foreach (Client in Spectators) {
         if (Config::isAdmin(Client)) {
             ServerAdmin::SendAdminPanel(Client);
@@ -39,23 +39,38 @@ Void OnModeReady() {
 
 Void HandleEvent(CServerPluginEvent Event) { 
     declare CClient Client <=> Event.Client;
+    declare Boolean isAdmin = False;
+    declare Text PlayerLevel = "Player";
+    if (Client != Null) {
+        isAdmin = Config::isAdmin(Client);
+        if (isAdmin) PlayerLevel = "Admin";
+    }
+    
     switch (Event.Type) {
-        
         case CServerPluginEvent::EType::ClientDisconnected:  {
-            
-        }   
+            if (Client != Null) {
+                Server::SendChat("""$ada{{{ PlayerLevel }}} $<$fff{{{ Client.User.Name }}}$> leaves""");
+            }
+        }
         
-        case CServerPluginEvent::EType::ClientConnected: {        
-            if (Config::isAdmin(Client)) {
+        case CServerPluginEvent::EType::ClientConnected: {     
+            if (Client != Null) {
+                Server::SendChat("""$ada{{{ PlayerLevel }}} $<$fff{{{ Client.User.Name }}}$> joins""");   
+            }
+            if (isAdmin) {
                 ServerAdmin::SendAdminPanel(Client);
             }
         }
         
-        case CServerPluginEvent::EType::ChatCommand: {            
-            if (Config::isAdmin(Client)) {                       
-                //  ServerAdmin::OnChat(Client, Event.ChatCommandType, Event.ChatCommandData);
-            }
-        }   
+        case CServerPluginEvent::EType::ChatCommand: {   
+            Server::SendChat("Available commands:", [Client]);
+            Server::SendChat("$ada/help $fff- show help", [Client]);         
+            if (isAdmin) {                       
+                ServerAdmin::OnChat(Client, Event.ChatCommandType, Event.ChatCommandData);
+            } 
+             
+            
+        }
         
         case CServerPluginEvent::EType::ModeCallback: {
             WidgetBestCheckpoints::OnModeEvent(Event);
@@ -80,20 +95,21 @@ Void HandleUiEvent(CUIConfigEvent UiEvent) {
     
     if (UiEvent.CustomEventType == "OpenDialog") {
         declare Text data = UiEvent.CustomEventData[0];
-        switch (data) {
-            case "!Players": {
-                declare CClient Client <=> GetClient(UiEvent.UI);
-                PlayersPanel::ShowPlayerAdmin(Client);
-            }
-            case "!MapList": {
-                declare CClient Client <=> GetClient(UiEvent.UI);
-                MapsPanel::ShowMaps(Client);
-            }
-            case "!Config": {
-                Server::_AddAction("!Config", []);
-            }
-            default: {}
-        }  
+        declare CClient Client <=> GetClient(UiEvent.UI);
+        if (Config::isAdmin(Client)) {
+            switch (data) {
+                case "!Players": {
+                    PlayersPanel::ShowPlayerAdmin(Client);
+                }
+                case "!MapList": {
+                    MapsPanel::ShowMaps(Client);
+                }
+                case "!Config": {
+                    Server::_AddAction("!Config", []);
+                }
+                default: {}
+            }  
+        }
     }
     
     if (UiEvent.CustomEventType == "TmControl.Plugins.Players") {
@@ -103,4 +119,10 @@ Void HandleUiEvent(CUIConfigEvent UiEvent) {
     if (UiEvent.CustomEventType == "TmControl.Plugins.Maps") {
         MapsPanel::OnUiEvent(UiEvent);
     }
+}
+
+
+Void onMainLoop() {
+    
+    
 }

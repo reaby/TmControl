@@ -8,7 +8,7 @@ main() {
     declare Boolean initialStartDone = False;
     Config::Init();
     PluginManager::Init();
-
+    
     while (True) {   
         yield; 
 
@@ -31,6 +31,7 @@ main() {
             // log(XPEvent);
         }
         
+        PluginManager::onMainLoop();
         Server::ProcessActions();    
     }
 }

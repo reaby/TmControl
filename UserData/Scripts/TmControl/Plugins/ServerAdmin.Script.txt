@@ -13,13 +13,18 @@ Void SendAdminPanel(CClient _Client) {
     }
 }
 
-Void OnChat(CClient Client, Text _command, Text[] _params) {
+Void OnChat(CClient Client, Text _command, Text[] _params) {    
     switch(_command) {
         case "/skip": {            
             Server::MapSkip();
         }
         case "/res": {            
             Server::MapRestart();
+        }
+        case "help": {
+            Server::SendChat("Available $<$adaAdmin$> commands:", [Client]);
+            Server::SendChat("$<$ada//skip$> - skips to next map", [Client]);
+            Server::SendChat("$<$ada//res$> - instantly restart current map", [Client]);
         }
     }
 }
