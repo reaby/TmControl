@@ -6,7 +6,7 @@
 #Include "TMControl/Plugins/Players.Script.txt" as PlayersPanel
 #Include "TMControl/Plugins/Maps.Script.txt" as MapsPanel
 #Include "TMControl/Plugins/BestCheckpoints.Script.txt" as WidgetBestCheckpoints
-
+#Include "TMControl/Plugins/ForceScores.Script.txt" as ForceRoundPoints
 
 *** OnInit ***
 *** 
@@ -19,6 +19,7 @@ Void Init() {
     PlayersPanel::Init();
     ServerAdmin::Init();
     WidgetBestCheckpoints::Init();
+    ForceRoundPoints::Init();
 }
 
 Void OnModeReady() {
@@ -74,10 +75,12 @@ Void HandleEvent(CServerPluginEvent Event) {
         
         case CServerPluginEvent::EType::ModeCallback: {
             WidgetBestCheckpoints::OnModeEvent(Event);
+            ForceRoundPoints::OnModeEvent(Event);
+            // log(Event);
         }
         
         default: {  
-            //   log(Event);
+           // log(Event);
         }
     }
 }
@@ -107,6 +110,9 @@ Void HandleUiEvent(CUIConfigEvent UiEvent) {
                 case "!Config": {
                     Server::_AddAction("!Config", []);
                 }
+                case "!ForceScores": {
+                    ForceRoundPoints::ShowPointsAdmin(Client);
+                }
                 default: {}
             }  
         }
@@ -119,6 +125,11 @@ Void HandleUiEvent(CUIConfigEvent UiEvent) {
     if (UiEvent.CustomEventType == "TmControl.Plugins.Maps") {
         MapsPanel::OnUiEvent(UiEvent);
     }
+    
+    if (UiEvent.CustomEventType == "TmControl.Plugins.ForceScores") {
+        ForceRoundPoints::OnUiEvent(UiEvent);
+    }
+    
 }
 
 

@@ -11,7 +11,7 @@ main() {
     
     while (True) {   
         yield; 
-
+        
         if (initialStartDone == False && MapLoaded) {
             initialStartDone = True;
             PluginManager::OnModeReady();
@@ -28,7 +28,7 @@ main() {
         }
         
         foreach (XPEvent in XmlRpc.PendingEvents) {
-            // log(XPEvent);
+            log(XPEvent);
         }
         
         PluginManager::onMainLoop();

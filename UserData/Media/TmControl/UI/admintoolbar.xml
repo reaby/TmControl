@@ -6,7 +6,7 @@
 		<style class="menuItem" focusareacolor1="0000" focusareacolor2="0004" />
 		<style class="submenuItem" bgcolor="0003" bgcolorfocus="0006" textsize="1.5" />
 	</stylesheet>
-	<frame pos="-21 -72.5">
+	<frame pos="-21 -72.5" z-index="1000">
 		<frame id="mainMenu">
 			<label class="menuItem" pos="36 0" z-index="0" size="6 6" halign="center" valign="center" data-menu="submenu_0" scriptevents="1" />
 			<label class="menuItem" pos="30 0" z-index="0" size="6 6" halign="center" valign="center" text="" data-menu="submenu_1" scriptevents="1" />
@@ -95,7 +95,9 @@
 			submenu: [
 			["🔁", "Re-read configs", "!Config"],
 			["", "Map list", "!MapList"],
-			["", "Players list", "!Players"]
+			["", "Players list", "!Players"],
+			["", "Force Scores", "!ForceScores"]
+			
 			
 			]			
 		},
