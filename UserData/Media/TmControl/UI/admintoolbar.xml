@@ -87,7 +87,7 @@
 		#Const C_delay 50
 		#Const C_speed 750
 		#Const C_submenuCount 7
-		
+
 		#Const menuJson """[
 		{ 	
 			icon: "",
@@ -105,6 +105,10 @@
 			icon: "",
 			title: "Maps",
 			submenu: [
+			["", "End Round", "ForceEndRound"],
+			["", "End Warmup", "ForceEndWarmup"],
+			["⏳", "Start Pause", "ForcePause"],
+			["", "End Pause", "ForceEndPause"],
 			["", "Skip", "NextMap"],
 			["🔁", "Restart", "RestartMap"]											
 			]	

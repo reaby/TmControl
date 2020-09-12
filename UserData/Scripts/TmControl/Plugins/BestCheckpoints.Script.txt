@@ -29,7 +29,7 @@ Text[] ModeCallbackData [{
     Integer time;
     Text login;
     Real speed;
-    Integer[] curlapcheckpoints;
+    Integer laptime;
     Integer checkpointinlap;
 }
 
@@ -176,13 +176,13 @@ Void OnModeEvent(CServerPluginEvent Event) {
             declare Integer i = waypoint.checkpointinlap;
             if (waypoint.checkpointinlap < C_widgetMaxCp) {
                 if (BestCpsData.existskey(i)) {
-                    if (BestCpsData[i].time == -1 || waypoint.curlapcheckpoints[i] < BestCpsData[i].time) {
+                    if (BestCpsData[i].time == -1 || waypoint.laptime < BestCpsData[i].time) {
                         declare CUser User <=> GetClient(waypoint.login).User;
                         declare CpInfo cp = CpInfo {
                             index = waypoint.checkpointinlap,
                             speed = ML::NearestInteger(waypoint.speed*3.6),
-                            time = waypoint.curlapcheckpoints[i],
-                            trigram = User.Trigram
+                            trigram = User.Trigram,
+                            time = waypoint.laptime
                         };
                         BestCpsData[waypoint.checkpointinlap] = cp;
                         Update();

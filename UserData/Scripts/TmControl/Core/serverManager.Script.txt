@@ -95,6 +95,18 @@ Void ProcessActions() {
                 NextMap();
             }
             
+            case "ForceEndRound": {
+                TriggerModeScriptEvent("Trackmania.ForceEndRound", []);
+            }
+            case "ForceEndWarmup": {
+                TriggerModeScriptEvent("Trackmania.WarmUp.ForceStop", []);
+            }
+            case "ForcePause": {
+                TriggerModeScriptEvent("Maniaplanet.Pause.SetActive", ["true"]);
+            }
+            case "ForceEndPause": {
+                TriggerModeScriptEvent("Maniaplanet.Pause.SetActive", ["false"]);
+            }
             case "ForceSpectator": {
                 declare CClient Client <=> GetClient(params[0]);  
                 ServerAdmin.ForceSpectator(Client, _getSpecMode(params[1]));  

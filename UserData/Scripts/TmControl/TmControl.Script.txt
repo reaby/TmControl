@@ -20,6 +20,7 @@ main() {
         foreach (Event in PendingEvents) {            
             declare TempEvent <=> Event;
             PluginManager::HandleEvent(TempEvent);
+           // log(TempEvent);
         }
         
         foreach (UIEvent in UIManager.PendingEvents) {            
