@@ -64,7 +64,7 @@
 								SendCustomEvent("TmControl.Plugins.ForceScores", ["Apply", jsonplayer.tojson()]);
 							}
 							case "btn_close": {
-								SendCustomEvent("TmControl.Plugins.ForceScores", ["Close"]);
+								SendCustomEvent("TmControl.Plugins.ForceScores", ["Close", " "]);
 							}
 							default: {}
 						}
