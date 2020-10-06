@@ -46,7 +46,7 @@
 declare Text PointsListXml;
 
 Void Init() {
-    PointsListXml = File::Read("TmControl/UI/roundpoints.xml");
+    PointsListXml = File::Read("TmControl/UI/Admin/forceScores.xml");
 }
 
 Text genPlayersList(RoundPoints points) {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<?xml-model href="manialink_v3.xsd"?>
+<?xml-model href="../manialink_v3.xsd"?>
 <manialink version="3">
 	<frame id="Window">
 		<label pos="0 4" z-index="0" size="90 16" text="Admin has warned you." halign="center" valign="center" />

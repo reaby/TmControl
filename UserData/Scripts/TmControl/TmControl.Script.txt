@@ -19,8 +19,7 @@ main() {
         
         foreach (Event in PendingEvents) {            
             declare TempEvent <=> Event;
-            PluginManager::HandleEvent(TempEvent);
-           // log(TempEvent);
+            PluginManager::HandleEvent(TempEvent);       
         }
         
         foreach (UIEvent in UIManager.PendingEvents) {            
@@ -31,8 +30,7 @@ main() {
         foreach (XPEvent in XmlRpc.PendingEvents) {
             log(XPEvent);
         }
-        
-        PluginManager::onMainLoop();
+
         Server::ProcessActions();    
     }
 }

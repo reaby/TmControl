@@ -1,5 +1,30 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:simpleType name="type_cmlentry_value">
+        <xs:annotation>
+            <xs:documentation>Valuetype used with CMlEntry.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Ml_Unknown" />
+            <xs:enumeration value="Ml_Natural" />
+            <xs:enumeration value="Ml_Integer" />
+            <xs:enumeration value="Ml_Real" />
+            <xs:enumeration value="Ml_String" />
+            <xs:enumeration value="Ml_TimeMmSsCc" />
+            <xs:enumeration value="Ml_TimeHhMmSs" />
+            <xs:enumeration value="Ml_RealFormated" />
+            <xs:enumeration value="Ml_TimeMmSs" />
+            <xs:enumeration value="Ml_Ascii7bit" />
+            <xs:enumeration value="Ml_Real3Decimals" />
+            <xs:enumeration value="Ml_TimeHhMmSs_24" />
+            <xs:enumeration value="Ml_TimeHhMm" />
+            <xs:enumeration value="Ml_Percent" />
+            <xs:enumeration value="Ml_Hexa" />
+            <xs:enumeration value="Ml_TimeHhMmSsOrMmSs" />
+            <xs:enumeration value="Ml_TimeHhMmFromSeconds" />
+        </xs:restriction>
+    </xs:simpleType>
+
     <xs:simpleType name="type_color">
         <xs:annotation>
             <xs:documentation>Color, supports formats: RGB RGBA RRGGBB and RRGGBBAA in hex. An alpha value of 00 is totally transparent; FF is totally opaque.</xs:documentation>
@@ -186,6 +211,7 @@
             <xs:attributeGroup ref="basicAttrib" />
             <xs:attributeGroup ref="sizeAttrib" />
             <xs:attributeGroup ref="scriptAttrib" />
+            <xs:attribute name="color" type="type_color" use="optional" />
         </xs:complexType>
     </xs:element>
     <xs:element name="timeline">
@@ -237,7 +263,7 @@
             <xs:attribute name="text" type="xs:string" />
             <xs:attribute name="textprefix" type="xs:string" use="optional" />
             <xs:attribute name="autonewline" type="type_bool" use="optional" />
-
+            <xs:attribute name="appendellipsis" type="type_bool" use="optional" />
             <xs:attribute name="opacity" type="type_floatPositive" use="optional" />
             <xs:attribute name="textemboss" type="type_bool" use="optional" />
             <xs:attribute name="maxline" type="xs:positiveInteger" use="optional" />
@@ -276,6 +302,23 @@
             <xs:attribute name="type" type="type_fileEntry" use="optional" />
         </xs:complexType>
     </xs:element>
+    <xs:element name="minimap">
+        <xs:complexType>
+            <xs:attributeGroup ref="basicAttrib" />
+            <xs:attributeGroup ref="sizeAttrib" />
+            <xs:attributeGroup ref="scriptAttrib" />
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="slider">
+        <xs:complexType>
+            <xs:attributeGroup ref="basicAttrib" />
+            <xs:attributeGroup ref="sizeAttrib" />
+            <xs:attributeGroup ref="scriptAttrib" />
+            <xs:attribute name="value" type="type_floatPositive" use="optional" />
+            <xs:attribute name="minrange" type="type_floatPositive" use="optional" />
+            <xs:attribute name="maxrange" type="type_floatPositive" use="optional" />
+        </xs:complexType>
+    </xs:element>
     <xs:element name="quad">
         <xs:complexType>
             <xs:attributeGroup ref="basicAttrib" />
@@ -285,15 +328,16 @@
 
             <xs:attribute name="image" type="xs:anyURI" use="optional" />
             <xs:attribute name="imagefocus" type="xs:anyURI" use="optional" />
-
+            <xs:attribute name="alphamaskurl" type="xs:anyURI" use="optional" />
             <xs:attribute name="bgcolor" type="type_color" use="optional" />
+            <xs:attribute name="bgcolorfocus" type="type_color" use="optional" />
             <xs:attribute name="keepratio" type="type_keepRatio" use="optional" />
             <xs:attribute name="colorize" type="type_color" use="optional" />
             <xs:attribute name="modulatecolor" type="type_color" use="optional" />
             <xs:attribute name="style" type="xs:string" use="optional" />
             <xs:attribute name="substyle" type="xs:string" use="optional" />
-            <xs:attribute name="autoscalefixedwidth" type="type_bool" use="optional" />
             <xs:attribute name="styleselected" type="type_bool" use="optional" />
+            <xs:attribute name="autoscalefixedwidth" type="type_bool" use="optional" />
             <xs:attribute name="opacity" type="type_floatPositive" use="optional" />
             <xs:attribute name="bluramount" type="type_floatPositive" use="optional" />
             <xs:anyAttribute processContents="lax" />
@@ -309,6 +353,7 @@
             <xs:attribute name="textformat" type="entry_textformat" use="optional" />
             <xs:attribute name="selecttext" type="type_bool" use="optional" />
             <xs:attribute name="default" type="xs:string" use="optional" />
+            <xs:attribute name="valuetype" type="type_cmlentry_value" use="optional" />
         </xs:complexType>
     </xs:element>
     <xs:element name="textedit" nillable="true">
@@ -343,6 +388,9 @@
                 <xs:element ref="quad" minOccurs="0" maxOccurs="unbounded" />
                 <xs:element ref="entry" minOccurs="0" maxOccurs="unbounded" />
                 <xs:element ref="textedit" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element ref="colorpicker" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element ref="timeline" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element ref="slider" minOccurs="0" maxOccurs="unbounded" />
             </xs:choice>
             <xs:attributeGroup ref="basicAttrib"></xs:attributeGroup>
             <xs:attribute name="clip" type="type_float2positive" use="optional" />
@@ -399,6 +447,9 @@
                             <xs:element ref="entry" minOccurs="0" maxOccurs="unbounded" />
                             <xs:element ref="textedit" minOccurs="0" maxOccurs="unbounded" />
                             <xs:element ref="frame" minOccurs="0" maxOccurs="unbounded" />
+                            <xs:element ref="colorpicker" minOccurs="0" maxOccurs="unbounded" />
+                            <xs:element ref="timeline" minOccurs="0" maxOccurs="unbounded" />
+                            <xs:element ref="slider" minOccurs="0" maxOccurs="unbounded" />
                         </xs:choice>
                         <xs:attributeGroup ref="basicAttrib" />
                     </xs:complexType>
@@ -414,6 +465,9 @@
                 <xs:element ref="entry" minOccurs="0" maxOccurs="unbounded" />
                 <xs:element ref="textedit" minOccurs="0" maxOccurs="unbounded" />
                 <xs:element ref="frame" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element ref="colorpicker" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element ref="timeline" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element ref="slider" minOccurs="0" maxOccurs="unbounded" />
                 <xs:element name="script" minOccurs="0" maxOccurs="unbounded"></xs:element>
             </xs:choice>
             <xs:attribute name="version" type="xs:int" default="3" />

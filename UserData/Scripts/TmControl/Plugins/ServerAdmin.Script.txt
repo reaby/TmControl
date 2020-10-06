@@ -4,12 +4,19 @@
 #Include "TmControl/Libs/File.Script.txt" as File
 
 Void Init() {
-    UI::Create("AdminPanel", File::Read("TmControl/UI/admintoolbar.xml"));
+    UI::Create("AdminPanel", File::Read("TmControl/UI/Admin/menu.xml"));
+    UI::Create("PlayerPanel", File::Read("TmControl/UI/menu.xml"));
 }
 
 Void SendAdminPanel(CClient _Client) {
     if (_Client != Null) {
         UI::Show("AdminPanel", _Client);
+    }
+}
+
+Void SendPlayerPanel(CClient _Client) {
+    if (_Client != Null) {
+        UI::Show("PlayerPanel", _Client);
     }
 }
 

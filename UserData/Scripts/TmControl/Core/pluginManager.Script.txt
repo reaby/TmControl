@@ -28,12 +28,17 @@ Void OnModeReady() {
     foreach (Client in Players) {
         if (Config::isAdmin(Client)) {
             ServerAdmin::SendAdminPanel(Client);
-        }        
+        } else {
+            ServerAdmin::SendPlayerPanel(Client);
+        }                
     }
     
     foreach (Client in Spectators) {
         if (Config::isAdmin(Client)) {
             ServerAdmin::SendAdminPanel(Client);
+        }
+        else {
+            ServerAdmin::SendPlayerPanel(Client);
         }
     }
 }
@@ -60,16 +65,17 @@ Void HandleEvent(CServerPluginEvent Event) {
             }
             if (isAdmin) {
                 ServerAdmin::SendAdminPanel(Client);
+            } else {
+                ServerAdmin::SendPlayerPanel(Client);
             }
         }
         
         case CServerPluginEvent::EType::ChatCommand: {   
             Server::SendChat("Available commands:", [Client]);
-            Server::SendChat("$ada/help $fff- show help", [Client]);         
+            Server::SendChat("$ada/help $fff- show help", [Client]);
             if (isAdmin) {                       
                 ServerAdmin::OnChat(Client, Event.ChatCommandType, Event.ChatCommandData);
-            } 
-             
+            }            
             
         }
         
@@ -80,7 +86,7 @@ Void HandleEvent(CServerPluginEvent Event) {
         }
         
         default: {  
-           // log(Event);
+            // log(Event);
         }
     }
 }
@@ -96,7 +102,7 @@ Void HandleUiEvent(CUIConfigEvent UiEvent) {
         } 
     }
     
-    if (UiEvent.CustomEventType == "OpenDialog") {
+    if (UiEvent.CustomEventType == "TmControl.Plugins.ServerAdmin") {
         declare Text data = UiEvent.CustomEventData[0];
         declare CClient Client <=> GetClient(UiEvent.UI);
         if (Config::isAdmin(Client)) {
@@ -115,7 +121,7 @@ Void HandleUiEvent(CUIConfigEvent UiEvent) {
                 }
                 default: {}
             }  
-        }
+        }    
     }
     
     if (UiEvent.CustomEventType == "TmControl.Plugins.Players") {
@@ -134,6 +140,5 @@ Void HandleUiEvent(CUIConfigEvent UiEvent) {
 
 
 Void onMainLoop() {
-    
     
 }

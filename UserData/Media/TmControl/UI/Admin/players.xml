@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml-model href="../manialink_v3.xsd"?>
 <manialink version="3">
 	<stylesheet>
 		<style class="button" size="50 7" textcolor="dee" focusareacolor1="0000" focusareacolor2="0000" halign="center" valign="center2" />
@@ -21,7 +22,7 @@
 					<entry pos="31 0" size="40 4" default="" textsize="2" focusareacolor1="0000" id="pl_wsuserid" />
 				</frame>
 			</frame>
-		</frame>
+		</frame>		
 		<frame id="background" pos="0 30" z-index="100">
 			<quad pos="0 31.6" z-index="0" size="100 0.5" bgcolor="FFF9" valign="center" halign="center" class="bg" />
 			<label pos="1 36" size="100 8" text="Manage players" scale="1" z-index="0" textsize="8" halign="center" valign="center" class="bg" translate="0" textcolor="dee" />

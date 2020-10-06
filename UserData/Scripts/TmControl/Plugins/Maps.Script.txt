@@ -2,6 +2,7 @@
 #Include "TmControl/Libs/File.Script.txt" as File
 #Include "TmControl/Libs/Ui.Script.txt" as UI
 #Include "TMControl/Core/serverManager.Script.txt" as Server
+#Include "TmControl/Core/Config.Script.txt" as Config
 #Include "TextLib" as TL
 
 #Struct Mapp {
@@ -10,7 +11,6 @@
     Text Uid;
     Integer Index;
 }
-
 Text genMapsList() {
     declare Text out = "";
     declare Integer i = 1;
@@ -20,11 +20,11 @@ Text genMapsList() {
         declare Text partial = TL::Replace(mapjson.tojson(), "\"", "'");
         out ^= """
         <frame pos="0 -{{{(i-1)*6}}}" size="156 5" id="{{{ Map.MapUid }}}" data-json="{{{ partial }}}">
-            <label pos="1 -4.5"  size="12 4" text="{{{i}}}" textsize="2" valign="bottom"/>
-            <label pos="11 -4.5"  size="20 4" text="{{{ TL::TimeToText(Map.TMObjective_AuthorTime, True, True) }}}" textsize="2" valign="bottom"/>
-            <label pos="32 -4.5"  size="51 4" text="{{{ Map.Name }}}" textsize="2" valign="bottom"/>
-            <label pos="83 -4.5"  size="51 4"  text="{{{ Map.AuthorNickName }}}" textsize="2" focusareacolor1="0000" valign="bottom" selecttext="1"/>
-            <quad class="selector" size="135 5" bgcolor="999" scriptevents="1" opacity="0"/>
+        <label pos="1 -4.5"  size="12 4" text="{{{i}}}" textsize="2" valign="bottom"/>
+        <label pos="11 -4.5"  size="20 4" text="{{{ TL::TimeToText(Map.TMObjective_AuthorTime, True, True) }}}" textsize="2" valign="bottom"/>
+        <label pos="32 -4.5"  size="51 4" text="{{{ Map.Name }}}" textsize="2" valign="bottom"/>
+        <label pos="83 -4.5"  size="51 4"  text="{{{ Map.AuthorNickName }}}" textsize="2" focusareacolor1="0000" valign="bottom" selecttext="1"/>
+        <quad class="selector" size="135 5" bgcolor="999" scriptevents="1" opacity="0"/>
         </frame>""";
         i +=1;
     }
@@ -32,7 +32,7 @@ Text genMapsList() {
 }
 
 Void ShowMaps(CClient _Client) {
-    declare Text xml = File::Read("TmControl/UI/maps.xml");
+    declare Text xml = File::Read("TmControl/UI/Admin/maps.xml");
     xml = TL::Replace(xml, "<!--%maps%-->", genMapsList());
     UI::Create("MapPanel", xml);
     UI::Show("MapPanel", _Client);
@@ -42,18 +42,26 @@ Void HideMaps(CClient _Client) {
     UI::Hide("MapPanel", _Client);
 }
 
+Void ShowVoteWindow() {
+    UI::Show("VotePanel");        
+}
+
 Void OnUiEvent(CUIConfigEvent UiEvent) {
     declare Text[] data = UiEvent.CustomEventData;
     declare Text param = data[1];
     declare CClient Client <=> GetClient(UiEvent.UI);
     switch (data[0]) {
         case "GotoMap": {
-            NextMapIndex = TL::ToInteger(param);
-            Server::MapSkip();
+            if (Config::isAdmin(Client)) {
+                NextMapIndex = TL::ToInteger(param);
+                Server::MapSkip();            
+            }
             HideMaps(Client);
         }
         case "QueueMap": {
-            NextMapIndex = TL::ToInteger(param);
+            if (Config::isAdmin(Client)) {
+                NextMapIndex = TL::ToInteger(param); 
+            }
             HideMaps(Client);
         }
         case "Close": {

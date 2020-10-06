@@ -89,12 +89,10 @@ Void ProcessActions() {
         switch(action) {
             case "RestartMap": {
                 RestartMap();
-            }
-            
+            }            
             case "NextMap": {
                 NextMap();
-            }
-            
+            }            
             case "ForceEndRound": {
                 TriggerModeScriptEvent("Trackmania.ForceEndRound", []);
             }
@@ -108,20 +106,17 @@ Void ProcessActions() {
                 TriggerModeScriptEvent("Maniaplanet.Pause.SetActive", ["false"]);
             }
             case "ForceSpectator": {
-                declare CClient Client <=> GetClient(params[0]);  
+                declare CClient Client <=> GetClient(params[0]); 
                 ServerAdmin.ForceSpectator(Client, _getSpecMode(params[1]));  
             }
-
             case "Kick": {
                 declare CClient Client <=> GetClient(params[0]);
                 ServerAdmin.Kick(Client, params[1]);
             }
-
             case "Ban": {
                 declare CClient Client <=> GetClient(params[0]);
                 ServerAdmin.Ban(Client, params[1]);
             }       
-        
             case "!Config": {
                 Config::Init();
             }

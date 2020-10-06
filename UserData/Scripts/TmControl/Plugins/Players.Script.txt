@@ -7,8 +7,8 @@
 declare Text PlayersListXml;
 
 Void Init() {
-    UI::Create("PlayersWarning", File::Read("TmControl/UI/playerWarning.xml"));
-    PlayersListXml = File::Read("TmControl/UI/players.xml");
+    UI::Create("PlayersWarning", File::Read("TmControl/UI/Admin/playerWarning.xml"));
+    PlayersListXml = File::Read("TmControl/UI/Admin/players.xml");
 }
 
 Text genPlayersList() {

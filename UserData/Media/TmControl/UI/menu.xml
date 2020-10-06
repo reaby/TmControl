@@ -23,7 +23,7 @@
 		<frameinstance modelid="menuitems" id="submenu_4" />
 		<frameinstance modelid="menuitems" id="submenu_5" />
 		<frameinstance modelid="menuitems" id="submenu_6" />
-	</frame>
+	</frame>	
 	<framemodel id="menuitems" pos="42 -2.5" hidden="0">
 		<frame pos="-3 3">
 			<label pos="3.5 0" z-index="0" size="6 6" halign="center" valign="center2" text="n" textsize="2" />
@@ -90,27 +90,10 @@
 
 		#Const menuJson """[
 		{ 	
-			icon: "",
-			title: "Server",		
-			submenu: [
-			["🔁", "Re-read configs", "!Config"],
-			["", "Map list", "!MapList"],
-			["", "Players list", "!Players"],
-			["", "Force Scores", "!ForceScores"]
-			
-			
-			]			
-		},
-		{ 	
 			icon: "",
 			title: "Maps",
 			submenu: [
-			[" ", "End Round", "ForceEndRound"],
-			[" ", "End Warmup", "ForceEndWarmup"],
-			["⏳", "Start Pause", "ForcePause"],
-			["⏳", "End Pause", "ForceEndPause"],
-			["", "Skip", "NextMap"],
-			["🔁", "Restart", "RestartMap"]											
+				["", "Maps list", "!Maps"]												
 			]	
 		}
 		]
@@ -233,7 +216,7 @@
 						if (TextLib::SubString(Event.Control.Parent.DataAttributeGet("action"), 0, 1) != "!") { 
 							SendCustomEvent("TmControl.Server.AddAction", [Event.Control.Parent.DataAttributeGet("action")]);
 						} else {
-							SendCustomEvent("OpenDialog", [Event.Control.Parent.DataAttributeGet("action")]);
+							SendCustomEvent("TmControl.Plugins.Menu", [Event.Control.Parent.DataAttributeGet("action")]);
 						}
 						hideMenu(Event.Control.Parent.Parent);
 					}
