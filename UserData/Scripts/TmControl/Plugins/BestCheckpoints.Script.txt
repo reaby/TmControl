@@ -176,7 +176,6 @@ Void OnModeEvent(CServerPluginEvent Event) {
 		case "Trackmania.Event.WayPoint": {
 			declare K_WayPoint waypoint;
 			waypoint.fromjson(Event.ModeCallbackData[0]);
-			log(waypoint);
 			declare Integer i = waypoint.checkpointinlap;
 			if (waypoint.checkpointinlap <= C_widgetMaxCp) {
 				if (BestCpsData.existskey(i)) {
@@ -189,14 +188,10 @@ Void OnModeEvent(CServerPluginEvent Event) {
 							time = waypoint.laptime
 						};
 						BestCpsData[waypoint.checkpointinlap] = cp;
-						log("update");
 						Update();
 					}
 				}
 			}
-		}
-		default: {
-			//   log(Event);
 		}
 	}
 }

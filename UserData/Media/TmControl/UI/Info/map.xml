@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml-model href="../manialink_v3.xsd"?>
+<manialink version="3">
+	<frame pos="158 85">
+		<label id="mapName" pos="0 0" valign="center2" halign="right" textfont="GameFontBlack" textemboss="1"/>
+		<label id="mapAuthor" pos="0 -5" valign="center2" halign="right" textfont="GameFontSemiBold" textemboss="1"/>
+		<label id="mapAuthorTime" pos="0 -10" valign="center2" halign="right" textfont="GameFontSemiBold" textemboss="1" textsize="2"/>
+		<label id="players" textprefix="" pos="0 -17" valign="center2" halign="right" textfont="GameFontSemiBold" textemboss="1" textsize="1.5"/>
+		<label id="specs"  textprefix="" pos="0 -22" valign="center2" halign="right" textfont="GameFontSemiBold" textemboss="1" textsize="1.5"/>
+	</frame>
+	<script><!--
+//#RequireContext CSmMlScriptIngame
+	#Include "TextLib" as TL
+
+
+	main() {
+		declare CMlLabel name <=> (Page.GetFirstChild("mapName") as CMlLabel);
+		declare CMlLabel author <=> (Page.GetFirstChild("mapAuthor") as CMlLabel);
+		declare CMlLabel authorTime <=> (Page.GetFirstChild("mapAuthorTime") as CMlLabel);
+		declare CMlLabel playerLabel <=> (Page.GetFirstChild("players") as CMlLabel);
+		declare CMlLabel specLabel <=> (Page.GetFirstChild("specs") as CMlLabel);
+
+		declare Text LastStamp = "";
+
+		while (True) {
+			yield;
+			if (System.CurrentLocalDateText != LastStamp) {
+				LastStamp = System.CurrentLocalDateText;
+				name.Value = Map.MapName;
+				author.Value = Map.AuthorNickName;
+				authorTime.Value = "" ^ TL::TimeToText(Map.TMObjective_AuthorTime, True, True);
+				playerLabel.Value = "" ^ Playground.ServerInfo.PlayerCount ^	"/" ^  Playground.ServerInfo.MaxPlayerCount ^ " ";
+				specLabel.Value = "" ^ Playground.ServerInfo.SpectatorCount ^	"/" ^  Playground.ServerInfo.MaxSpectatorCount ^ " ";
+			}
+		}
+	}
+
+	-->
+	</script>
+</manialink>

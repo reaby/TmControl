@@ -122,6 +122,10 @@ Void HandleUiEvent(CUIConfigEvent _UiEvent) {
 				case "!ForceScores": {
 					ForceRoundPoints::ShowPointsAdmin(Client);
 				}
+				case "!PrevMap":
+				{
+					ServerAdmin::PrevMap();
+				}
 				default: {}
 			}
 		}

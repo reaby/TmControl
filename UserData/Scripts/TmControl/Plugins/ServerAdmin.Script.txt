@@ -9,35 +9,45 @@ declare Integer G_PrevMap;
 Void Init() {
 	UI::Create("AdminPanel", File::Read("TmControl/UI/Admin/menu.xml"));
 	UI::Create("PlayerPanel", File::Read("TmControl/UI/menu.xml"));
+	UI::Create("MapInfoPanel", File::Read("TmControl/UI/Info/map.xml"));
 	G_PrevMap = CurMapIndex - 1;
 }
 
 Void SendAdminPanel(CClient _Client) {
 	if (_Client != Null) {
 		UI::Show("AdminPanel", _Client);
+		UI::Show("MapInfoPanel", _Client);
 	}
 }
 
 Void SendPlayerPanel(CClient _Client) {
 	if (_Client != Null) {
 		UI::Show("PlayerPanel", _Client);
+		UI::Show("MapInfoPanel", _Client);
 	}
+}
+
+Void PrevMap() {
+	if (G_PrevMap == CurMapIndex) {
+		G_PrevMap -=1;
+	}
+	Server::SendChat("Going to Previous Map...");
+	Server::MapSetNext(G_PrevMap);
+	Server::MapSkip();
 }
 
 Void OnChat(CClient Client, Text _command, Text[] _params) {
 	switch(_command) {
 		case "/skip": {
+			Server::SendChat("Skipping Map...");
 			Server::MapSkip();
 		}
 		case "/res": {
+			Server::SendChat("Restarting Map...");
 			Server::MapRestart();
 		}
 		case "/prev": {
-			if (G_PrevMap == CurMapIndex) {
-				G_PrevMap -=1;
-			}
-			Server::MapSetNext(G_PrevMap);
-			Server::MapSkip();
+			PrevMap();
 		}
 		case "/list": {
 			MapsPanel::ShowMaps(Client);
