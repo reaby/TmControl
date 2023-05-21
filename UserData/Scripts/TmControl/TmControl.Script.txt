@@ -1,36 +1,39 @@
 #RequireContext CServerPlugin
 
-#Include "TMControl/Core/config.Script.txt" as Config
-#Include "TMControl/Core/pluginManager.Script.txt" as PluginManager
-#Include "TMControl/Core/serverManager.Script.txt" as Server
+#Include "TmControl/Core/config.Script.txt" as Config
+#Include "TmControl/Core/pluginManager.Script.txt" as PluginManager
+#Include "TmControl/Core/serverManager.Script.txt" as Server
 
 main() {
-    declare Boolean initialStartDone = False;
+    declare Boolean InitialStartDone = False;
+
     Config::Init();
     PluginManager::Init();
-    
-    while (True) {   
-        yield; 
-        
-        if (initialStartDone == False && MapLoaded) {
-            initialStartDone = True;
+
+    while (True) {
+        yield;
+
+        if (InitialStartDone == False && MapLoaded) {
+						InitialStartDone = True;
             PluginManager::OnModeReady();
-        }
-        
-        foreach (Event in PendingEvents) {            
-            declare TempEvent <=> Event;
-            PluginManager::HandleEvent(TempEvent);       
-        }
-        
-        foreach (UIEvent in UIManager.PendingEvents) {            
-            declare TempUiEvent <=> UIEvent;
-            PluginManager::HandleUiEvent(TempUiEvent);
-        }
-        
-        foreach (XPEvent in XmlRpc.PendingEvents) {
-            log(XPEvent);
+						Server::SendChat("Community RoomController $fffv0.0.1 Started");
         }
 
-        Server::ProcessActions();    
+        foreach (Event in PendingEvents) {
+            declare CServerPluginEvent TempEvent <=> Event;
+            PluginManager::HandleEvent(TempEvent);
+        }
+
+        foreach (UIEvent in UIManager.PendingEvents) {
+            declare CUIConfigEvent TempUiEvent <=> UIEvent;
+            PluginManager::HandleUiEvent(TempUiEvent);
+        }
+
+        foreach (XPEvent in XmlRpc.PendingEvents) {
+					log(XPEvent);
+        }
+
+				PluginManager::Yield();
+        Server::ProcessActions();
     }
 }

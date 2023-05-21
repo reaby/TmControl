@@ -1,93 +1,93 @@
 // #RequireContext CServerPlugin
 #Include "TmControl/Libs/File.Script.txt" as File
 #Include "TmControl/Libs/Ui.Script.txt" as UI
-#Include "TMControl/Core/serverManager.Script.txt" as Server
+#Include "TmControl/Core/serverManager.Script.txt" as Server
 #Include "TextLib" as TL
 
 declare Text PlayersListXml;
 
 Void Init() {
-    UI::Create("PlayersWarning", File::Read("TmControl/UI/Admin/playerWarning.xml"));
-    PlayersListXml = File::Read("TmControl/UI/Admin/players.xml");
+	UI::Create("PlayersWarning", File::Read("TmControl/UI/Admin/playerWarning.xml"));
+	PlayersListXml = File::Read("TmControl/UI/Admin/players.xml");
 }
 
-Text genPlayersList() {
-    declare Text out = "";
-    declare Integer i = 1;
-    
-    foreach (Client in Clients) {
-        declare User <=> Client.User;
-        out ^= """
-        <frame pos="0 -{{{(i)*6}}}" size="156 5" id="{{{ User.Login }}}">
-            <label pos="1 -4.5"  size="12 4" text="{{{i}}}" textsize="2" valign="bottom"/>
-            <label pos="11 -4.5"  size="20 4" text="{{{ User.Trigram }}}" textsize="2" valign="bottom"/>
-            <label pos="32 -4.5"  size="51 4" text="{{{ User.Name }}}" textsize="2" valign="bottom"/>
-            <label pos="83 -4.5"  size="51 4"  text="{{{ User.ZonePath }}}" textsize="2" focusareacolor1="0000" valign="bottom" selecttext="1"/>
-            <quad class="selector" size="135 5" bgcolor="999" scriptevents="1" opacity="0"/>
-        </frame>""";
-        i +=1;
-    }
-    return out;
+Text GenPlayersList() {
+	declare Text out = "";
+	declare Integer i = 1;
+
+	foreach (Client in Clients) {
+		declare CUser User <=> Client.User;
+		out ^= """
+		<frame pos="0 -{{{(i)*6}}}" size="156 5" id="{{{ User.Login }}}">
+		<label pos="1 -4.5"  size="12 4" text="{{{i}}}" textsize="2" valign="bottom"/>
+		<label pos="11 -4.5"  size="20 4" text="{{{ User.Trigram }}}" textsize="2" valign="bottom"/>
+		<label pos="32 -4.5"  size="51 4" text="{{{ User.Name }}}" textsize="2" valign="bottom"/>
+		<label pos="83 -4.5"  size="51 4"  text="{{{ User.ZonePath }}}" textsize="2" focusareacolor1="0000" valign="bottom" selecttext="1"/>
+		<quad class="selector" size="135 5" bgcolor="3af" scriptevents="1" opacity="0" z-index="-1"/>
+		</frame>""";
+		i +=1;
+	}
+	return out;
 }
 
 Void ShowPlayerAdmin(CClient _Client) {
-    declare xml = PlayersListXml;
-    xml = TL::Replace(xml, "<!--%players%-->", genPlayersList());
-    UI::Create("PlayersPanel", xml);
-    UI::Show("PlayersPanel", _Client);
-    log("Showing players panel");
-    
+	declare Text xml = PlayersListXml;
+	xml = TL::Replace(xml, "<!--%players%-->", GenPlayersList());
+	UI::Create("PlayersPanel", xml);
+	UI::Show("PlayersPanel", _Client);
+	log("Showing players panel");
+
 }
 
 Void ShowWarning(CClient _Client) {
-    UI::Show("PlayersWarning", _Client);
+	UI::Show("PlayersWarning", _Client);
 }
 
 Void HideWarning(CClient _Client) {
-    UI::Hide("PlayersWarning", _Client);
+	UI::Hide("PlayersWarning", _Client);
 }
 
 Void HidePlayerAdmin(CClient _Client) {
-    UI::Hide("PlayersPanel", _Client);
+	UI::Hide("PlayersPanel", _Client);
 }
 
 Void OnUiEvent(CUIConfigEvent UiEvent) {
-    declare Text[] data = UiEvent.CustomEventData;
-    if (data.count >= 2) {
-        declare Text action = data[0];
-        switch (action) {
-            case "Close": {
-                if (data[1] == "Main") HidePlayerAdmin(GetClient(UiEvent.UI));
-                if (data[1] == "Warn") HideWarning(GetClient(UiEvent.UI));
-                return;
-            }
-        }
-        declare Text Login = data[1];
-        declare CClient Client = GetClient(Login);
-        if (Client != Null) {
-            switch (action) {
-                case "ToggleSpec": {
-                    Server::ForceSpectator(Login, !Client.IsSpectator);
-                }
-                case "ToggleChat": {
-                    Client.UI.OverlayHideChat = !Client.UI.OverlayHideChat;
-                }
-                case "Warn": {
-                    ShowWarning(Client);
-                }
-                case "Kick": {
-                    Server::PlayerKick(Login, "");
-                    HidePlayerAdmin(Client);
-                    Server::SendChat("""TmControl> Player $<$fff{{{Client.User.Name}}}$> Kicked""", [GetClient(UiEvent.UI)]);
-                }
-                case "Ban": {
-                    Server::PlayerBan(Login, "");
-                    HidePlayerAdmin(Client);
-                    Server::SendChat("""TmControl> Player $<$fff{{{Client.User.Name}}}$> Banned""", [GetClient(UiEvent.UI)]);
-                }
-            }
-        } else {
-            Server::SendChat("""Client with login {{{Login}}} not found, can't invoke action""", [GetClient(UiEvent.UI)]);
-        }
-    } 
+	declare Text[] data = UiEvent.CustomEventData;
+	if (data.count >= 2) {
+		declare Text Action = data[0];
+		switch (Action) {
+			case "Close": {
+				if (data[1] == "Main") HidePlayerAdmin(GetClient(UiEvent.UI));
+				if (data[1] == "Warn") HideWarning(GetClient(UiEvent.UI));
+				return;
+			}
+		}
+		declare Text Login = data[1];
+		declare CClient Client = GetClient(Login);
+		if (Client == Null) {
+			Server::SendChat("""Client with login {{{Login}}} not found, can't invoke action""", [GetClient(UiEvent.UI)]);
+			return;
+		}
+		switch (Action) {
+			case "ToggleSpec": {
+				Server::ForceSpectator(Login, !Client.IsSpectator);
+			}
+			case "ToggleChat": {
+				Client.UI.OverlayHideChat = !Client.UI.OverlayHideChat;
+			}
+			case "Warn": {
+				ShowWarning(Client);
+			}
+			case "Kick": {
+				Server::PlayerKick(Login, "");
+				HidePlayerAdmin(Client);
+				Server::SendChat("""Player $<$fff{{{Client.User.Name}}}$> Kicked""", [GetClient(UiEvent.UI)]);
+			}
+			case "Ban": {
+				Server::PlayerBan(Login, "");
+				HidePlayerAdmin(Client);
+				Server::SendChat("""Player $<$fff{{{Client.User.Name}}}$> Banned""", [GetClient(UiEvent.UI)]);
+			}
+		}
+	}
 }

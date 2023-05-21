@@ -1,5 +1,5 @@
 // #RequireContext CServerPlugin
-#Include "TMControl/Core/serverManager.Script.txt" as Server
+#Include "TmControl/Core/serverManager.Script.txt" as Server
 #Include "TmControl/Libs/Ui.Script.txt" as UI
 #Include "TmControl/Libs/File.Script.txt" as File
 
@@ -13,11 +13,11 @@ Void SendPlayerPanel(CClient _Client) {
     }
 }
 
-Void OnChat(CClient Client, Text _command, Text[] _params) {    
-    switch(_command) {        
+Void OnChat(CClient Client, Text _command, Text[] _params) {
+    switch(_command) {
         case "help": {
             Server::SendChat("Available commands:", [Client]);
-            Server::SendChat("$<$ada/list$> - show maplist", [Client]);            
+            Server::SendChat("$<$ada/list$> - show maplist", [Client]);
         }
     }
 }

@@ -26,11 +26,11 @@
 				<label pos="11 -0.5" size="20 4" text="Time" maxline="1" textsize="2" />
 				<label pos="32 -0.5" size="51 4" text="Name" maxline="1" textsize="2" />
 				<label pos="83 -0.5" size="51 4" text="Author" translate="1" maxline="1" textsize="2" />
-				<quad pos="0 -4.75" size="135 0.25" bgcolor="fff" />
+				<quad pos="0 -4.75" size="135 0.25" bgcolor="3af" z-index="-2" />
 			</frame>
-			<frame pos="0 -6" size="156 80" id="Maplist" scroll="1">
+			<frame pos="0 -6" size="156 80" id="Maplist" scroll="1" z-index="2">
 				<!--%maps%-->
-				<quad size="900 900" scriptevents="1" bgcolor="0000" />
+				<quad size="900 900" scriptevents="1" bgcolor="0000" z-index="-2"/>
 			</frame>
 		</frame>
 		<frame pos="50 10">
@@ -52,51 +52,51 @@
 	<script><!--
 		// #RequireContext CSmMlScriptIngame
 		#Include "TextLib" as TextLib
-		
+
 		#Struct Map {
 			Text Name;
 			Text Comments;
 			Text Uid;
 			Integer Index;
 		}
-		
+
 		declare Map SelectedMap;
-		
+
 		Void SelectMap(Text MapUid) {
 			declare CMlFrame Frame = (Page.GetFirstChild(MapUid) as CMlFrame);
 			if (Frame != Null) {
 				declare Text jsonData = Frame.DataAttributeGet("json");
-				SelectedMap.fromjson(TextLib::Replace(jsonData, "'", "\""));	
+				SelectedMap.fromjson(TextLib::Replace(jsonData, "'", "\""));
 				(Frame.Controls[4] as CMlQuad).Opacity = 1.;
 			}
-			
+
 			(Page.GetFirstChild("map_name") as CMlLabel).Value =  SelectedMap.Name;
 			(Page.GetFirstChild("map_comments") as CMlLabel).Value =  SelectedMap.Comments;
 			(Page.GetFirstChild("map_uid") as CMlEntry).Value =  SelectedMap.Uid;
 		}
-		
+
 		main() {
 			declare FrameMapsList <=> (Page.GetFirstChild("Maplist") as CMlFrame);
 			SelectMap(FrameMapsList.Controls[0].ControlId);
 			FrameMapsList.ScrollMax = <0., (FrameMapsList.Controls.count * 4.)>;
-			
+
 			while (True) {
 				yield;
-				
-				foreach (Event in PendingEvents) {							
+
+				foreach (Event in PendingEvents) {
 					if (Event.Type == CMlScriptEvent::Type::MouseOver && Event.Control.HasClass("selector")) {
 						if (Event.Control.Parent.ControlId != SelectedMap.Uid) {
 							(Event.Control as CMlQuad).Opacity= 0.4;
 						}
-						
+
 					}
-					
+
 					if (Event.Type == CMlScriptEvent::Type::MouseOut && Event.Control.HasClass("selector")) {
 						if (Event.Control.Parent.ControlId != SelectedMap.Uid) {
 							(Event.Control as CMlQuad).Opacity= 0.;
 						}
 					}
-					
+
 					if (Event.Type == CMlScriptEvent::Type::MouseClick && Event.Control.HasClass("selector")) {
 						if (SelectedMap.Uid != "") {
 							declare CMlFrame frame = (Page.GetFirstChild(SelectedMap.Uid) as CMlFrame);
@@ -106,7 +106,7 @@
 						}
 						SelectMap(Event.Control.Parent.ControlId);
 					}
-					
+
 					if (Event.Type == CMlScriptEvent::Type::MouseClick && Event.Control.HasClass("button")) {
 						switch (Event.Control.Parent.ControlId) {
 							case "btn_goto": {

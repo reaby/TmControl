@@ -1,144 +1,151 @@
-// #RequireContext CServerPlugin
+// #RequireContext CManiaAppTitle
 #Include "TextLib" as TL
-#Include "TMControl/Core/config.Script.txt" as Config
-#Include "TMControl/Core/serverManager.Script.txt" as Server
-#Include "TMControl/Plugins/ServerAdmin.Script.txt" as ServerAdmin
-#Include "TMControl/Plugins/Players.Script.txt" as PlayersPanel
-#Include "TMControl/Plugins/Maps.Script.txt" as MapsPanel
-#Include "TMControl/Plugins/BestCheckpoints.Script.txt" as WidgetBestCheckpoints
-#Include "TMControl/Plugins/ForceScores.Script.txt" as ForceRoundPoints
+#Include "TmControl/Core/config.Script.txt" as Config
+#Include "TmControl/Core/serverManager.Script.txt" as Server
+#Include "TmControl/Plugins/ServerAdmin.Script.txt" as ServerAdmin
+#Include "TmControl/Plugins/Players.Script.txt" as PlayersPanel
+#Include "TmControl/Plugins/Maps.Script.txt" as MapsPanel
+#Include "TmControl/Plugins/BestCheckpoints.Script.txt" as WidgetBestCheckpoints
+#Include "TmControl/Plugins/ForceScores.Script.txt" as ForceRoundPoints
 
-*** OnInit ***
-*** 
-// this should get run, but never does.
-log("PluginManager: OnInit");
-***
+declare Text G_DateStamp;
 
-Void Init() {     
-    +++ OnInit +++
-    PlayersPanel::Init();
-    ServerAdmin::Init();
-    WidgetBestCheckpoints::Init();
-    ForceRoundPoints::Init();
+Void Init() {
+	PlayersPanel::Init();
+	ServerAdmin::Init();
+	WidgetBestCheckpoints::Init() ;
+	ForceRoundPoints::Init();
 }
 
 Void OnModeReady() {
-    Server::onModeReady();
-    
-    foreach (Client in Players) {
-        if (Config::isAdmin(Client)) {
-            ServerAdmin::SendAdminPanel(Client);
-        } else {
-            ServerAdmin::SendPlayerPanel(Client);
-        }                
-    }
-    
-    foreach (Client in Spectators) {
-        if (Config::isAdmin(Client)) {
-            ServerAdmin::SendAdminPanel(Client);
-        }
-        else {
-            ServerAdmin::SendPlayerPanel(Client);
-        }
-    }
+	Server::OnModeReady();
+	foreach (Client in Spectators) {
+
+		if (Config::IsAdmin(Client)) {
+			ServerAdmin::SendAdminPanel(Client);
+		}
+		else {
+			ServerAdmin::SendPlayerPanel(Client);
+		}
+	}
+
+	foreach (Client in Players) {
+		if (Config::IsAdmin(Client)) {
+			ServerAdmin::SendAdminPanel(Client);
+		} else {
+			ServerAdmin::SendPlayerPanel(Client);
+		}
+	}
+}
+Void ShowHelp(CClient _Client) {
+	Server::SendChat("Available commands:", [_Client]);
+	Server::SendChat("$ada/help $fff- show help", [_Client]);
+}
+/** test  */
+Void HandleEvent(CServerPluginEvent _Event) {
+	declare CClient Client <=> _Event.Client;
+	declare Boolean IsAdmin = False;
+	declare Text PlayerLevel = "Player";
+	if (Client != Null) {
+		IsAdmin = Config::IsAdmin(Client);
+		if (IsAdmin) PlayerLevel = "Admin";
+	}
+
+	switch (_Event.Type) {
+		case CServerPluginEvent::EType::ClientDisconnected:  {
+			if (Client != Null) {
+				Server::SendChat("""$daa{{{ PlayerLevel }}} $<$fff{{{ Client.User.Name }}}$> leaves""");
+			}
+		}
+
+		case CServerPluginEvent::EType::ClientConnected: {
+			if (Client != Null) {
+				Server::SendChat("""$ada{{{ PlayerLevel }}} $<$fff{{{ Client.User.Name }}}$> joins""");
+			}
+			if (IsAdmin) {
+				ServerAdmin::SendAdminPanel(Client);
+			} else {
+				ServerAdmin::SendPlayerPanel(Client);
+			}
+		}
+
+		case CServerPluginEvent::EType::ChatCommand: {
+			switch(_Event.ChatCommandType) {
+				case "help": return ShowHelp(Client);
+			}
+
+			if (TL::StartsWith("/", _Event.ChatCommandType)) {
+				if (IsAdmin) {
+					ServerAdmin::OnChat(Client, _Event.ChatCommandType, _Event.ChatCommandData);
+				}
+			}
+		}
+
+		case CServerPluginEvent::EType::ModeCallback: {
+			WidgetBestCheckpoints::OnModeEvent(_Event);
+			ForceRoundPoints::OnModeEvent(_Event);
+			// ServerAdmin::OnModeEvent(_Event);
+			// log(Event);
+		}
+
+		default: {
+			log(_Event);
+		}
+	}
 }
 
-Void HandleEvent(CServerPluginEvent Event) { 
-    declare CClient Client <=> Event.Client;
-    declare Boolean isAdmin = False;
-    declare Text PlayerLevel = "Player";
-    if (Client != Null) {
-        isAdmin = Config::isAdmin(Client);
-        if (isAdmin) PlayerLevel = "Admin";
-    }
-    
-    switch (Event.Type) {
-        case CServerPluginEvent::EType::ClientDisconnected:  {
-            if (Client != Null) {
-                Server::SendChat("""$ada{{{ PlayerLevel }}} $<$fff{{{ Client.User.Name }}}$> leaves""");
-            }
-        }
-        
-        case CServerPluginEvent::EType::ClientConnected: {     
-            if (Client != Null) {
-                Server::SendChat("""$ada{{{ PlayerLevel }}} $<$fff{{{ Client.User.Name }}}$> joins""");   
-            }
-            if (isAdmin) {
-                ServerAdmin::SendAdminPanel(Client);
-            } else {
-                ServerAdmin::SendPlayerPanel(Client);
-            }
-        }
-        
-        case CServerPluginEvent::EType::ChatCommand: {   
-            Server::SendChat("Available commands:", [Client]);
-            Server::SendChat("$ada/help $fff- show help", [Client]);
-            if (isAdmin) {                       
-                ServerAdmin::OnChat(Client, Event.ChatCommandType, Event.ChatCommandData);
-            }            
-            
-        }
-        
-        case CServerPluginEvent::EType::ModeCallback: {
-            WidgetBestCheckpoints::OnModeEvent(Event);
-            ForceRoundPoints::OnModeEvent(Event);
-            // log(Event);
-        }
-        
-        default: {  
-            // log(Event);
-        }
-    }
-}
+Void HandleUiEvent(CUIConfigEvent _UiEvent) {
 
-Void HandleUiEvent(CUIConfigEvent UiEvent) {
-    
-    if (UiEvent.CustomEventType == "TmControl.Server.AddAction") {
-        declare Text[] data = UiEvent.CustomEventData;
-        if (data.count >= 1) {
-            declare Text action = data[0];
-            data.removekey(0);
-            Server::_AddAction(action,data);    
-        } 
-    }
-    
-    if (UiEvent.CustomEventType == "TmControl.Plugins.ServerAdmin") {
-        declare Text data = UiEvent.CustomEventData[0];
-        declare CClient Client <=> GetClient(UiEvent.UI);
-        if (Config::isAdmin(Client)) {
-            switch (data) {
-                case "!Players": {
-                    PlayersPanel::ShowPlayerAdmin(Client);
-                }
-                case "!MapList": {
-                    MapsPanel::ShowMaps(Client);
-                }
-                case "!Config": {
-                    Server::_AddAction("!Config", []);
-                }
-                case "!ForceScores": {
-                    ForceRoundPoints::ShowPointsAdmin(Client);
-                }
-                default: {}
-            }  
-        }    
-    }
-    
-    if (UiEvent.CustomEventType == "TmControl.Plugins.Players") {
-        PlayersPanel::OnUiEvent(UiEvent);
-    }
-    
-    if (UiEvent.CustomEventType == "TmControl.Plugins.Maps") {
-        MapsPanel::OnUiEvent(UiEvent);
-    }
-    
-    if (UiEvent.CustomEventType == "TmControl.Plugins.ForceScores") {
-        ForceRoundPoints::OnUiEvent(UiEvent);
-    }
-    
+	if (_UiEvent.CustomEventType == "TmControl.Server.AddAction") {
+		declare Text[] Data = _UiEvent.CustomEventData;
+		if (Data.count >= 1) {
+			declare Text Action = Data[0];
+			Data.removekey(0);
+			Server::AddAction(Action, Data);
+		}
+	}
+
+	if (_UiEvent.CustomEventType == "TmControl.Plugins.ServerAdmin") {
+		declare Text Data = _UiEvent.CustomEventData[0];
+		declare CClient Client <=> GetClient(_UiEvent.UI);
+		if (Config::IsAdmin(Client)) {
+			switch (Data) {
+				case "!Players": {
+					PlayersPanel::ShowPlayerAdmin(Client);
+				}
+				case "!MapList": {
+					MapsPanel::ShowMaps(Client);
+				}
+				case "!Config": {
+					Server::AddAction("!Config", []);
+				}
+				case "!ForceScores": {
+					ForceRoundPoints::ShowPointsAdmin(Client);
+				}
+				default: {}
+			}
+		}
+	}
+
+	if (_UiEvent.CustomEventType == "TmControl.Plugins.Players") {
+		PlayersPanel::OnUiEvent(_UiEvent);
+	}
+
+	if (_UiEvent.CustomEventType == "TmControl.Plugins.Maps") {
+		MapsPanel::OnUiEvent(_UiEvent);
+	}
+
+	if (_UiEvent.CustomEventType == "TmControl.Plugins.ForceScores") {
+		ForceRoundPoints::OnUiEvent(_UiEvent);
+	}
+
 }
 
 
-Void onMainLoop() {
-    
+Void Yield() {
+	if (G_DateStamp != System.CurrentLocalDateText) {
+		G_DateStamp = System.CurrentLocalDateText;
+
+	}
+
 }

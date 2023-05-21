@@ -4,6 +4,7 @@
 	<stylesheet>
 		<style class="active" focusareacolor1="000F" focusareacolor2="000" />
 		<style class="menuItem" focusareacolor1="0000" focusareacolor2="0004" />
+		<style class="font" textfont="GameFontSemiBold" />
 		<style class="submenuItem" bgcolor="0003" bgcolorfocus="0006" textsize="1.5" />
 	</stylesheet>
 	<frame pos="-21 -72.5" z-index="1000">
@@ -27,118 +28,118 @@
 	<framemodel id="menuitems" pos="42 -2.5" hidden="0">
 		<frame pos="-3 3">
 			<label pos="3.5 0" z-index="0" size="6 6" halign="center" valign="center2" text="n" textsize="2" />
-			<label pos="8 0" z-index="0" size="36 6" valign="center2" text="Template" textsize="1" halign="left" />
-			<quad class="submenuItem" pos="0 0" z-index="0" size="42 5" valign="center" halign="left" scriptevents="1" />
-			<quad pos="0 0" size="0.35 5" bgcolor="fff" halign="left" valign="center" />
+			<label class="font" pos="8 0" z-index="0" size="36 6" valign="center2" text="Template" textsize="1" halign="left" />
+			<quad class="submenuItem" pos="0 0" z-index="-1" size="42 5" valign="center" halign="left" scriptevents="1" />
+			<quad pos="0 0" size="0.35 5" bgcolor="fff" halign="left" valign="center" z-index="-2"/>
 		</frame>
 		<frame pos="-3 8.5">
 			<label pos="3.5 0" z-index="0" size="6 6" halign="center" valign="center2" text="n" textsize="2" />
-			<label pos="8 0" z-index="0" size="36 6" valign="center2" text="Template" textsize="1" halign="left" />
-			<quad class="submenuItem" pos="0 0" z-index="0" size="42 5" valign="center" halign="left" scriptevents="1" />
-			<quad pos="0 0" size="0.35 5" bgcolor="fff" halign="left" valign="center" />
+			<label class="font" pos="8 0" z-index="0" size="36 6" valign="center2" text="Template" textsize="1" halign="left" />
+			<quad class="submenuItem" pos="0 0" z-index="-1" size="42 5" valign="center" halign="left" scriptevents="1" />
+			<quad pos="0 0" size="0.35 5" bgcolor="fff" halign="left" valign="center" z-index="-2"/>
 		</frame>
 		<frame pos="-3 14">
 			<label pos="3.5 0" z-index="0" size="6 6" halign="center" valign="center2" text="n" textsize="2" />
-			<label pos="8 0" z-index="0" size="36 6" valign="center2" text="Template" textsize="1" halign="left" />
-			<quad class="submenuItem" pos="0 0" z-index="0" size="42 5" valign="center" halign="left" scriptevents="1" />
-			<quad pos="0 0" size="0.35 5" bgcolor="fff" halign="left" valign="center" />
+			<label class="font" pos="8 0" z-index="0" size="36 6" valign="center2" text="Template" textsize="1" halign="left" />
+			<quad class="submenuItem" pos="0 0" z-index="-1" size="42 5" valign="center" halign="left" scriptevents="1" />
+			<quad pos="0 0" size="0.35 5" bgcolor="fff" halign="left" valign="center" z-index="-2"/>
 		</frame>
 		<frame pos="-3 19.5">
 			<label pos="3.5 0" z-index="0" size="6 6" halign="center" valign="center2" text="n" textsize="2" />
-			<label pos="8 0" z-index="0" size="36 6" valign="center2" text="Template" textsize="1" halign="left" />
-			<quad class="submenuItem" pos="0 0" z-index="0" size="42 5" valign="center" halign="left" scriptevents="1" />
-			<quad pos="0 0" size="0.35 5" bgcolor="fff" halign="left" valign="center" />
+			<label class="font" pos="8 0" z-index="0" size="36 6" valign="center2" text="Template" textsize="1" halign="left" />
+			<quad class="submenuItem" pos="0 0" z-index="-1" size="42 5" valign="center" halign="left" scriptevents="1" />
+			<quad pos="0 0" size="0.35 5" bgcolor="fff" halign="left" valign="center" z-index="-2"/>
 		</frame>
 		<frame pos="-3 25">
 			<label pos="3.5 0" z-index="0" size="6 6" halign="center" valign="center2" text="n" textsize="2" />
-			<label pos="8 0" z-index="0" size="36 6" valign="center2" text="Template" textsize="1" halign="left" />
-			<quad class="submenuItem" pos="0 0" z-index="0" size="42 5" valign="center" halign="left" scriptevents="1" />
-			<quad pos="0 0" size="0.35 5" bgcolor="fff" halign="left" valign="center" />
+			<label class="font" pos="8 0" z-index="0" size="36 6" valign="center2" text="Template" textsize="1" halign="left" />
+			<quad class="submenuItem" pos="0 0" z-index="-1" size="42 5" valign="center" halign="left" scriptevents="1" />
+			<quad pos="0 0" size="0.35 5" bgcolor="fff" halign="left" valign="center" z-index="-2"/>
 		</frame>
 		<frame pos="-3 30.5">
 			<label pos="3.5 0" z-index="0" size="6 6" halign="center" valign="center2" text="n" textsize="2" />
-			<label pos="8 0" z-index="0" size="36 6" valign="center2" text="Template" textsize="1" halign="left" />
-			<quad class="submenuItem" pos="0 0" z-index="0" size="42 5" valign="center" halign="left" scriptevents="1" />
-			<quad pos="0 0" size="0.35 5" bgcolor="fff" halign="left" valign="center" />
+			<label class="font" pos="8 0" z-index="0" size="36 6" valign="center2" text="Template" textsize="1" halign="left" />
+			<quad class="submenuItem" pos="0 0" z-index="-1" size="42 5" valign="center" halign="left" scriptevents="1" />
+			<quad pos="0 0" size="0.35 5" bgcolor="fff" halign="left" valign="center" z-index="-2"/>
 		</frame>
 		<frame pos="-3 36">
 			<label pos="3.5 0" z-index="0" size="6 6" halign="center" valign="center2" text="n" textsize="2" />
-			<label pos="8 0" z-index="0" size="36 6" valign="center2" text="Template" textsize="1" halign="left" />
-			<quad class="submenuItem" pos="0 0" z-index="0" size="42 5" valign="center" halign="left" scriptevents="1" />
-			<quad pos="0 0" size="0.35 5" bgcolor="fff" halign="left" valign="center" />
+			<label class="font"  pos="8 0" z-index="0" size="36 6" valign="center2" text="Template" textsize="1" halign="left" />
+			<quad class="submenuItem" pos="0 0" z-index="-1" size="42 5" valign="center" halign="left" scriptevents="1" />
+			<quad pos="0 0" size="0.35 5" bgcolor="fff" halign="left" valign="center" z-index="-2"/>
 		</frame>
 		<frame pos="-3 41.5">
 			<label pos="3.5 0" z-index="0" size="6 6" halign="center" valign="center2" text="n" textsize="2" />
-			<label pos="8 0" z-index="0" size="36 6" valign="center2" text="Template" textsize="1" halign="left" />
-			<quad class="submenuItem" pos="0 0" z-index="0" size="42 5" valign="center" halign="left" scriptevents="1" />
-			<quad pos="0 0" size="0.35 5" bgcolor="fff" halign="left" valign="center" />
+			<label class="font" pos="8 0" z-index="0" size="36 6" valign="center2" text="Template" textsize="1" halign="left" />
+			<quad class="submenuItem" pos="0 0" z-index="-1" size="42 5" valign="center" halign="left" scriptevents="1" />
+			<quad pos="0 0" size="0.35 5" bgcolor="fff" halign="left" valign="center" z-index="-2"/>
 		</frame>
 	</framemodel>
-	<script><!-- 
+	<script><!--
 		/** @context CSmMlScriptIngame */
 		#Include "TextLib" as TextLib
-		
+
 		#Struct MenuStruct {
 			Text icon;
 			Text title;
 			Text[][] submenu;
 		}
-		
+
 		#Const C_delay 50
 		#Const C_speed 750
 		#Const C_submenuCount 7
 
 		#Const menuJson """[
-		{ 	
+		{
 			icon: "",
-			title: "Server",		
+			title: "Server",
 			submenu: [
 			["🔁", "Re-read configs", "!Config"],
 			["", "Map list", "!MapList"],
 			["", "Players list", "!Players"],
-			["", "Force Scores", "!ForceScores"]						
-			]			
+			["", "Force Scores", "!ForceScores"]
+			]
 		},
-		{ 	
+		{
 			icon: "",
 			title: "Maps",
 			submenu: [
 			[" ", "End Round", "ForceEndRound"],
 			[" ", "End Warmup", "ForceEndWarmup"],
-			["⏳", "Start Pause", "ForcePause"],
-			["⏳", "End Pause", "ForceEndPause"],
 			["", "Skip", "NextMap"],
-			["🔁", "Restart", "RestartMap"]											
-			]	
+			["🔁", "Restart", "RestartMap"]
+			]
 		}
 		]
 		"""
-		
+
+		// ["⏳", "Start Pause", "ForcePause"],
+		// ["⏳", "End Pause", "ForceEndPause"],
 		declare Text activeMenu;
-		
-		
-		
+
+
+
 		Void showMenu(CMlFrame menuFrame, Boolean needWait) {
 			declare id = TextLib::ToInteger(menuFrame.DataAttributeGet("menuId"));
 			declare CMlFrame mainFrame <=> (Page.GetFirstChild("mainMenu") as CMlFrame);
 			foreach(i => label in mainFrame.Controls) {
-				if (i == id) {  
+				if (i == id) {
 					(label as CMlLabel).TextSizeReal = 3.;
 				}
-			}   
+			}
 			declare time = Now;
 			if (needWait) {
 				declare Integer items = TextLib::ToInteger(menuFrame.DataAttributeGet("items"));
 				time = Now + (items*C_delay) + C_speed/2;
 			}
-			
+
 			foreach(index => frame in menuFrame.Controls) {
-				frame.RelativeScale = 0.;        
-				AnimMgr.Flush(frame);        
-				AnimMgr.Add(frame, """<elem scale="1" />""", time + (index-1)*C_delay, C_speed, CAnimManager::EAnimManagerEasing::ElasticOut);        
+				frame.RelativeScale = 0.;
+				AnimMgr.Flush(frame);
+				AnimMgr.Add(frame, """<elem scale="1" />""", time + (index-1)*C_delay, C_speed, CAnimManager::EAnimManagerEasing::ElasticOut);
 			}
 		}
-		
+
 		Void hideMenu(CMlFrame menuFrame) {
 			activeMenu = "";
 			declare id = TextLib::ToInteger(menuFrame.DataAttributeGet("menuId"));
@@ -146,24 +147,24 @@
 			foreach(i => label in mainFrame.Controls) {
 				(label as CMlLabel).TextSizeReal = 1.;
 			}
-			
+
 			declare Integer items = TextLib::ToInteger(menuFrame.DataAttributeGet("items"));
 			foreach(index => frame in menuFrame.Controls) {
-				declare time = Now;        
-				AnimMgr.Flush(frame);		
-				AnimMgr.Add(frame, """<elem scale="0" />""", Now - C_speed/2 + (items-1 - index)*C_delay, C_speed, CAnimManager::EAnimManagerEasing::ElasticIn);       
+				declare time = Now;
+				AnimMgr.Flush(frame);
+				AnimMgr.Add(frame, """<elem scale="0" />""", Now - C_speed/2 + (items-1 - index)*C_delay, C_speed, CAnimManager::EAnimManagerEasing::ElasticIn);
 			}
 		}
-		
+
 		Void hideMenu(Text menuFrame) {
 			hideMenu((Page.GetFirstChild(menuFrame) as CMlFrame));
 		}
-		
+
 		main() {
 			activeMenu = "";
 			declare MenuStruct[] mainMenu;
 			mainMenu.fromjson(menuJson);
-			
+
 			// initial hide
 			for (x, 0, C_submenuCount-1) {
 				declare CMlFrame menuFrame <=> (Page.GetFirstChild("submenu_"^x) as CMlFrame);
@@ -174,7 +175,7 @@
 						label.Value = mainMenu[x].icon;
 						label.TextSizeReal = 1.;
 						menuFrame.DataAttributeSet("menuId", ""^x);
-						menuFrame.Show();						
+						menuFrame.Show();
 						foreach(j => frame in menuFrame.Controls) {
 							frame.RelativeScale = 0.;
 							menuFrame.DataAttributeSet("items", ""^mainMenu[x].submenu.count);
@@ -185,7 +186,7 @@
 									(subFrame.Controls[0] as CMlLabel).Value = menuItem[0];
 									(subFrame.Controls[1] as CMlLabel).Value = menuItem[1];
 									subFrame.DataAttributeSet("action", menuItem[2]);
-									
+
 								} else {
 									subFrame.Hide();
 								}
@@ -197,18 +198,18 @@
 					}
 				}
 			}
-			
+
 			while (True) {
-				yield;	
-				
+				yield;
+
 				foreach (Event in PendingEvents) {
 					if (Event.Type == CMlScriptEvent::Type::MouseClick && Event.Control.HasClass("menuItem")) {
 						declare Text currentMenu = Event.Control.DataAttributeGet("menu");
 						declare CMlFrame menuFrame <=> (Page.GetFirstChild(currentMenu) as CMlFrame);
 						if (activeMenu == "") {
 							showMenu(menuFrame, False);
-							
-							activeMenu = currentMenu;	
+
+							activeMenu = currentMenu;
 						}  else {
 							if (activeMenu == currentMenu) {
 								hideMenu(currentMenu);
@@ -217,18 +218,18 @@
 								activeMenu = currentMenu;
 								showMenu(menuFrame, True);
 							}
-						}               
+						}
 					}
-					
-					if (Event.Type == CMlScriptEvent::Type::MouseOver && Event.Control.HasClass("submenuItem")) {                
-						Event.Control.Parent.Controls[1].RelativeScale = 1.1;                               
+
+					if (Event.Type == CMlScriptEvent::Type::MouseOver && Event.Control.HasClass("submenuItem")) {
+						Event.Control.Parent.Controls[1].RelativeScale = 1.1;
 					}
-					
+
 					if (Event.Type == CMlScriptEvent::Type::MouseOut && Event.Control.HasClass("submenuItem")) {
-						Event.Control.Parent.Controls[1].RelativeScale = 1.;   
+						Event.Control.Parent.Controls[1].RelativeScale = 1.;
 					}
 					if (Event.Type == CMlScriptEvent::Type::MouseClick && Event.Control.HasClass("submenuItem")) {
-						if (TextLib::SubString(Event.Control.Parent.DataAttributeGet("action"), 0, 1) != "!") { 
+						if (TextLib::SubString(Event.Control.Parent.DataAttributeGet("action"), 0, 1) != "!") {
 							SendCustomEvent("TmControl.Server.AddAction", [Event.Control.Parent.DataAttributeGet("action")]);
 						} else {
 							SendCustomEvent("TmControl.Plugins.ServerAdmin", [Event.Control.Parent.DataAttributeGet("action")]);
@@ -236,7 +237,7 @@
 						hideMenu(Event.Control.Parent.Parent);
 					}
 				}
-			}		
+			}
 		}
 	--></script>
 </manialink>

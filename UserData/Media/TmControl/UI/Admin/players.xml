@@ -22,7 +22,7 @@
 					<entry pos="31 0" size="40 4" default="" textsize="2" focusareacolor1="0000" id="pl_wsuserid" />
 				</frame>
 			</frame>
-		</frame>		
+		</frame>
 		<frame id="background" pos="0 30" z-index="100">
 			<quad pos="0 31.6" z-index="0" size="100 0.5" bgcolor="FFF9" valign="center" halign="center" class="bg" />
 			<label pos="1 36" size="100 8" text="Manage players" scale="1" z-index="0" textsize="8" halign="center" valign="center" class="bg" translate="0" textcolor="dee" />
@@ -33,11 +33,11 @@
 				<label pos="11 -0.5" size="20 4" text="Trigram" maxline="1" textsize="2" />
 				<label pos="32 -0.5" size="51 4" text="Nickname" maxline="1" textsize="2" />
 				<label pos="83 -0.5" size="51 4" text="From" translate="1" maxline="1" textsize="2" />
-				<quad pos="0 -4.75" size="135 0.25" bgcolor="fff" />
+				<quad pos="0 -4.75" size="135 0.25" bgcolor="3af" />
 			</frame>
 			<frame pos="0 -6" size="156 80" id="PlayersList" scroll="1">
 				<!--%players%-->
-				<quad size="900 900" scriptevents="1" bgcolor="0000" />
+				<quad size="900 900" scriptevents="1" bgcolor="0000" z-index="-2" />
 			</frame>
 		</frame>
 		<frame pos="20 0">
@@ -71,13 +71,13 @@
 	<script><!--
 		// #RequireContext CSmMlScriptIngame
 		#Include "TextLib" as TextLib
-		
+
 		declare Text SelectedLogin;
-		
+
 		Void SelectPlayer(Text Login) {
 			declare Frame = (Page.GetFirstChild(Login) as CMlFrame);
 			if (Frame != Null) {
-				SelectedLogin = Login;	
+				SelectedLogin = Login;
 				(Frame.Controls[4] as CMlQuad).Opacity = 1.;
 			}
 			declare CUser User;
@@ -99,29 +99,29 @@
 				pl_wsuserid.Value = User.WebServicesUserId;
 			}
 		}
-		
+
 		main() {
 			declare CMlFrame FramePlayersList <=> (Page.GetFirstChild("PlayersList") as CMlFrame);
 			SelectPlayer(FramePlayersList.Controls[0].ControlId);
 			FramePlayersList.ScrollMax = <0., (FramePlayersList.Controls.count * 4.)>;
-			
+
 			while (True) {
 				yield;
-				
-				foreach (Event in PendingEvents) {							
+
+				foreach (Event in PendingEvents) {
 					if (Event.Type == CMlScriptEvent::Type::MouseOver && Event.Control.HasClass("selector")) {
 						if (Event.Control.Parent.ControlId != SelectedLogin) {
 							(Event.Control as CMlQuad).Opacity= 0.4;
 						}
-						
+
 					}
-					
+
 					if (Event.Type == CMlScriptEvent::Type::MouseOut && Event.Control.HasClass("selector")) {
 						if (Event.Control.Parent.ControlId != SelectedLogin) {
 							(Event.Control as CMlQuad).Opacity= 0.;
 						}
 					}
-					
+
 					if (Event.Type == CMlScriptEvent::Type::MouseClick && Event.Control.HasClass("selector")) {
 						if (SelectedLogin != "") {
 							declare CMlFrame frame = (Page.GetFirstChild(SelectedLogin) as CMlFrame);
@@ -131,7 +131,7 @@
 						}
 						SelectPlayer(Event.Control.Parent.ControlId);
 					}
-					
+
 					if (Event.Type == CMlScriptEvent::Type::MouseClick && Event.Control.HasClass("button")) {
 						switch (Event.Control.Parent.ControlId) {
 							case "btn_chat": {
@@ -152,7 +152,7 @@
 							case "btn_close": {
 								SendCustomEvent("TmControl.Plugins.Players", ["Close", "Main"]);
 							}
-							default: 
+							default:
 							{}
 						}
 					}

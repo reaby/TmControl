@@ -136,7 +136,7 @@
     <xs:attributeGroup name="basicAttrib">
         <xs:attribute name="id" type="xs:NCName" use="optional" />
         <xs:attribute name="pos" type="type_float2" />
-        <xs:attribute name="z-index" type="type_floatPositive" use="optional" />
+        <xs:attribute name="z-index" type="xs:float" use="optional" />
         <xs:attribute name="class" type="xs:string" use="optional" />
         <xs:attribute name="rot" type="xs:float" use="optional" />
         <xs:attribute name="hidden" type="type_bool" use="optional" />

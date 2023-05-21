@@ -1,34 +1,37 @@
 // #RequireContext CServerPlugin
 #Include "TmControl/Libs/File.Script.txt" as File
 
-#Struct ConfigJson {
+#Struct K_ConfigJson {
 	Text[Text] Admins;
 	Text[Text] Colors;
 }
 
 
-declare ConfigJson configuration;
+declare K_ConfigJson G_configuration;
 
+/** Initializes the module */
 Void Init() {
-	declare Text data = File::Read("TmControl/config.json");
-	if (data == "") {
-		log("TMControl is started without any admins.");
+	declare Text Data = File::Read("TmControl/config.json");
+	if (Data == "") {
+		log("TmControl is started without any admins.");
 		log("Did you remember to copy config.default.json to config.json ?");
 	}
-	configuration.fromjson(data);
+	G_configuration.fromjson(Data);
 }
 
-Boolean isAdmin(Text _login) {
-	return configuration.Admins.existskey(_login);
+/** returns if the login is admin */
+Boolean IsAdmin(Text _Login) {
+	return G_configuration.Admins.existskey(_Login);
 }
 
-Boolean isAdmin(CClient _client) {
-	if (_client != Null) {
-		return isAdmin(_client.User.Login);
+/** asd das */
+Boolean IsAdmin(CClient _Client) {
+	if (_Client != Null) {
+		return IsAdmin(_Client.User.Login);
 	}
 	return False;
 }
 
-Text[Text] getColors() {
-	return configuration.Colors;
+Text[Text] GetColors() {
+	return G_configuration.Colors;
 }

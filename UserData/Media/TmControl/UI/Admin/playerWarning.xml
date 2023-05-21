@@ -2,17 +2,17 @@
 <?xml-model href="../manialink_v3.xsd"?>
 <manialink version="3">
 	<frame id="Window">
-		<label pos="0 4" z-index="0" size="90 16" text="Admin has warned you." halign="center" valign="center" />
+		<label pos="0 4" z-index="2" size="90 16" text="Admin has warned you." halign="center" valign="center" />
 		<frame pos="6.5 -10" class="btnContainer" id="btn_close">
 			<label id="Close" size="30 6" text="Ok" class="button" textprefix="" halign="center" valign="center" focusareacolor1="0000" focusareacolor2="fff" translate="1" scriptevents="1" pos="-6.5 1.5" textsize="1.5" />
 			<quad size="30 6" style="Bgs1" colorize="fff" substyle="BgColorContour" class="button" halign="center" valign="center" pos="-6.5 1.5" />
 		</frame>
-		<quad pos="0 0" z-index="0" size="100 30" style="Bgs1" substyle="BgDialogBlur" halign="center" valign="center" class="bg" />
+		<quad pos="0 0" size="100 30" style="Bgs1" substyle="BgDialogBlur" halign="center" valign="center" class="bg" z-index="-2"/>
 	</frame>
-	<script><!--	
+	<script><!--
 		// #RequireContext CSmMlScriptIngame
-		
-		/** main function 
+
+		/** main function
 		* used as entrypoint to script
 		*/
 		main() {
@@ -27,7 +27,7 @@
 				}
 			}
 		}
-		
+
 	-->
 	</script>
 </manialink>

@@ -1,131 +1,142 @@
 // @context CServerPlugin
-#Include "TMControl/Core/config.Script.txt" as Config
+#Include "TmControl/Core/config.Script.txt" as Config
 #Include "TextLib" as TL
 
-declare Text[][Text] PendingActions;
+declare Text[][Text] G_PendingActions;
 
-Void _AddAction(Text action, Text[] params) {
-    if (!PendingActions.existskey(action)) {
-        PendingActions[action] = params;
-    }
+/**
+* adds action to pending actions
+*/
+Void AddAction(Text _Action, Text[] _Params) {
+	if (!G_PendingActions.existskey(_Action)) {
+		G_PendingActions[_Action] = _Params;
+	}
 }
 
 Void PlayerKick(CClient _Client, Text _Reason) {
-    _AddAction("Kick", [_Client.User.Login, _Reason]);
+	AddAction("Kick", [_Client.User.Login, _Reason]);
 }
 
 Void PlayerKick(Text _Login, Text _Reason) {
-    _AddAction("Kick", [_Login, _Reason]);
+	AddAction("Kick", [_Login, _Reason]);
 }
 
 Void PlayerBan(CClient _Client, Text _Reason) {
-    _AddAction("Ban", [_Client.User.Login, _Reason]);
+	AddAction("Ban", [_Client.User.Login, _Reason]);
 }
 
 Void PlayerBan(Text _Login, Text _Reason) {
-    _AddAction("Ban", [_Login, _Reason]);
+	AddAction("Ban", [_Login, _Reason]);
 }
 
 Void MapSkip() {
-    _AddAction("NextMap", []);
+	AddAction("NextMap", []);
 }
 
 Void MapRestart() {
-    _AddAction("RestartMap", []);
+	AddAction("RestartMap", []);
 }
 
 Void ForceSpectator(Text _Login, Boolean _IsSpec) {
-    declare Text out = "PlayerSelectable";
-    if (_IsSpec == True) out = "SpectatorForced";
-    _AddAction("ForceSpectator", [_Login, out]);
+	declare Text Out = "PlayerSelectable";
+	if (_IsSpec == True) Out = "SpectatorForced";
+	AddAction("ForceSpectator", [_Login, Out]);
 }
 
 Void MapSetNext(CMapInfo _Map) {
-    NextMapIndex = MapList.keyof(_Map) % MapList.count;
+	NextMapIndex = MapList.keyof(_Map) % MapList.count;
 }
 
-Void MapSetNext(Integer _index) {
-    NextMapIndex = _index % MapList.count;
+Void MapSetNext(Integer _Index) {
+	NextMapIndex = _Index % MapList.count;
 }
 
 Text ParseColors(Text _Message) {
-    declare out = _Message;
-    foreach (color => code in Config::getColors()) {
-        out = TL::Replace(out, """%{{{color}}}%""", code);
-    }
-    return out;
+	declare Text Out = _Message;
+	foreach (color => code in Config::GetColors()) {
+		Out = TL::Replace(Out, """%{{{color}}}%""", code);
+	}
+	return Out;
 }
 
+
+Void SendChat(Text _Message, Boolean _Prefix) {
+	log("""[Server] {{{_Message}}}""");
+	declare Text Prefix = "";
+	if (_Prefix) {
+		Prefix = "»» ";
+	}
+	UIManager.UIAll.SendChat(Prefix ^ ParseColors(_Message));
+}
 
 Void SendChat(Text _Message) {
-    log("""[Server] {{{_Message}}}""");
-    
-    UIManager.UIAll.SendChat(ParseColors(_Message));
+	SendChat(_Message, True);
 }
+
 Void SendChat(Text _Message, CClient[] _Recipients) {
-    declare out = ParseColors(_Message);
-    foreach (Client in _Recipients) {
-        Client.UI.SendChat(out);
-    }
+	declare Text Out = ParseColors(_Message);
+	foreach (Client in _Recipients) {
+		Client.UI.SendChat("» "^Out);
+	}
 }
 
-Void SendChat(Text _Message, Text[] __Recipients) {
-    declare out = ParseColors(_Message);
-    foreach (_Client in __Recipients) {
-        declare Client <=> GetClient(_Client);
-        Client.UI.SendChat(out);
-    }   
+Void SendChat(Text _Message, Text[] _Recipients) {
+	declare Text Out = ParseColors(_Message);
+	foreach (Login in _Recipients) {
+		declare CClient Client <=> GetClient(Login);
+		Client.UI.SendChat("» "^Out);
+	}
 }
 
-CServerAdmin::ESpecMode _getSpecMode(Text _SpectatorMode) {
-    if (_SpectatorMode == "SpectatorForced") return CServerAdmin::ESpecMode::SpectatorForced;
-    if (_SpectatorMode == "PlayerSelectable") return CServerAdmin::ESpecMode::PlayerSelectable;
-    /** @todo add other enums as well */
-    return CServerAdmin::ESpecMode::Selectable;
+CServerAdmin::ESpecMode GetSpecMode(Text _SpectatorMode) {
+	if (_SpectatorMode == "SpectatorForced") return CServerAdmin::ESpecMode::SpectatorForced;
+	if (_SpectatorMode == "PlayerSelectable") return CServerAdmin::ESpecMode::PlayerSelectable;
+	/** @todo add other enums as well */
+	return CServerAdmin::ESpecMode::Selectable;
 }
 
 Void ProcessActions() {
-    foreach(action => params in PendingActions) {
-        switch(action) {
-            case "RestartMap": {
-                RestartMap();
-            }            
-            case "NextMap": {
-                NextMap();
-            }            
-            case "ForceEndRound": {
-                TriggerModeScriptEvent("Trackmania.ForceEndRound", []);
-            }
-            case "ForceEndWarmup": {
-                TriggerModeScriptEvent("Trackmania.WarmUp.ForceStop", []);
-            }
-            case "ForcePause": {
-                TriggerModeScriptEvent("Maniaplanet.Pause.SetActive", ["true"]);
-            }
-            case "ForceEndPause": {
-                TriggerModeScriptEvent("Maniaplanet.Pause.SetActive", ["false"]);
-            }
-            case "ForceSpectator": {
-                declare CClient Client <=> GetClient(params[0]); 
-                ServerAdmin.ForceSpectator(Client, _getSpecMode(params[1]));  
-            }
-            case "Kick": {
-                declare CClient Client <=> GetClient(params[0]);
-                ServerAdmin.Kick(Client, params[1]);
-            }
-            case "Ban": {
-                declare CClient Client <=> GetClient(params[0]);
-                ServerAdmin.Ban(Client, params[1]);
-            }       
-            case "!Config": {
-                Config::Init();
-            }
-        }
-    }
-    
-    PendingActions.clear();
+	foreach(action => params in G_PendingActions) {
+		switch(action) {
+			case "RestartMap": {
+				RestartMap();
+			}
+			case "NextMap": {
+				NextMap();
+			}
+			case "ForceEndRound": {
+				TriggerModeScriptEvent("Trackmania.ForceEndRound", []);
+			}
+			case "ForceEndWarmup": {
+				TriggerModeScriptEvent("Trackmania.WarmUp.ForceStop", []);
+			}
+			case "ForcePause": {
+				TriggerModeScriptEvent("Maniaplanet.Pause.SetActive", ["true"]);
+			}
+			case "ForceEndPause": {
+				TriggerModeScriptEvent("Maniaplanet.Pause.SetActive", ["false"]);
+			}
+			case "ForceSpectator": {
+				declare CClient Client <=> GetClient(params[0]);
+				ServerAdmin.ForceSpectator(Client, GetSpecMode(params[1]));
+			}
+			case "Kick": {
+				declare CClient Client <=> GetClient(params[0]);
+				ServerAdmin.Kick(Client, params[1]);
+			}
+			case "Ban": {
+				declare CClient Client <=> GetClient(params[0]);
+				ServerAdmin.Ban(Client, params[1]);
+			}
+			case "!Config": {
+				Config::Init();
+			}
+		}
+	}
+
+	G_PendingActions.clear();
 }
 
-Void onModeReady() {
-    TriggerModeScriptEvent("XmlRpc.EnableCallbacks", [""^Now]);
+Void OnModeReady() {
+	TriggerModeScriptEvent("XmlRpc.EnableCallbacks", [""^Now]);
 }

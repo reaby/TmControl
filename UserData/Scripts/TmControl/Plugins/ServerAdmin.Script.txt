@@ -1,37 +1,60 @@
 // #RequireContext CServerPlugin
-#Include "TMControl/Core/serverManager.Script.txt" as Server
+#Include "TmControl/Core/serverManager.Script.txt" as Server
 #Include "TmControl/Libs/Ui.Script.txt" as UI
 #Include "TmControl/Libs/File.Script.txt" as File
+#Include "TmControl/Plugins/Maps.Script.txt" as MapsPanel
+
+declare Integer G_PrevMap;
 
 Void Init() {
-    UI::Create("AdminPanel", File::Read("TmControl/UI/Admin/menu.xml"));
-    UI::Create("PlayerPanel", File::Read("TmControl/UI/menu.xml"));
+	UI::Create("AdminPanel", File::Read("TmControl/UI/Admin/menu.xml"));
+	UI::Create("PlayerPanel", File::Read("TmControl/UI/menu.xml"));
+	G_PrevMap = CurMapIndex - 1;
 }
 
 Void SendAdminPanel(CClient _Client) {
-    if (_Client != Null) {
-        UI::Show("AdminPanel", _Client);
-    }
+	if (_Client != Null) {
+		UI::Show("AdminPanel", _Client);
+	}
 }
 
 Void SendPlayerPanel(CClient _Client) {
-    if (_Client != Null) {
-        UI::Show("PlayerPanel", _Client);
-    }
+	if (_Client != Null) {
+		UI::Show("PlayerPanel", _Client);
+	}
 }
 
-Void OnChat(CClient Client, Text _command, Text[] _params) {    
-    switch(_command) {
-        case "/skip": {            
-            Server::MapSkip();
-        }
-        case "/res": {            
-            Server::MapRestart();
-        }
-        case "help": {
-            Server::SendChat("Available $<$adaAdmin$> commands:", [Client]);
-            Server::SendChat("$<$ada//skip$> - skips to next map", [Client]);
-            Server::SendChat("$<$ada//res$> - instantly restart current map", [Client]);
-        }
-    }
+Void OnChat(CClient Client, Text _command, Text[] _params) {
+	switch(_command) {
+		case "/skip": {
+			Server::MapSkip();
+		}
+		case "/res": {
+			Server::MapRestart();
+		}
+		case "/prev": {
+			if (G_PrevMap == CurMapIndex) {
+				G_PrevMap -=1;
+			}
+			Server::MapSetNext(G_PrevMap);
+			Server::MapSkip();
+		}
+		case "/list": {
+			MapsPanel::ShowMaps(Client);
+		}
+		case "/help": {
+			Server::SendChat("Available $<$adaAdmin$> commands:", [Client]);
+			Server::SendChat("$<$ada//skip$> - skips to next map", [Client]);
+			Server::SendChat("$<$ada//res$> - instantly restart current map", [Client]);
+		}
+	}
+}
+
+Void OnModeEvent(CServerPluginEvent _Event) {
+	switch (_Event.ModeCallbackType) {
+		case "Maniaplanet.EndMap_End": {
+			G_PrevMap = CurMapIndex;
+		}
+	}
+
 }

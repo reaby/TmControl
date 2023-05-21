@@ -1,11 +1,11 @@
 // #RequireContext CServerPlugin
 #Include "TmControl/Libs/File.Script.txt" as File
 #Include "TmControl/Libs/Ui.Script.txt" as UI
-#Include "TMControl/Core/serverManager.Script.txt" as Server
+#Include "TmControl/Core/serverManager.Script.txt" as Server
 #Include "TextLib" as TL
 
-/** 
-"players": 
+/**
+"players":
 {
     "login": "EdbzfLXMS_aI_PjZCVaygQ",
     "accountid": "11d6f37c-b5cc-4bf6-88fc-f8d90956b281",
@@ -52,7 +52,7 @@ Void Init() {
 Text genPlayersList(RoundPoints points) {
     declare Text out = "";
     declare Integer i = 1;
-    
+
     foreach (player in points.players) {
         out ^= """
         <frame pos="0 -{{{(i-1)*6}}}" size="156 5" id="{{{ player.login }}}">
@@ -92,9 +92,9 @@ Void OnUiEvent(CUIConfigEvent UiEvent) {
                         TriggerModeScriptEvent("Trackmania.SetPlayerPoints", [player.Login, "0","0","""{{{player.Points}}}"""]);
                     }
                     HidePointsAdmin(GetClient(UiEvent.UI));
-                    return; 
+                    return;
                 }
-            } 
+            }
         }
     }
 }
@@ -102,16 +102,16 @@ Void OnUiEvent(CUIConfigEvent UiEvent) {
 Void OnModeEvent(CServerPluginEvent Event) {
     switch (Event.ModeCallbackType) {
         case "Trackmania.Scores": {
-           
+
             declare RoundPoints points;
             points.fromjson(Event.ModeCallbackData[0]);
             declare xml = PointsListXml;
             xml = TL::Replace(xml, "<!--%players%-->", genPlayersList(points));
-          
+
             UI::Create("ForcePointsPanel", xml);
             declare _Client = GetClient(points.responseid);
             if (  _Client != Null) {
-                UI::Show("ForcePointsPanel", _Client);  
+                UI::Show("ForcePointsPanel", _Client);
             }
         }
     }

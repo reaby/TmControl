@@ -15,10 +15,32 @@
 	],
 	"extensions": {
 		"recommendations": [
-			"mmcfarland.vscode-maniascript",
+			"reaby.maniascript-support",
 			"redhat.vscode-xml",
 			"vincent-p.vscode-maniascript"
 		]
 	},
-	"settings": {}
+	"settings": {
+		"editor.tabSize": 2,
+		"editor.detectIndentation": false,
+		"editor.insertSpaces": false,
+		"diffEditor.ignoreTrimWhitespace": false,
+		"files.trimTrailingWhitespace": true,
+		"files.encoding": "utf8",
+		"files.eol": "\n"
+	},
+	"launch": {
+		"version": "0.2.0",
+		"configurations": [
+			{
+				"type": "node",
+				"request": "launch",
+				"name": "Launch Program",
+				"skipFiles": [
+					"<node_internals>/**"
+				],
+				"program": "${workspaceFolder}/Tools/restart.js"
+			}
+		]
+	}
 }
