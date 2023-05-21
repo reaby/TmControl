@@ -1,28 +1,28 @@
 // #RequireContext CServerPlugin
-declare Ident[Text] _UILayers;
+declare Ident[Text] G_UILayers;
 
-Boolean _LayerExists(Text _LayerName) {
-	if (!_UILayers.existskey(_LayerName)) return False;
-	if (!UIManager.UILayers.existskey(_UILayers[_LayerName])) return False;
+Boolean LayerExists(Text _LayerName) {
+	if (!G_UILayers.existskey(_LayerName)) return False;
+	if (!UIManager.UILayers.existskey(G_UILayers[_LayerName])) return False;
 	return True;
 }
 
 CUILayer LayerGet(Text _LayerName) {
-	if (!_LayerExists(_LayerName)) return Null;
-	return UIManager.UILayers[_UILayers[_LayerName]];
+	if (!LayerExists(_LayerName)) return Null;
+	return UIManager.UILayers[G_UILayers[_LayerName]];
 }
 
-Void _Delete(Text _LayerName) {
-	if (!_LayerExists(_LayerName)) return;
-	UIManager.UILayerDestroy(UIManager.UILayers[_UILayers[_LayerName]]);
-	_UILayers.removekey(_LayerName);
+Void Delete(Text _LayerName) {
+	if (!LayerExists(_LayerName)) return;
+	UIManager.UILayerDestroy(UIManager.UILayers[G_UILayers[_LayerName]]);
+	G_UILayers.removekey(_LayerName);
 }
 
 CUILayer Create(Text _LayerName, Text _LayerManialink) {
-	if (_LayerExists(_LayerName)) _Delete(_LayerName);
+	if (LayerExists(_LayerName)) Delete(_LayerName);
 	declare CUILayer NewLayer <=> UIManager.UILayerCreate();
-	_UILayers[_LayerName] = NewLayer.Id;
-	if (NewLayer != Null) { 
+	G_UILayers[_LayerName] = NewLayer.Id;
+	if (NewLayer != Null) {
 		NewLayer.ManialinkPage = _LayerManialink;
 		NewLayer.IsVisible = True;
 	}
@@ -34,13 +34,13 @@ Void Show(Text _LayerName, CClient _Client) {
 	Layer.IsVisible = True;
 
 	if (Layer == Null) return;
-	
+
 	if (_Client != Null) {
-		declare UI <=> UIManager.GetUI(_Client);
+		declare CUIConfig UI <=> UIManager.GetUI(_Client);
 		if (UI == Null) return;
 		if (!UI.UILayers.exists(Layer)) UI.UILayers.add(Layer);
-	} else {
-		if (!UIManager.UIAll.UILayers.exists(Layer)) UIManager.UIAll.UILayers.add(Layer);
+	} else if (!UIManager.UIAll.UILayers.exists(Layer)) {
+		UIManager.UIAll.UILayers.add(Layer);
 	}
 }
 
@@ -49,15 +49,15 @@ Void Show(Text _LayerName) {
 }
 
 Void Hide(Text _LayerName, CClient _Client) {
-	declare Layer <=> LayerGet(_LayerName);
+	declare CUILayer Layer <=> LayerGet(_LayerName);
 	if (Layer == Null) return;
-	
-	if (_Client != Null) {
-		declare UI <=> UIManager.GetUI(_Client);
+
+	if (_Client == Null) {
+		UIManager.UIAll.UILayers.removekey(Layer.Id);
+	} else {
+		declare CUIConfig UI <=> UIManager.GetUI(_Client);
 		if (UI == Null) return;
 		UI.UILayers.removekey(Layer.Id);
-	} else {
-		UIManager.UIAll.UILayers.removekey(Layer.Id);
 	}
 }
 

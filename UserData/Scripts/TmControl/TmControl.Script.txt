@@ -16,7 +16,7 @@ main() {
         if (InitialStartDone == False && MapLoaded) {
 						InitialStartDone = True;
             PluginManager::OnModeReady();
-						Server::SendChat("Community RoomController $fffv0.0.1 Started");
+						Server::SendChat("$af3Community Room Controller $fffv0.0.1");
         }
 
         foreach (Event in PendingEvents) {

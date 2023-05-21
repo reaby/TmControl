@@ -4,7 +4,9 @@
 		"login2_here": "friendly_name"
 	},
 	"Colors": {
-		"join": "$ada",
-		"leave": "$daa"
+		"info": "$3af",
+		"map": "$f9f",
+		"join": "$0f3",
+		"leave": "$d00"
 	}
 }

@@ -1,118 +1,98 @@
 // #RequireContext CServerPlugin
 #Include "TmControl/Libs/File.Script.txt" as File
 #Include "TmControl/Libs/Ui.Script.txt" as UI
-#Include "TmControl/Core/serverManager.Script.txt" as Server
 #Include "TextLib" as TL
 
-/**
-"players":
-{
-    "login": "EdbzfLXMS_aI_PjZCVaygQ",
-    "accountid": "11d6f37c-b5cc-4bf6-88fc-f8d90956b281",
-    "name": "reaby",
-    "rank": 1,
-    "roundpoints": 0,
-    "mappoints": 0,
-    "matchpoints": 0,
-    "bestracetime": -1,
-    "bestracecheckpoints": [],
-    "bestlaptime": -1,
-    "bestlapcheckpoints": [],
-    "prevracetime": -1,
-    "prevracecheckpoints": []
-}
-*/
-
-#Struct PlayerData {
-    Text login;
-    Text name;
-    Integer rank;
-    Integer roundpoints;
-    Integer mappoints;
-    Integer matchpoints;
+#Struct K_PlayerData {
+	Text login;
+	Text name;
+	Integer rank;
+	Integer roundpoints;
+	Integer mappoints;
+	Integer matchpoints;
 }
 
-#Struct RoundPoints {
-    Text responseid;
-    PlayerData[] players;
+#Struct K_RoundPoints {
+	Text responseid;
+	K_PlayerData[] players;
 }
 
-#Struct JsonPlayer {
-    Text Login;
-    Integer Points;
+#Struct K_JsonPlayer {
+	Text Login;
+	Integer Points;
 }
 
 
-declare Text PointsListXml;
+declare Text G_PointsListXml;
 
 Void Init() {
-    PointsListXml = File::Read("TmControl/UI/Admin/forceScores.xml");
+	G_PointsListXml = File::Read("TmControl/UI/Admin/forceScores.xml");
 }
 
-Text genPlayersList(RoundPoints points) {
-    declare Text out = "";
-    declare Integer i = 1;
+Text GenPlayerList(K_RoundPoints _Points) {
+	declare Text Out = "";
+	declare Integer Idx = 1;
 
-    foreach (player in points.players) {
-        out ^= """
-        <frame pos="0 -{{{(i-1)*6}}}" size="156 5" id="{{{ player.login }}}">
-        <label pos="1 -4.5"   size="12 4" text="{{{ player.rank }}}" textsize="2" valign="bottom"/>
-        <label pos="11 -4.5"  size="20 4" text="{{{ player.login}}}" textsize="2" valign="bottom"/>
-        <label pos="32 -4.5"  size="51 4" text="{{{ player.name }}}" textsize="2" valign="bottom"/>
-        <entry pos="83 -4.5"  size="51 4" default="{{{ player.matchpoints }}}" textsize="2" valign="bottom" selecttext="1"/>
-        </frame>""";
-        i +=1;
-    }
-    return out;
+	foreach (Player in _Points.players) {
+		Out ^= """
+		<frame pos="0 -{{{(Idx-1)*6}}}" size="156 5" id="{{{ Player.login }}}">
+		<label pos="1 -4.5"   size="12 4" text="{{{ Player.rank }}}" textsize="2" valign="bottom"/>
+		<label pos="11 -4.5"  size="20 4" text="{{{ Player.login}}}" textsize="2" valign="bottom"/>
+		<label pos="32 -4.5"  size="51 4" text="{{{ Player.name }}}" textsize="2" valign="bottom"/>
+		<entry pos="83 -4.5"  size="51 4" default="{{{ Player.matchpoints }}}" textsize="2" valign="bottom" selecttext="1"/>
+		</frame>""";
+		Idx +=1;
+	}
+	return Out;
 }
 
 Void ShowPointsAdmin(CClient _Client) {
-    TriggerModeScriptEvent("Trackmania.GetScores", [_Client.User.Login]);
+	TriggerModeScriptEvent("Trackmania.GetScores", [_Client.User.Login]);
 }
 
 Void HidePointsAdmin(CClient _Client) {
-    UI::Hide("ForcePointsPanel", _Client);
+	UI::Hide("ForcePointsPanel", _Client);
 }
 
-Void OnUiEvent(CUIConfigEvent UiEvent) {
-    declare Text[] data = UiEvent.CustomEventData;
-    if (data.count >= 2) {
-        declare Text action = data[0];
-        declare CClient Client = GetClient(UiEvent.UI);
-        if (Client != Null) {
-            switch (action) {
-                case "Close": {
-                    HidePointsAdmin(GetClient(UiEvent.UI));
-                    return;
-                }
-                case "Apply": {
-                    declare JsonPlayer[] jsonplayer;
-                    jsonplayer.fromjson(data[1]);
-                    foreach (player in jsonplayer) {
-                        TriggerModeScriptEvent("Trackmania.SetPlayerPoints", [player.Login, "0","0","""{{{player.Points}}}"""]);
-                    }
-                    HidePointsAdmin(GetClient(UiEvent.UI));
-                    return;
-                }
-            }
-        }
-    }
+Void OnUiEvent(CUIConfigEvent _UIEvent) {
+	declare Text[] Data = _UIEvent.CustomEventData;
+	if (Data.count >= 2) {
+		declare Text Action = Data[0];
+		declare CClient Client = GetClient(_UIEvent.UI);
+		if (Client != Null) {
+			switch (Action) {
+				case "Close": {
+					HidePointsAdmin(GetClient(_UIEvent.UI));
+					return;
+				}
+				case "Apply": {
+					declare K_JsonPlayer[] JsonPlayer;
+					JsonPlayer.fromjson(Data[1]);
+					foreach (Player in JsonPlayer) {
+						TriggerModeScriptEvent("Trackmania.SetPlayerPoints", [Player.Login, "0","0","""{{{Player.Points}}}"""]);
+					}
+					HidePointsAdmin(GetClient(_UIEvent.UI));
+					return;
+				}
+			}
+		}
+	}
 }
 
-Void OnModeEvent(CServerPluginEvent Event) {
-    switch (Event.ModeCallbackType) {
-        case "Trackmania.Scores": {
+Void OnModeEvent(CServerPluginEvent _Event) {
+	switch (_Event.ModeCallbackType) {
+		case "Trackmania.Scores": {
 
-            declare RoundPoints points;
-            points.fromjson(Event.ModeCallbackData[0]);
-            declare xml = PointsListXml;
-            xml = TL::Replace(xml, "<!--%players%-->", genPlayersList(points));
+			declare K_RoundPoints Points;
+			Points.fromjson(_Event.ModeCallbackData[0]);
+			declare Text Xml = G_PointsListXml;
+			Xml = TL::Replace(Xml, "<!--%players%-->", GenPlayerList(Points));
 
-            UI::Create("ForcePointsPanel", xml);
-            declare _Client = GetClient(points.responseid);
-            if (  _Client != Null) {
-                UI::Show("ForcePointsPanel", _Client);
-            }
-        }
-    }
+			UI::Create("ForcePointsPanel", Xml);
+			declare CClient Client = GetClient(Points.responseid);
+			if (Client != Null) {
+				UI::Show("ForcePointsPanel", Client);
+			}
+		}
+	}
 }

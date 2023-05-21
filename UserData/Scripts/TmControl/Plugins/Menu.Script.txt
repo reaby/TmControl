@@ -13,11 +13,11 @@ Void SendPlayerPanel(CClient _Client) {
     }
 }
 
-Void OnChat(CClient Client, Text _command, Text[] _params) {
-    switch(_command) {
+Void OnChat(CClient _Client, Text _Command, Text[] _Params) {
+    switch(_Command) {
         case "help": {
-            Server::SendChat("Available commands:", [Client]);
-            Server::SendChat("$<$ada/list$> - show maplist", [Client]);
+            Server::SendChat("Available commands:", [_Client]);
+            Server::SendChat("$<$ada/list$> - show maplist", [_Client]);
         }
     }
 }

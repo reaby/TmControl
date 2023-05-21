@@ -104,11 +104,11 @@
 			icon: "",
 			title: "Maps",
 			submenu: [
-			[" ", "End Round", "ForceEndRound"],
-			[" ", "End Warmup", "ForceEndWarmup"],
+			[" ", "End Round", "!ForceEndRound"],
+			[" ", "End Warmup", "!ForceEndWarmup"],
 			["", "Previous", "!PrevMap"],
-			["", "Skip", "NextMap"],
-			["🔁", "Restart", "RestartMap"]
+			["", "Skip", "!NextMap"],
+			["🔁", "Restart", "!RestartMap"]
 			]
 		}
 		]

@@ -1,13 +1,12 @@
 // #RequireContext CServerPlugin
-#Include "TextLib" as TL
 
 Text Read(Text _Filename) {
-	declare CHttpRequest req = Http.CreateGet("""file:///Media/{{{_Filename}}}""");
-	wait(req.IsCompleted);
-	if (req.StatusCode == 200) {
-		return req.Result;
+	declare CHttpRequest Req = Http.CreateGet("""file:///Media/{{{_Filename}}}""");
+	wait(Req.IsCompleted);
+	if (Req.StatusCode == 200) {
+		return Req.Result;
 	}
-	if (req.StatusCode == 404) {
+	if (Req.StatusCode == 404) {
 		log("File '" ^ _Filename ^ "' not found");
 	}
 	return "";

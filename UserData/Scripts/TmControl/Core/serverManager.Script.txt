@@ -4,6 +4,43 @@
 
 declare Text[][Text] G_PendingActions;
 
+Text ParseColors(Text _Message) {
+	declare Text Out = _Message;
+	foreach (color => code in Config::GetColors()) {
+		Out = TL::Replace(Out, """%{{{color}}}%""", code);
+	}
+	return Out;
+}
+
+
+Void SendChat(Text _Message, Boolean _Prefix) {
+	log("""[Server] {{{_Message}}}""");
+	declare Text Prefix = "";
+	if (_Prefix) {
+		Prefix = "»» $3af";
+	}
+	UIManager.UIAll.SendChat(Prefix ^ ParseColors(_Message));
+}
+
+Void SendChat(Text _Message) {
+	SendChat(_Message, True);
+}
+
+Void SendChat(Text _Message, CClient[] _Recipients) {
+	declare Text Out = ParseColors(_Message);
+	foreach (Client in _Recipients) {
+		Client.UI.SendChat("» $3af"^Out);
+	}
+}
+
+Void SendChat(Text _Message, Text[] _Recipients) {
+	declare Text Out = ParseColors(_Message);
+	foreach (Login in _Recipients) {
+		declare CClient Client <=> GetClient(Login);
+		Client.UI.SendChat("» $3af"^Out);
+	}
+}
+
 /**
 * adds action to pending actions
 */
@@ -29,13 +66,32 @@ Void PlayerBan(Text _Login, Text _Reason) {
 	AddAction("Ban", [_Login, _Reason]);
 }
 
-Void MapSkip() {
+Void MapSkip(Boolean _Silent) {
+	if (!_Silent) {
+		SendChat("Admin skips to next map");
+	}
 	AddAction("NextMap", []);
 }
 
+Void MapSkip() {
+	MapSkip(False);
+}
+
 Void MapRestart() {
+	SendChat("Admin restarts the map");
 	AddAction("RestartMap", []);
 }
+
+Void ForceEndRound() {
+	SendChat("Admin forces round to end");
+	AddAction("ForceEndRound", []);
+}
+
+Void ForceEndWarmup() {
+	SendChat("Admin forces warmup to end");
+	AddAction("ForceEndWarmup", []);
+}
+
 
 Void ForceSpectator(Text _Login, Boolean _IsSpec) {
 	declare Text Out = "PlayerSelectable";
@@ -49,43 +105,6 @@ Void MapSetNext(CMapInfo _Map) {
 
 Void MapSetNext(Integer _Index) {
 	NextMapIndex = _Index % MapList.count;
-}
-
-Text ParseColors(Text _Message) {
-	declare Text Out = _Message;
-	foreach (color => code in Config::GetColors()) {
-		Out = TL::Replace(Out, """%{{{color}}}%""", code);
-	}
-	return Out;
-}
-
-
-Void SendChat(Text _Message, Boolean _Prefix) {
-	log("""[Server] {{{_Message}}}""");
-	declare Text Prefix = "";
-	if (_Prefix) {
-		Prefix = "»» ";
-	}
-	UIManager.UIAll.SendChat(Prefix ^ ParseColors(_Message));
-}
-
-Void SendChat(Text _Message) {
-	SendChat(_Message, True);
-}
-
-Void SendChat(Text _Message, CClient[] _Recipients) {
-	declare Text Out = ParseColors(_Message);
-	foreach (Client in _Recipients) {
-		Client.UI.SendChat("» "^Out);
-	}
-}
-
-Void SendChat(Text _Message, Text[] _Recipients) {
-	declare Text Out = ParseColors(_Message);
-	foreach (Login in _Recipients) {
-		declare CClient Client <=> GetClient(Login);
-		Client.UI.SendChat("» "^Out);
-	}
 }
 
 CServerAdmin::ESpecMode GetSpecMode(Text _SpectatorMode) {

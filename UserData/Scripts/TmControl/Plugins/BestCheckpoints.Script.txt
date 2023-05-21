@@ -4,7 +4,7 @@
 #Include "MathLib" as ML
 
 /**
-Text ModeCallbackType Trackmania.Event.WayPoint
+Text ModeCallbackType Trackmania._Event.WayPoint
 Text[] ModeCallbackData [{
 	"time": 21450260,
 	"login": "",
@@ -41,15 +41,15 @@ Text[] ModeCallbackData [{
 
 #Const C_widgetMaxCp 21
 
-declare K_CpInfo[] BestCpsData;
+declare K_CpInfo[] G_BestCpsData;
 
-Text getManialink() {
-	declare Integer maxColumns = 6;
-	declare Integer maxRows = 2;
-	declare Integer y = 89;
-	declare Integer index = 0;
+Text GetManialink() {
+	declare Integer MaxColumns = 6;
+	declare Integer MaxRows = 2;
+	declare Integer PosY = 89;
+	declare Integer Index = 0;
 
-	declare Text out = """
+	declare Text Out = """
 	<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 	<manialink version="3" name="TmControl.Widget.BestCps">
 	<stylesheet>
@@ -57,23 +57,22 @@ Text getManialink() {
 	</stylesheet>
 	""";
 
-	for (row, 0, maxRows) {
-		for (column, 0, maxColumns) {
-			out ^= """
-			<frame pos="{{{-130 + (column*37)}}} {{{ y- (row*5) }}}" id="cp_{{{index}}}" hidden="1">
+	for (row, 0, MaxRows) {
+		for (column, 0, MaxColumns) {
+			Out ^= """
+			<frame pos="{{{-130 + (column*37)}}} {{{ PosY- (row*5) }}}" id="cp_{{{Index}}}" hidden="1">
 			<label pos="2 -2" size="4 4" halign="center" text="" class="center" textsize="1" />
 			<label pos="5 -2" size="12 4" text=""  class="center" textsize="0.5" />
 			<label pos="17.7 -2" size="19 4" text="" class="center" textsize="1" />
-			<!-- <label pos="30 -2" size="12 4" text="" textsize="0.8"  class="center"/> -->
 			<quad pos="0 0" size="4 4" bgcolor="0007" halign="left" z-index="-2"/>
 			<quad pos="4.5 0" size="12 4" bgcolor="0004" halign="left" z-index="-2"/>
 			<quad pos="17 0" size="19 4" bgcolor="0004" halign="left" z-index="-2"/>
 
 			</frame>""";
-			index +=1;
+			Index +=1;
 		}
 	}
-	out ^= """
+	Out ^= """
 	<script><!--
 	#Include "MathLib" as ML
 	#Include "TextLib" as TL
@@ -122,49 +121,48 @@ Text getManialink() {
 	}
 	--></script>
 	""";
-	out ^= """</manialink>""";
+	Out ^= """</manialink>""";
 
-	return out;
+	return Out;
 }
 
 Void Update() {
-	declare Text out = BestCpsData.tojson();
-	out = TL::Replace(out, "\"", "'");
+	declare Text Out = G_BestCpsData.tojson();
+	Out = TL::Replace(Out, "\"", "'");
 
-	declare Text xml = """
+	declare Text Xml = """
 	<manialink version="3" name="TmControl.Widget.BestCpsUpdater">
 	<script><!--
 	main() {
 		declare Integer tmcontrol_bestcps_update for LocalUser;
 		declare Text tmcontrol_bestcps_data for LocalUser = "[]";
-		tmcontrol_bestcps_data = "{{{ out }}}";
+		tmcontrol_bestcps_data = "{{{ Out }}}";
 		tmcontrol_bestcps_update = {{{ Now }}};
 	}
 	--></script>
 	</manialink>
 	""";
 
-	UI::Create("BestCpsUpdater", xml);
+	UI::Create("BestCpsUpdater", Xml);
 	UI::Show("BestCpsUpdater");
 }
 
 Void Reset() {
-	BestCpsData.clear();
-	for(i, 0, C_widgetMaxCp) {
-		BestCpsData.add(K_CpInfo{index = i, time = -1});
+	G_BestCpsData.clear();
+	for(Idx, 0, C_widgetMaxCp) {
+		G_BestCpsData.add(K_CpInfo{index = Idx, time = -1});
 	}
 	Update();
 }
 
 Void Init() {
-	UI::Create("WidgetBestCps", getManialink());
+	UI::Create("WidgetBestCps", GetManialink());
 	UI::Show("WidgetBestCps");
 	Reset();
 }
 
-Void OnModeEvent(CServerPluginEvent Event) {
-	log(Event);
-	switch (Event.ModeCallbackType) {
+Void OnModeEvent(CServerPluginEvent _Event) {
+	switch (_Event.ModeCallbackType) {
 		case "Maniaplanet.Podium_Start": {
 			Reset();
 		}
@@ -174,20 +172,20 @@ Void OnModeEvent(CServerPluginEvent Event) {
 		}
 
 		case "Trackmania.Event.WayPoint": {
-			declare K_WayPoint waypoint;
-			waypoint.fromjson(Event.ModeCallbackData[0]);
-			declare Integer i = waypoint.checkpointinlap;
-			if (waypoint.checkpointinlap <= C_widgetMaxCp) {
-				if (BestCpsData.existskey(i)) {
-					if (BestCpsData[i].time == -1 || waypoint.laptime < BestCpsData[i].time) {
-						declare CUser User <=> GetClient(waypoint.login).User;
-						declare K_CpInfo cp = K_CpInfo {
-							index = waypoint.checkpointinlap,
-							speed = ML::NearestInteger(waypoint.speed*3.6),
+			declare K_WayPoint Waypoint;
+			Waypoint.fromjson(_Event.ModeCallbackData[0]);
+			declare Integer Idx = Waypoint.checkpointinlap;
+			if (Waypoint.checkpointinlap <= C_widgetMaxCp) {
+				if (G_BestCpsData.existskey(Idx)) {
+					if (G_BestCpsData[Idx].time == -1 || Waypoint.laptime < G_BestCpsData[Idx].time) {
+						declare CUser User <=> GetClient(Waypoint.login).User;
+						declare K_CpInfo Cp = K_CpInfo {
+							index = Waypoint.checkpointinlap,
+							speed = ML::NearestInteger(Waypoint.speed*3.6),
 							trigram = User.Name,
-							time = waypoint.laptime
+							time = Waypoint.laptime
 						};
-						BestCpsData[waypoint.checkpointinlap] = cp;
+						G_BestCpsData[Waypoint.checkpointinlap] = Cp;
 						Update();
 					}
 				}

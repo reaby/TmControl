@@ -34,13 +34,15 @@
 			</frame>
 		</frame>
 		<frame pos="50 10">
-			<frame pos="0 0" class="btnContainer" id="btn_queue">
-				<label size="22 6" text="Queue next" class="button noAnim" textprefix="" halign="center" valign="center" focusareacolor1="0000" focusareacolor2="fff" data-color="fff" translate="0" scriptevents="1" pos="-6.5 1.5" textsize="1.5" />
-				<quad size="22 6" style="Bgs1" colorize="fff" substyle="BgColorContour" class="button" halign="center" valign="center" pos="-6.5 1.5" />
-			</frame>
-			<frame pos="23 0" class="btnContainer" id="btn_goto">
-				<label size="22 6" text="Go to map" class="button noAnim" textprefix="" halign="center" valign="center" focusareacolor1="0000" focusareacolor2="09f" data-color="fff" translate="0" scriptevents="1" pos="-6.5 1.5" textsize="1.5" />
-				<quad size="22 6" style="Bgs1" colorize="09f" substyle="BgColorContour" class="button" halign="center" valign="center" pos="-6.5 1.5" />
+			<frame id="adminControls">
+				<frame pos="0 0" class="btnContainer" id="btn_queue">
+					<label size="22 6" text="Queue next" class="button noAnim" textprefix="" halign="center" valign="center" focusareacolor1="0000" focusareacolor2="fff" data-color="fff" translate="0" scriptevents="1" pos="-6.5 1.5" textsize="1.5" />
+					<quad size="22 6" style="Bgs1" colorize="fff" substyle="BgColorContour" class="button" halign="center" valign="center" pos="-6.5 1.5" />
+				</frame>
+				<frame pos="23 0" class="btnContainer" id="btn_goto">
+					<label size="22 6" text="Go to map" class="button noAnim" textprefix="" halign="center" valign="center" focusareacolor1="0000" focusareacolor2="09f" data-color="fff" translate="0" scriptevents="1" pos="-6.5 1.5" textsize="1.5" />
+					<quad size="22 6" style="Bgs1" colorize="09f" substyle="BgColorContour" class="button" halign="center" valign="center" pos="-6.5 1.5" />
+				</frame>
 			</frame>
 			<frame pos="46 0" class="btnContainer" id="btn_vote">
 				<label size="22 6" text="Vote" class="button noAnim" textprefix="" halign="center" valign="center" focusareacolor1="0000" focusareacolor2="0f0" data-color="fff" translate="0" scriptevents="1" pos="-6.5 1.5" textsize="1.5" />
@@ -56,6 +58,7 @@
 	<script><!--
 		// #RequireContext CSmMlScriptIngame
 		#Include "TextLib" as TextLib
+		#Const isAdmin "%admin%"
 
 		#Struct Map {
 			Text Name;
@@ -81,6 +84,10 @@
 
 		main() {
 			declare FrameMapsList <=> (Page.GetFirstChild("Maplist") as CMlFrame);
+			declare CMlFrame adminControls <=> (Page.GetFirstChild("adminControls") as CMlFrame);
+			if (isAdmin != "True") {
+				adminControls.Hide();
+			}
 			SelectMap(FrameMapsList.Controls[0].ControlId);
 			FrameMapsList.ScrollMax = <0., (FrameMapsList.Controls.count * 4.)>;
 
@@ -112,10 +119,10 @@
 					if (Event.Type == CMlScriptEvent::Type::MouseClick && Event.Control.HasClass("button")) {
 						switch (Event.Control.Parent.ControlId) {
 							case "btn_goto": {
-								SendCustomEvent("TmControl.Plugins.Maps", ["GotoMap", ""^SelectedMap.Index]);
+								if (isAdmin == "True") SendCustomEvent("TmControl.Plugins.Maps", ["GotoMap", ""^SelectedMap.Index]);
 							}
 							case "btn_queue": {
-								SendCustomEvent("TmControl.Plugins.Maps", ["QueueMap", ""^SelectedMap.Index]);
+								if (isAdmin == "True") SendCustomEvent("TmControl.Plugins.Maps", ["QueueMap", ""^SelectedMap.Index]);
 							}
 							case "btn_close": {
 								SendCustomEvent("TmControl.Plugins.Maps", ["Close", ""]);

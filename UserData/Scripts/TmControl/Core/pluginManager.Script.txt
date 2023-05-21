@@ -84,13 +84,13 @@ Void HandleEvent(CServerPluginEvent _Event) {
 		case CServerPluginEvent::EType::ModeCallback: {
 			WidgetBestCheckpoints::OnModeEvent(_Event);
 			ForceRoundPoints::OnModeEvent(_Event);
-			// ServerAdmin::OnModeEvent(_Event);
+			ServerAdmin::OnModeEvent(_Event);
 			// log(Event);
 		}
 
-		default: {
-			log(_Event);
-		}
+		/*default: {
+			// log(_Event);
+		}*/
 	}
 }
 
@@ -102,6 +102,16 @@ Void HandleUiEvent(CUIConfigEvent _UiEvent) {
 			declare Text Action = Data[0];
 			Data.removekey(0);
 			Server::AddAction(Action, Data);
+		}
+	}
+
+	if (_UiEvent.CustomEventType == "TmControl.Plugins.Menu") {
+		declare Text Data = _UiEvent.CustomEventData[0];
+		declare CClient Client <=> GetClient(_UiEvent.UI);
+		switch (Data) {
+			case "!MapList": {
+				MapsPanel::ShowMaps(Client);
+			}
 		}
 	}
 
@@ -126,7 +136,24 @@ Void HandleUiEvent(CUIConfigEvent _UiEvent) {
 				{
 					ServerAdmin::PrevMap();
 				}
-				default: {}
+				case "!NextMap":
+				{
+					Server::MapSkip();
+				}
+				case "!RestartMap":
+				{
+					Server::MapRestart();
+				}
+				case "!ForceEndWarmup":
+				{
+					Server::ForceEndWarmup();
+				}
+				case "!ForceEndRound":
+				{
+					Server::ForceEndRound();
+				}
+
+
 			}
 		}
 	}

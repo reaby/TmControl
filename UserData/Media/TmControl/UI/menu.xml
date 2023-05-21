@@ -2,18 +2,19 @@
 <?xml-model href="manialink_v3.xsd"?>
 <manialink version="3">
 	<stylesheet>
-		<style class="active" focusareacolor1="000F" focusareacolor2="000" />
-		<style class="menuItem" focusareacolor1="0000" focusareacolor2="0004" />
-		<style class="submenuItem" bgcolor="0003" bgcolorfocus="0006" textsize="1.5" />
+		<style class="active" focusareacolor1="000F" focusareacolor2="0000" />
+		<style class="menuItem" focusareacolor1="000a" focusareacolor2="000f" />
+		<style class="font" textfont="GameFontSemiBold" />
+		<style class="submenuItem" bgcolor="0009" bgcolorfocus="000f" textsize="1.5" />
 	</stylesheet>
-	<frame pos="-150 -50" z-index="1000">
-		<frame id="mainMenu">
-			<label class="menuItem" pos="36 0" z-index="0" size="6 6" halign="center" valign="center" data-menu="submenu_0" scriptevents="1" />
-			<label class="menuItem" pos="30 0" z-index="0" size="6 6" halign="center" valign="center" text="" data-menu="submenu_1" scriptevents="1" />
-			<label class="menuItem" pos="24 0" z-index="0" size="6 6" halign="center" valign="center" text="" data-menu="submenu_2" scriptevents="1" />
-			<label class="menuItem" pos="18 0" z-index="0" size="6 6" halign="center" valign="center" text="" data-menu="submenu_3" scriptevents="1" />
-			<label class="menuItem" pos="12 0" z-index="0" size="6 6" halign="center" valign="center" text="" data-menu="submenu_4" scriptevents="1" />
-			<label class="menuItem" pos="6 0" z-index="0" size="6 6" halign="center" valign="center" text="" data-menu="submenu_5" scriptevents="1" />
+	<frame pos="-156 89" z-index="1000">
+		<frame id="mainMenu" scale="1.4">
+			<label class="menuItem" pos="0 -38" z-index="0" size="6 6" halign="center" valign="center" data-menu="submenu_0" scriptevents="1" />
+			<label class="menuItem" pos="0 -31" z-index="0" size="6 6" halign="center" valign="center" text="" data-menu="submenu_1" scriptevents="1" />
+			<label class="menuItem" pos="0 -28" z-index="0" size="6 6" halign="center" valign="center" text="" data-menu="submenu_2" scriptevents="1" />
+			<label class="menuItem" pos="0 -21" z-index="0" size="6 6" halign="center" valign="center" text="" data-menu="submenu_3" scriptevents="1" />
+			<label class="menuItem" pos="0 -14" z-index="0" size="6 6" halign="center" valign="center" text="" data-menu="submenu_4" scriptevents="1" />
+			<label class="menuItem" pos="0 -7" z-index="0" size="6 6" halign="center" valign="center" text="" data-menu="submenu_5" scriptevents="1" />
 			<label class="menuItem" pos="0 0" z-index="0" size="6 6" halign="center" valign="center" text="" data-menu="submenu_6" scriptevents="1" />
 		</frame>
 		<frameinstance modelid="menuitems" id="submenu_0" />
@@ -24,53 +25,53 @@
 		<frameinstance modelid="menuitems" id="submenu_5" />
 		<frameinstance modelid="menuitems" id="submenu_6" />
 	</frame>
-	<framemodel id="menuitems" pos="42 -2.5" hidden="0">
+	<framemodel id="menuitems" pos="9 -57" hidden="0">
 		<frame pos="-3 3">
 			<label pos="3.5 0" z-index="0" size="6 6" halign="center" valign="center2" text="n" textsize="2" />
 			<label pos="8 0" z-index="0" size="36 6" valign="center2" text="Template" textsize="1" halign="left" />
-			<quad class="submenuItem" pos="0 0" z-index="0" size="42 5" valign="center" halign="left" scriptevents="1" />
+			<quad class="submenuItem" pos="0 0" z-index="-1" size="42 5" valign="center" halign="left" scriptevents="1" />
 			<quad pos="0 0" size="0.35 5" bgcolor="fff" halign="left" valign="center" />
 		</frame>
 		<frame pos="-3 8.5">
 			<label pos="3.5 0" z-index="0" size="6 6" halign="center" valign="center2" text="n" textsize="2" />
 			<label pos="8 0" z-index="0" size="36 6" valign="center2" text="Template" textsize="1" halign="left" />
-			<quad class="submenuItem" pos="0 0" z-index="0" size="42 5" valign="center" halign="left" scriptevents="1" />
+			<quad class="submenuItem" pos="0 0" z-index="-1" size="42 5" valign="center" halign="left" scriptevents="1" />
 			<quad pos="0 0" size="0.35 5" bgcolor="fff" halign="left" valign="center" />
 		</frame>
 		<frame pos="-3 14">
 			<label pos="3.5 0" z-index="0" size="6 6" halign="center" valign="center2" text="n" textsize="2" />
 			<label pos="8 0" z-index="0" size="36 6" valign="center2" text="Template" textsize="1" halign="left" />
-			<quad class="submenuItem" pos="0 0" z-index="0" size="42 5" valign="center" halign="left" scriptevents="1" />
+			<quad class="submenuItem" pos="0 0" z-index="-1" size="42 5" valign="center" halign="left" scriptevents="1" />
 			<quad pos="0 0" size="0.35 5" bgcolor="fff" halign="left" valign="center" />
 		</frame>
 		<frame pos="-3 19.5">
 			<label pos="3.5 0" z-index="0" size="6 6" halign="center" valign="center2" text="n" textsize="2" />
 			<label pos="8 0" z-index="0" size="36 6" valign="center2" text="Template" textsize="1" halign="left" />
-			<quad class="submenuItem" pos="0 0" z-index="0" size="42 5" valign="center" halign="left" scriptevents="1" />
+			<quad class="submenuItem" pos="0 0" z-index="-1" size="42 5" valign="center" halign="left" scriptevents="1" />
 			<quad pos="0 0" size="0.35 5" bgcolor="fff" halign="left" valign="center" />
 		</frame>
 		<frame pos="-3 25">
 			<label pos="3.5 0" z-index="0" size="6 6" halign="center" valign="center2" text="n" textsize="2" />
 			<label pos="8 0" z-index="0" size="36 6" valign="center2" text="Template" textsize="1" halign="left" />
-			<quad class="submenuItem" pos="0 0" z-index="0" size="42 5" valign="center" halign="left" scriptevents="1" />
+			<quad class="submenuItem" pos="0 0" z-index="-1" size="42 5" valign="center" halign="left" scriptevents="1" />
 			<quad pos="0 0" size="0.35 5" bgcolor="fff" halign="left" valign="center" />
 		</frame>
 		<frame pos="-3 30.5">
 			<label pos="3.5 0" z-index="0" size="6 6" halign="center" valign="center2" text="n" textsize="2" />
 			<label pos="8 0" z-index="0" size="36 6" valign="center2" text="Template" textsize="1" halign="left" />
-			<quad class="submenuItem" pos="0 0" z-index="0" size="42 5" valign="center" halign="left" scriptevents="1" />
+			<quad class="submenuItem" pos="0 0" z-index="-1" size="42 5" valign="center" halign="left" scriptevents="1" />
 			<quad pos="0 0" size="0.35 5" bgcolor="fff" halign="left" valign="center" />
 		</frame>
 		<frame pos="-3 36">
 			<label pos="3.5 0" z-index="0" size="6 6" halign="center" valign="center2" text="n" textsize="2" />
 			<label pos="8 0" z-index="0" size="36 6" valign="center2" text="Template" textsize="1" halign="left" />
-			<quad class="submenuItem" pos="0 0" z-index="0" size="42 5" valign="center" halign="left" scriptevents="1" />
+			<quad class="submenuItem" pos="0 0" z-index="-1" size="42 5" valign="center" halign="left" scriptevents="1" />
 			<quad pos="0 0" size="0.35 5" bgcolor="fff" halign="left" valign="center" />
 		</frame>
 		<frame pos="-3 41.5">
 			<label pos="3.5 0" z-index="0" size="6 6" halign="center" valign="center2" text="n" textsize="2" />
 			<label pos="8 0" z-index="0" size="36 6" valign="center2" text="Template" textsize="1" halign="left" />
-			<quad class="submenuItem" pos="0 0" z-index="0" size="42 5" valign="center" halign="left" scriptevents="1" />
+			<quad class="submenuItem" pos="0 0" z-index="-1" size="42 5" valign="center" halign="left" scriptevents="1" />
 			<quad pos="0 0" size="0.35 5" bgcolor="fff" halign="left" valign="center" />
 		</frame>
 	</framemodel>
@@ -93,7 +94,7 @@
 			icon: "",
 			title: "Maps",
 			submenu: [
-				["", "Maps list", "!Maps"]
+				["", "Maps list", "!MapList"]
 			]
 		}
 		]
@@ -213,9 +214,7 @@
 						Event.Control.Parent.Controls[1].RelativeScale = 1.;
 					}
 					if (Event.Type == CMlScriptEvent::Type::MouseClick && Event.Control.HasClass("submenuItem")) {
-						if (TextLib::SubString(Event.Control.Parent.DataAttributeGet("action"), 0, 1) != "!") {
-							SendCustomEvent("TmControl.Server.AddAction", [Event.Control.Parent.DataAttributeGet("action")]);
-						} else {
+						if (TextLib::SubString(Event.Control.Parent.DataAttributeGet("action"), 0, 1) == "!") {
 							SendCustomEvent("TmControl.Plugins.Menu", [Event.Control.Parent.DataAttributeGet("action")]);
 						}
 						hideMenu(Event.Control.Parent.Parent);
